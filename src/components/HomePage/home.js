@@ -87,10 +87,17 @@ const Home = () => {
       const checkProfileDetails = async () => {
         const emailObj = { email };
         const response = await profileCheckingApi(emailObj);
+        console.log(response);
         if (response.status === 202) {
           setProfile(true);
         } else if (response.status === 200) {
           setProfile(false);
+          if (Cookies.get("username") === undefined) {
+            Cookies.set("username", response.data.res.name);
+          }
+          if (Cookies.get("userrole") === undefined) {
+            Cookies.set("userrole", response.data.res.designation);
+          }
         }
       };
       checkProfileDetails();

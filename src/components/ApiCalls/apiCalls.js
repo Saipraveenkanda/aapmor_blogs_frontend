@@ -71,15 +71,14 @@ export const profileCheckingApi = async (emailObj) => {
   // console.log(response);
 
   const options = {
-    method: "POST",
+    method: "get",
+    url: "http://localhost:3005/profile/check",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
-    body: JSON.stringify(emailObj),
   };
 
-  const response = await fetch("http://localhost:3005/profile/check", options);
+  const response = await axios(options);
 
   return response;
 };
