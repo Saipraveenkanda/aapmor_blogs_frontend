@@ -110,6 +110,7 @@ const Header = () => {
               variant="text"
               color="inherit"
               disableElevation
+              disabled
               href="/user/profile"
             >
               Profile
@@ -129,6 +130,7 @@ const Header = () => {
               color="inherit"
               disableElevation
               href="/user/blogs"
+              disabled
             >
               Your blogs
             </Button>
