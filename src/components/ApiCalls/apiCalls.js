@@ -44,7 +44,7 @@ export const createBlogApi = async (blogDetails) => {
 };
 export const getBlogsApi = async (category) => {
   const response = await axios.get(
-    `http://localhost:3005/blogs/filter/?category=${category}`
+    `http://192.168.0.119:3005/blogs/filter/?category=${category}`
   );
   return response;
 };
