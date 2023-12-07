@@ -6,13 +6,15 @@ import {
   createBlogApiUrl,
   saveBlogsApiUrl,
   profileUpdateApiUrl,
+  profileCheckingApiUrl,
   publishBlogApiUrl,
   likesApiUrl,
   saveBLogApiUrl,
   getSavedBlogsApiUrl,
+  commentsApiUrl,
 } from "../Url/configUrls";
 import axios from "axios";
-
+const host = "192.168.0.122";
 const token = Cookies.get("jwtToken");
 
 export const sendOtpApi = async (email) => {
@@ -44,12 +46,12 @@ export const createBlogApi = async (blogDetails) => {
 };
 export const getBlogsApi = async (category) => {
   const response = await axios.get(
-    `http://localhost:3005/blogs/filter/?category=${category}`
+    `http://${host}:3005/blogs/filter/?category=${category}`
   );
   return response;
 };
 export const getBlogViewApi = async (id) => {
-  const response = await axios.get(`http://localhost:3005/blogs/${id}`);
+  const response = await axios.get(`http://${host}:3005/blogs/${id}`);
   return response;
 };
 
@@ -64,15 +66,9 @@ export const profileUpdateApi = async (profileDetails) => {
 
 //CHECKING PROFILE AFTER LOGIN API
 export const profileCheckingApi = async (emailObj) => {
-  // const response = await axios.post(
-  //   "http://192.168.0.103:3005/profile/check",
-  //   emailObj
-  // );
-  // console.log(response);
-
   const options = {
     method: "get",
-    url: "http://localhost:3005/profile/check",
+    url: profileCheckingApiUrl,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -87,7 +83,7 @@ export const profileCheckingApi = async (emailObj) => {
 export const commentsApi = async (commentObject) => {
   const config = {
     method: "post",
-    url: "http://localhost:3005/comments",
+    url: commentsApiUrl,
     headers: {
       Authorization: `Bearer ${token}`,
     },
