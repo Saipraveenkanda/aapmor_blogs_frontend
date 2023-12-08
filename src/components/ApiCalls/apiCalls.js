@@ -15,6 +15,7 @@ import {
 } from "../Url/configUrls";
 import axios from "axios";
 const host = "192.168.0.122";
+// const host = "localhost";
 const token = Cookies.get("jwtToken");
 
 export const sendOtpApi = async (email) => {

@@ -115,7 +115,7 @@ const Header = () => {
             >
               Profile
             </Button>
-            <Divider orientation="vertical" flexItem color="#fff" />
+            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
             <Button
               variant="text"
               color="inherit"
@@ -124,7 +124,7 @@ const Header = () => {
             >
               Saved
             </Button>
-            <Divider orientation="vertical" flexItem color="#fff" />
+            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
             <Button
               variant="text"
               color="inherit"
@@ -134,7 +134,7 @@ const Header = () => {
             >
               Your blogs
             </Button>
-            <Divider orientation="vertical" flexItem color="#fff" />
+            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
             <Tooltip title="logout">
               <Button
                 variant="text"
