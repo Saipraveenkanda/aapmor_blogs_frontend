@@ -31,6 +31,8 @@ import {
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 
+const host = "192.168.0.122";
+
 const BlogView = () => {
   const navigate = useNavigate();
   const [blogDetails, setBlogDetails] = useState({});
@@ -87,7 +89,7 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
-    const response = await axios.get(`http://localhost:3005/blogs/${id}`);
+    const response = await axios.get(`http://${host}:3005/blogs/${id}`);
     const blogDetails = await response.data;
     if (response.status === 200) {
       setApiStatus("SUCCESS");

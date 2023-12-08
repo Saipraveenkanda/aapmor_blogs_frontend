@@ -57,7 +57,14 @@ const SavedBlogs = () => {
         <Typography variant="h6" sx={{ pl: 2, pt: 2 }} fontWeight={700}>
           Your Saved Blogs
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, p: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            p: 2,
+          }}
+        >
           {savedBlogs.map((blogItem) => {
             return <Blog blogDetails={blogItem} key={blogItem._id} />;
           })}

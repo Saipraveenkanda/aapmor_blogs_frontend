@@ -106,6 +106,12 @@ const Home = () => {
     }
   }, [email]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000);
+  }, [showAlert]);
+
   //GET BLOGS API CALL
   const getBlogsData = async () => {
     const response = await getBlogsApi(category);
