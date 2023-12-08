@@ -80,6 +80,7 @@ const Header = () => {
           />
           <Typography variant="h6" color={"#ffffff"}>
             BLOGS
+            Satya
           </Typography>
         </Box>
         <Box
