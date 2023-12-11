@@ -85,8 +85,7 @@ const Home = () => {
     const token = Cookies.get("jwtToken");
     if (token !== undefined) {
       const checkProfileDetails = async () => {
-        const emailObj = { email };
-        const response = await profileCheckingApi(emailObj);
+        const response = await profileCheckingApi();
         console.log(response);
         if (response.status === 202) {
           setProfile(true);
@@ -104,7 +103,7 @@ const Home = () => {
     } else {
       setProfile(false);
     }
-  }, [email]);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {

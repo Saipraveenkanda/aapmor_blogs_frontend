@@ -75,7 +75,7 @@ const Login = () => {
   };
 
   const isValidEmail = (email) => {
-    const pattern = /^[a-zA-Z]\w{3,12}@([a-zA-Z]+\.)+[a-zA-Z]+$/;
+    const pattern = /^[a-zA-Z]\w{3,50}@([a-zA-Z]+\.)+[a-zA-Z]+$/;
     return pattern.test(email);
   };
   const handleEmailChange = (e) => {

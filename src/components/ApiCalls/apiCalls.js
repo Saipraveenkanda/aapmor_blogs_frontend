@@ -66,7 +66,7 @@ export const profileUpdateApi = async (profileDetails) => {
 };
 
 //CHECKING PROFILE AFTER LOGIN API
-export const profileCheckingApi = async (emailObj) => {
+export const profileCheckingApi = async () => {
   const options = {
     method: "get",
     url: profileCheckingApiUrl,

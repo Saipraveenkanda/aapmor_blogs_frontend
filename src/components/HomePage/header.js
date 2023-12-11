@@ -106,13 +106,7 @@ const Header = () => {
               alignItems: "center",
             }}
           >
-            <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              disabled
-              href="/user/profile"
-            >
+            <Button variant="text" color="inherit" disableElevation disabled>
               Profile
             </Button>
             {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
@@ -120,7 +114,7 @@ const Header = () => {
               variant="text"
               color="inherit"
               disableElevation
-              href="/user/saved"
+              onClick={() => navigate("/user/saved")}
             >
               Saved
             </Button>
