@@ -69,7 +69,7 @@ const Login = () => {
       Cookies.set("userEmail", data.email, { expires: 10 });
       navigate("/");
     } else {
-      setButtonText("Enter OTP");
+      setButtonText("Submit OTP");
       handleOnSubmitError(data.message);
     }
   };
@@ -84,7 +84,7 @@ const Login = () => {
   };
 
   const handleOtpChange = (e) => {
-    setButtonText("Enter OTP");
+    setButtonText("Submit OTP");
     setShowErrMsg(false);
     setOtp(e.target.value);
   };
@@ -126,6 +126,12 @@ const Login = () => {
     }
   };
 
+  const handleIncorrectEmail = () => {
+    setShowOtpView(false);
+    setShowEmailView(true);
+    setSuccessMsg("");
+  };
+
   //RETURN
   return (
     <Box
@@ -139,9 +145,7 @@ const Login = () => {
       }}
     >
       <Paper
-        elevation={{ md: 5 }}
-        component="form"
-        onSubmit={onSubmitEmail}
+        elevation={5}
         sx={{
           borderRadius: { md: "15px" },
           borderTopRightRadius: { md: "60px" },
@@ -205,6 +209,7 @@ const Login = () => {
             onChange={handleEmailChange}
             value={email}
             sx={{
+              height: "52px",
               width: { xs: "90%", lg: "60%" },
               marginBottom: { xs: "30px", lg: "24px" },
               animation: emailError ? "shake 0.3s" : "",
@@ -236,13 +241,13 @@ const Login = () => {
         {/* EMAIL SEND BUTTON */}
         {showEmailView && (
           <Button
-            type="submit"
+            onClick={onSubmitEmail}
             data-testid="email input"
             variant="contained"
             disabled={isButtonDisable}
             sx={{
               width: { xs: "90%", lg: "60%" },
-              height: "48px",
+              height: "52px",
               fontWeight: 500,
             }}
           >
@@ -285,7 +290,7 @@ const Login = () => {
                   cursor: "pointer",
                   color: "blue",
                 }}
-                onClick={() => navigate("/login")}
+                onClick={handleIncorrectEmail}
               >
                 click here
               </span>{" "}

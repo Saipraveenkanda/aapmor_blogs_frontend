@@ -202,6 +202,7 @@ const CreateBlog = () => {
                     fullWidth
                     size="small"
                   >
+                    <MenuItem value={"Insights"}>Insights</MenuItem>
                     <MenuItem value={"Fitness"}>Fitness</MenuItem>
                     <MenuItem value={"Artificial Intelligence"}>
                       Artificial Intelligence
@@ -210,13 +211,11 @@ const CreateBlog = () => {
                     <MenuItem value={"Politics"}>Politics</MenuItem>
                     <MenuItem value={"International"}>International</MenuItem>
                     <MenuItem value={"News"}>News</MenuItem>
-
                     <MenuItem value={"Sports"}>Sports</MenuItem>
                     <MenuItem value={"Fashion"}>Fashion</MenuItem>
-
                     <MenuItem value={"Food & Health"}>Food & health</MenuItem>
                     <MenuItem value={"Gaming"}>Gaming</MenuItem>
-
+                    <MenuItem value={"Technology"}>Technology</MenuItem>
                     <MenuItem value={"Arts"}>Arts</MenuItem>
                   </Select>
                 </FormControl>

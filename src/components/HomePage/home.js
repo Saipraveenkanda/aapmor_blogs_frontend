@@ -51,16 +51,27 @@ const Home = () => {
   const blogObj = useSelector((state) => state.blogs);
   const blogs = blogObj.blogs;
 
-  const [designation, setDesignation] = useState("Select");
-  const [gender, setGender] = useState("Select");
+  const [designation, setDesignation] = useState("");
+  const [gender, setGender] = useState("");
   const [name, setName] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [profileSaveButtonDisabled, setProfileSaveButtonDisabled] =
+    useState(true);
 
   const email = Cookies.get("userEmail");
   const user = Cookies.get("username");
 
   const userName = user !== undefined ? user : "User";
+
+  /* To check all fields are populated for profile updating */
+  useEffect(() => {
+    if (!!name && !!gender && !!designation) {
+      setProfileSaveButtonDisabled(false);
+    } else {
+      setProfileSaveButtonDisabled(true);
+    }
+  }, [name, gender, designation]);
 
   const handleProfileUpdate = async () => {
     const profileDetails = {
@@ -83,17 +94,16 @@ const Home = () => {
 
   useEffect(() => {
     const token = Cookies.get("jwtToken");
-    console.log(token, "token is present");
     if (token !== undefined) {
       const checkProfileDetails = async () => {
+        console.log("now checking profile status");
         const response = await profileCheckingApi();
-        console.log(
-          response,
-          "response from db to verify profile update status"
-        );
+        console.log(response);
         if (response.status === 202) {
+          clearInterval(intervalId);
           setProfile(true);
         } else if (response.status === 200) {
+          clearInterval(intervalId);
           setProfile(false);
           if (Cookies.get("username") === undefined) {
             Cookies.set("username", response.data.res.name);
@@ -102,8 +112,12 @@ const Home = () => {
             Cookies.set("userrole", response.data.res.designation);
           }
         }
+        clearInterval(intervalId);
       };
-      checkProfileDetails();
+      const intervalId = setInterval(() => {
+        console.log("waiting 5 sec for checking profile");
+        checkProfileDetails();
+      }, 5000);
     } else {
       setProfile(false);
     }
@@ -281,11 +295,8 @@ const Home = () => {
               <Select
                 onChange={(e) => setDesignation(e.target.value)}
                 value={designation}
+                required
               >
-                <MenuItem value="Select" disabled>
-                  Select
-                </MenuItem>
-
                 <MenuItem value="HR">HR</MenuItem>
                 <MenuItem value="Devops">Devops</MenuItem>
                 <MenuItem value="QA">QA</MenuItem>
@@ -302,10 +313,8 @@ const Home = () => {
               <Select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
+                required
               >
-                <MenuItem value="Select" disabled>
-                  Select
-                </MenuItem>
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
                 <MenuItem value="Other">Other</MenuItem>
@@ -317,6 +326,7 @@ const Home = () => {
               startIcon={<SaveIcon />}
               variant="contained"
               fullWidth
+              disabled={profileSaveButtonDisabled}
               sx={{ mt: 4 }}
             >
               <span>Save</span>

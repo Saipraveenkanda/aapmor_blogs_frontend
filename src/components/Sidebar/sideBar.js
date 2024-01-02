@@ -12,6 +12,8 @@ import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
+import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+import InsightsIcon from "@mui/icons-material/Insights";
 import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -135,6 +137,22 @@ const SideBar = ({ category, setCategory }) => {
           label="Politics"
           color="default"
           variant={category === "Politics" ? "filled" : "outlined"}
+          onClick={(e) => setCategory(e.target.innerText)}
+        />
+        <Chip
+          size="small"
+          icon={<AirplanemodeActiveIcon />}
+          label="International"
+          color="default"
+          variant={category === "International" ? "filled" : "outlined"}
+          onClick={(e) => setCategory(e.target.innerText)}
+        />
+        <Chip
+          size="small"
+          icon={<InsightsIcon />}
+          label="Insights"
+          color="default"
+          variant={category === "Insights" ? "filled" : "outlined"}
           onClick={(e) => setCategory(e.target.innerText)}
         />
       </Box>

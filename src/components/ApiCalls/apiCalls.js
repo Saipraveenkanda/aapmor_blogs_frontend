@@ -16,7 +16,6 @@ import {
 import axios from "axios";
 const host = "192.168.0.122";
 // const host = "localhost";
-const token = Cookies.get("jwtToken");
 
 export const sendOtpApi = async (email) => {
   const response = await axios.post(forgetPassUrl, { email });
@@ -32,13 +31,13 @@ export const submitRegisterApi = async (userDetails) => {
   const response = await axios.post(registerApiUrl, userDetails);
   return response;
 };
+const token = Cookies.get("jwtToken");
 export const createBlogApi = async (blogDetails) => {
-  const jwtToken = Cookies.get("jwtToken");
   const options = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(blogDetails),
   };
@@ -67,6 +66,7 @@ export const profileUpdateApi = async (profileDetails) => {
 
 //CHECKING PROFILE AFTER LOGIN API
 export const profileCheckingApi = async () => {
+  const token = Cookies.get("jwtToken");
   const options = {
     method: "get",
     url: profileCheckingApiUrl,
