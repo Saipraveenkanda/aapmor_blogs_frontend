@@ -270,9 +270,28 @@ const Login = () => {
           </Typography>
         )}
         {successMsg !== "" && (
-          <Typography variant="subtitle2" sx={{ color: "green", marginTop: 2 }}>
-            {successMsg}
-          </Typography>
+          <Box sx={{ textAlign: "center", maxWidth: 400 }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "green", marginTop: 2 }}
+            >
+              {successMsg}
+            </Typography>
+            <Typography variant="caption" fontSize={12}>
+              incorrect email ?{" "}
+              <span
+                style={{
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                  color: "blue",
+                }}
+                onClick={() => navigate("/login")}
+              >
+                click here
+              </span>{" "}
+              to update your email address.{" "}
+            </Typography>
+          </Box>
         )}
       </Paper>
     </Box>

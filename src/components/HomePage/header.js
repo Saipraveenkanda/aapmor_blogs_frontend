@@ -13,6 +13,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Stack,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -93,8 +94,8 @@ const Header = () => {
             borderRadius: 2,
           }}
         >
-          <InputBase type="search" placeholder="Search..." fullWidth />
-          <SearchOutlined color="primary" sx={{ cursor: "pointer" }} />
+          <InputBase type="search" placeholder="Search..." fullWidth disabled />
+          <SearchOutlined color="primary" sx={{ cursor: "not-allowed" }} />
         </Box>
 
         {/* WEB NAVIGATION AFTER LOGIN */}
@@ -134,9 +135,15 @@ const Header = () => {
                 variant="text"
                 color="inherit"
                 disableElevation
+                sx={{ gap: 1 }}
                 onClick={handleLogout}
               >
-                <LogoutIcon />
+                <Stack direction={"column"} alignItems={"center"}>
+                  <LogoutIcon />
+                  <Typography variant="caption" fontSize={10}>
+                    Logout
+                  </Typography>
+                </Stack>
               </Button>
             </Tooltip>
           </Box>
@@ -150,8 +157,15 @@ const Header = () => {
               variant="text"
               color="inherit"
               onClick={() => navigate("/login")}
+              sx={{ alignItems: "center", gap: 1 }}
             >
-              <LoginIcon />
+              <Stack direction={"column"} alignItems={"center"}>
+                <LoginIcon />
+
+                <Typography variant="caption" fontSize={10}>
+                  Login
+                </Typography>
+              </Stack>
             </Button>
           </Tooltip>
         )}

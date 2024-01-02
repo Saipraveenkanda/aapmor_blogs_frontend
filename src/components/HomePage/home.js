@@ -83,10 +83,14 @@ const Home = () => {
 
   useEffect(() => {
     const token = Cookies.get("jwtToken");
+    console.log(token, "token is present");
     if (token !== undefined) {
       const checkProfileDetails = async () => {
         const response = await profileCheckingApi();
-        console.log(response);
+        console.log(
+          response,
+          "response from db to verify profile update status"
+        );
         if (response.status === 202) {
           setProfile(true);
         } else if (response.status === 200) {
@@ -322,7 +326,7 @@ const Home = () => {
       </Modal>
     );
   };
-
+  console.log(profile, "show profile");
   return (
     <>
       <Header />

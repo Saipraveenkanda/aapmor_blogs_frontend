@@ -1,5 +1,5 @@
-const host = "192.168.0.122";
-// const host = "localhost";
+// const host = process.env.HOST_NAME;
+const host = "localhost";
 
 export const updatePassUrl = `http://${host}:3005/users/`;
 export const forgetPassUrl = `http://${host}:3005/sendEmail`;

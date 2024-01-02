@@ -15,7 +15,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHandsClapping } from "@fortawesome/free-solid-svg-icons";
 import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
@@ -31,7 +32,8 @@ import {
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 
-const host = "192.168.0.122";
+// const host = "192.168.0.122";
+const host = "localhost";
 
 const BlogView = () => {
   const navigate = useNavigate();
@@ -43,6 +45,7 @@ const BlogView = () => {
   const [apiStatus, setApiStatus] = useState("INITIAL");
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [disableCommentButton, setDisableCommentButton] = useState(true);
 
   useEffect(() => {
     getBlogItem();
@@ -68,16 +71,28 @@ const BlogView = () => {
     ":" +
     dateObject.getSeconds(); */
 
-  const handleCommentApi = async () => {
-    setLoading(true);
-    const commentObject = { comment, id, name, dateObject };
-    const response = await commentsApi(commentObject);
-    console.log(response);
-    if (response.status === 200) {
-      setLoading(false);
-      getBlogItem();
+  useEffect(() => {
+    if (comment.length >= 1) {
+      setDisableCommentButton(false);
+    } else {
+      setDisableCommentButton(true);
     }
-    setComment("");
+  }, [comment]);
+
+  const handleCommentApi = async () => {
+    if (comment === "") {
+      setDisableCommentButton(true);
+    } else {
+      setLoading(true);
+      const commentObject = { comment, id, name, dateObject };
+      const response = await commentsApi(commentObject);
+      console.log(response);
+      if (response.status === 200) {
+        setLoading(false);
+        getBlogItem();
+      }
+      setComment("");
+    }
   };
 
   const handleLikes = async () => {
@@ -312,7 +327,8 @@ const BlogView = () => {
                 onClick={handleLikes}
                 sx={{ marginTop: 0, padding: 0 }}
               >
-                <ThumbUpOutlinedIcon />
+                {/* <ThumbUpOutlinedIcon /> */}
+                <FontAwesomeIcon icon={faHandsClapping} />
               </IconButton>
               <Typography>{likes} </Typography>
             </Stack>
@@ -377,6 +393,7 @@ const BlogView = () => {
                       variant="contained"
                       loading={loading}
                       size="small"
+                      disabled={disableCommentButton}
                       onClick={handleCommentApi}
                       endIcon={<SendOutlinedIcon />}
                     >

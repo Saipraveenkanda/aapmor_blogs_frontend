@@ -25,6 +25,7 @@ import BlotFormatter from "quill-blot-formatter";
 import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
 import { LoadingButton } from "@mui/lab";
 
 const name = Cookies.get("username");
@@ -56,14 +57,43 @@ const modules = {
   },
 };
 
+const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
+const savedData = savedBlogData !== null && savedBlogData;
+console.log(savedData);
+
 const CreateBlog = () => {
   document.title = "Create New Blog";
-  const [category, setCategory] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [blogImage, setBlogImage] = useState("");
-  const [editorHtml, setEditorHtml] = useState("");
+  const [category, setCategory] = useState(
+    savedData !== false ? savedData.category : ""
+  );
+  const [title, setTitle] = useState(
+    savedData !== false ? savedData.title : ""
+  );
+  const [description, setDescription] = useState(
+    savedData !== false ? savedData.description : ""
+  );
+  const [blogImage, setBlogImage] = useState(
+    savedData !== false ? savedData.blog_img : ""
+  );
+  const [editorHtml, setEditorHtml] = useState(
+    savedData !== false ? savedData.content : ""
+  );
   const [loading, setLoading] = useState(false);
+
+  const handleSave = () => {
+    const saveBlogData = {
+      category,
+      title,
+      description,
+      blog_img: blogImage,
+      content: editorHtml,
+    };
+    if (title && description && blogImage && category && editorHtml) {
+      setLoading(true);
+      localStorage.setItem("blogData", JSON.stringify(saveBlogData));
+      setLoading(false);
+    }
+  };
 
   const navigate = useNavigate();
   const handleChange = (html) => {
@@ -122,6 +152,14 @@ const CreateBlog = () => {
     await publishBlogApi(content);
   };
 
+  const disablePublishButton =
+    !!category &&
+    !!title &&
+    !!description &&
+    !!blogImage &&
+    !!editorHtml &&
+    editorHtml !== "<p><br></p>";
+
   return (
     <>
       <Header />
@@ -159,6 +197,7 @@ const CreateBlog = () => {
               sx={{ width: "50%" }}
               variant="standard"
               required
+              value={title}
             />
             <Divider orientation="vertical" flexItem />
             <Stack direction="row" spacing={1} alignItems="flex-end">
@@ -191,16 +230,29 @@ const CreateBlog = () => {
                   </Select>
                 </FormControl>
               </Box>
-              <Button variant="outlined" onClick={() => navigate("/")}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  localStorage.removeItem("blogData");
+                  navigate("/");
+                }}
+              >
                 Cancel
               </Button>
               <LoadingButton
                 loading={loading}
                 variant="contained"
                 onClick={submitPost}
+                disabled={!disablePublishButton}
               >
                 Publish
               </LoadingButton>
+              <LoadingButton
+                loading={loading}
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
+                onClick={handleSave}
+              ></LoadingButton>
             </Stack>
           </Box>
           <Box
@@ -219,6 +271,7 @@ const CreateBlog = () => {
                 placeholder="Enter few lines about your blog"
                 fullWidth
                 required
+                value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
               <Divider orientation="vertical" flexItem />

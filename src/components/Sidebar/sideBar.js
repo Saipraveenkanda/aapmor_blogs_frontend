@@ -15,6 +15,7 @@ import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import RecentBlogs from "../RecentBlogs/recentBlogs";
 
 const SideBar = ({ category, setCategory }) => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const SideBar = ({ category, setCategory }) => {
       <Typography variant="body1" gutterBottom fontWeight={600} marginTop={2}>
         Categories
       </Typography>
+      {/* Category chips */}
       <Box
         sx={{
           display: "flex",
@@ -142,7 +144,7 @@ const SideBar = ({ category, setCategory }) => {
           title="Create new blog "
           arrow
           placement="left"
-          sx={{ marginTop: 1, position: "sticky", top: 80 }}
+          sx={{ mt: 1, position: "sticky", top: 80, mb: 1 }}
         >
           <Fab
             variant="extended"
@@ -155,10 +157,14 @@ const SideBar = ({ category, setCategory }) => {
           </Fab>
         </Tooltip>
       ) : (
-        <Typography variant="caption" color={"GrayText"}>
-          <a href="/login">Login</a> to create blog
-        </Typography>
+        <Box sx={{ p: 1 }}>
+          <Typography variant="caption" color={"GrayText"}>
+            <span onClick={() => navigate("/login")}>Login</span> to create blog
+          </Typography>
+        </Box>
       )}
+      <Divider orientation="horizontal" flexItem />
+      <RecentBlogs />
     </Box>
   );
 };
