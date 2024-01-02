@@ -22,6 +22,9 @@ import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import Footer from "../HomePage/footer";
+
+import "./style.css";
+
 import {
   commentsApi,
   likesApi,
@@ -163,6 +166,14 @@ const BlogView = () => {
     }
   };
 
+  const addImageClass = (htmlContent) => {
+    return htmlContent.replace(/<img/g, '<img class="quill-blog-image"');
+  };
+
+  const createMarkup = (content) => {
+    return { __html: addImageClass(content) };
+  };
+
   // RENDER EACH COMMENT
 
   const renderComments = () => {
@@ -239,11 +250,12 @@ const BlogView = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-start",
+            justifyContent: "center",
             alignItems: "flex-start",
-            padding: 4,
+            padding: { md: 4, xs: "16px" },
             paddingTop: 0,
-            maxWidth: { md: "70%", xs: "100%", sm: "90%" },
+            ml: { md: 8, xs: 0 },
+            maxWidth: { md: "100%", xs: "100%", sm: "90%" },
             boxSizing: "border-box",
           }}
         >
@@ -258,7 +270,7 @@ const BlogView = () => {
               mb: 2,
             }}
           />
-          <Typography gutterBottom variant="h4" color={"grey"}>
+          <Typography gutterBottom variant="h5">
             {title}
           </Typography>
 
@@ -299,8 +311,11 @@ const BlogView = () => {
           {/* HTML FILE */}
 
           <Box
-            dangerouslySetInnerHTML={{ __html: html }}
-            sx={{ width: { md: "70%", xs: "100%", sm: "90%" } }}
+            dangerouslySetInnerHTML={createMarkup(html)}
+            sx={{
+              width: { md: "80%", xs: "100%", sm: "90%" },
+              // alignSelf: { md: "center", xs: "flex-start" },
+            }}
           ></Box>
 
           <Divider orientation="horizontal" flexItem sx={{ mt: 3 }} />
@@ -328,8 +343,9 @@ const BlogView = () => {
         <Box
           sx={{
             paddingLeft: 4,
+            ml: { md: 8, xs: 0 },
             backgroundColor: "#fff",
-            width: { md: "50%", xs: "80%", sm: "90%" },
+            width: { md: "70%", xs: "90%", sm: "90%" },
           }}
         >
           <Box>
