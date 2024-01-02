@@ -18,9 +18,7 @@ import { useState, React } from "react";
 import { createBlogApi, publishBlogApi } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
-import ReactQuill, { Quill } from "react-quill";
-import ImageResize from "quill-image-resize-module-react";
-import BlotFormatter from "quill-blot-formatter";
+import ReactQuill from "react-quill";
 
 import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
@@ -30,8 +28,6 @@ import { LoadingButton } from "@mui/lab";
 
 const name = Cookies.get("username");
 const role = Cookies.get("userrole");
-Quill.register("modules/imageResize", ImageResize);
-Quill.register("modules/blotFormatter", BlotFormatter);
 
 const modules = {
   toolbar: [
@@ -44,16 +40,10 @@ const modules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image", "video"],
-    ["clean"],
+    ["image", "video"],
   ],
   clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
     matchVisual: false,
-  },
-  imageResize: {
-    parchment: Quill.import("parchment"),
-    modules: ["Resize", "DisplaySize"],
   },
 };
 
@@ -106,7 +96,6 @@ const CreateBlog = () => {
   })}, ${newDate.getFullYear()}`;
 
   const handleFileUpload = async (e) => {
-    console.log(e.target.files[0]);
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
     setBlogImage(base64);
@@ -140,8 +129,10 @@ const CreateBlog = () => {
       htmlFile: editorHtml,
       savedUsers: [],
     };
+    console.log(blogDetails);
 
     const response = await createBlogApi(blogDetails);
+    console.log(response);
     if (response.status === 200) {
       setLoading(false);
       const data = await response.json();
