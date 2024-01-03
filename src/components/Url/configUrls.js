@@ -1,4 +1,4 @@
-const host = process.env.HOST_NAME;
+const host = "192.168.0.122";
 // const host = "localhost";
 
 export const updatePassUrl = `http://${host}:3005/users/`;

@@ -182,7 +182,7 @@ const SideBar = ({ category, setCategory }) => {
         </Box>
       )}
       <Divider orientation="horizontal" flexItem />
-      <RecentBlogs />
+      {/* <RecentBlogs /> */}
     </Box>
   );
 };
