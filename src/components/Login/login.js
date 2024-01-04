@@ -115,7 +115,7 @@ const Login = () => {
       setSuccessMsg(data.message);
 
       if (response.status === 200) {
-        setButtonText("Enter OTP");
+        setButtonText("Submit OTP");
         setShowEmailView(false);
         setShowOtpView(true);
       } else {
@@ -304,29 +304,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// <LoadingButton
-// size="small"
-// onClick={handleClick}
-// endIcon={<SendIcon />}
-// loading={loading}
-// loadingPosition="end"
-// variant="contained"
-// >
-// <span>Send</span>
-// </LoadingButton>
-
-// &.error
-//     {
-//       animation: shake 0.2s ease-in-out 0s 2;
-//       box-shadow: 0 0 0.5em red;
-//     }
-//   }
-// }
-
-// @keyframes shake {
-//   0% { margin-left: 0rem; }
-//   25% { margin-left: 0.5rem; }
-//   75% { margin-left: -0.5rem; }
-//   100% { margin-left: 0rem; }
-// }
