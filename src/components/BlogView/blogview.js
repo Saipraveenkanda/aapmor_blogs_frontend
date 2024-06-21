@@ -35,8 +35,8 @@ import {
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 
-const host = "192.168.0.122";
-// const host = "localhost";
+// const host = "192.168.0.122";
+const host = "localhost";
 
 const BlogView = () => {
   const navigate = useNavigate();
@@ -52,6 +52,7 @@ const BlogView = () => {
 
   useEffect(() => {
     getBlogItem();
+    // eslint-disable-next-line
   }, []);
 
   const token = Cookies.get("jwtToken");

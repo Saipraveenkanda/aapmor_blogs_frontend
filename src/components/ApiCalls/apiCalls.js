@@ -14,8 +14,8 @@ import {
   commentsApiUrl,
 } from "../Url/configUrls";
 import axios from "axios";
-const host = "192.168.0.122";
-// const host = "localhost";
+// const host = "192.168.0.122";
+const host = "localhost";
 
 export const sendOtpApi = async (email) => {
   const response = await axios.post(forgetPassUrl, { email });
