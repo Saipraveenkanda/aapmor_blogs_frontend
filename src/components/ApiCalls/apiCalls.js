@@ -30,8 +30,8 @@ export const submitRegisterApi = async (userDetails) => {
   const response = await axios.post(registerApiUrl, userDetails);
   return response;
 };
-const token = Cookies.get("jwtToken");
 export const createBlogApi = async (blogDetails) => {
+  const token = Cookies.get("jwtToken");
   const options = {
     method: "POST",
     headers: {
