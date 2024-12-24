@@ -21,63 +21,74 @@ const RecentBlogs = () => {
       {recentBlogsList.length > 0 ? (
         <>
           <Typography variant="body1" fontWeight={600} marginTop={2}>
-            Related blogs you might like
+            Recent blogs you might like
           </Typography>
-          <List sx={{ bgcolor: "background.paper", maxWidth: "100%" }}>
-            {recentBlogsList.slice(0, 5).map((eachBlogItem) => {
-              const { blogImage, description, title, username, _id } =
-                eachBlogItem;
-              return (
-                <>
-                  <ListItem
-                    key={_id}
-                    alignItems="flex-start"
-                    disablePadding
-                    sx={{
-                      display: "flex",
-                      gap: 1,
-                      cursor: "pointer",
-                      mb: 1.5,
-                      mt: 1.5,
-                    }}
-                    onClick={() => navigate(`/blogs/${_id}`)}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        alt="blog image"
-                        src={blogImage}
-                        sx={{ width: 64, height: 64 }}
-                        variant="rounded"
-                      />
-                    </ListItemAvatar>
-                    <Stack direction={"column"} spacing={0}>
-                      <Typography
-                        variant="subtitle2"
-                        fontSize={12}
-                        style={{
-                          minWidth: "200px",
-                        }}
-                        fontWeight={600}
-                      >
-                        {title.slice(0, 26)}...
-                      </Typography>
+          <List
+            sx={{
+              bgcolor: "background.paper",
+              maxWidth: "100%",
+              overflowY: "auto",
+              height: "80vh",
+              scrollbarWidth: "thin",
+            }}
+          >
+            {recentBlogsList
+              .slice(0, 5)
+              .map(({ blogImage, description, title, username, _id }) => {
+                return (
+                  <>
+                    <ListItem
+                      key={_id}
+                      alignItems="flex-start"
+                      disablePadding
+                      sx={{
+                        display: "flex",
+                        gap: 1,
+                        cursor: "pointer",
+                        mb: 1.5,
+                        mt: 1.5,
+                      }}
+                      onClick={() => navigate(`/blogs/${_id}`)}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          alt="blog image"
+                          src={blogImage}
+                          sx={{ width: 64, height: 64 }}
+                          variant="rounded"
+                        />
+                      </ListItemAvatar>
+                      <Stack direction={"column"} spacing={0}>
+                        <Typography
+                          variant="subtitle2"
+                          fontSize={12}
+                          style={{
+                            // minWidth: "200px",
+                            textOverflow: "ellipsis",
+                          }}
+                          fontWeight={600}
+                        >
+                          {/* {title.slice(0, 26)}... */}
+                          {title}
+                        </Typography>
 
-                      <Typography
-                        sx={{ display: "inline", maxWidth: "85%" }}
-                        component="span"
-                        variant="caption"
-                        fontSize={11}
-                        color="text.primary"
-                      >
-                        {username}
-                        {` - ${description.slice(0, 50)}`}
-                      </Typography>
-                    </Stack>
-                  </ListItem>
-                  <Divider orientation="horizontal" />
-                </>
-              );
-            })}
+                        <Typography
+                          sx={{ display: "inline", maxWidth: "85%" }}
+                          component="span"
+                          variant="caption"
+                          fontSize={11}
+                          color="text.primary"
+                          textOverflow={"ellipsis"}
+                        >
+                          {username || "Anonymous"}
+                          {` - ${description.slice(0, 50)}...`}
+                        </Typography>
+                      </Stack>
+                    </ListItem>
+                    <Divider orientation="horizontal" />
+                  </>
+                );
+              })}
           </List>
         </>
       ) : null}

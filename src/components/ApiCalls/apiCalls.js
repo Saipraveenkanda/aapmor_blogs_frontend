@@ -14,8 +14,7 @@ import {
   commentsApiUrl,
 } from "../Url/configUrls";
 import axios from "axios";
-// const host = "192.168.0.122";
-const host = "localhost";
+const host = process.env.REACT_APP_API_URL;
 
 export const sendOtpApi = async (email) => {
   const response = await axios.post(forgetPassUrl, { email });
@@ -46,12 +45,12 @@ export const createBlogApi = async (blogDetails) => {
 };
 export const getBlogsApi = async (category) => {
   const response = await axios.get(
-    `http://${host}:3005/blogs/filter/?category=${category}`
+    `${host}/blogs/filter/?category=${category}`
   );
   return response;
 };
 export const getBlogViewApi = async (id) => {
-  const response = await axios.get(`http://${host}:3005/blogs/${id}`);
+  const response = await axios.get(`${host}/blogs/${id}`);
   return response;
 };
 
@@ -82,6 +81,7 @@ export const profileCheckingApi = async () => {
 
 //COMMENTS API
 export const commentsApi = async (commentObject) => {
+  const token = Cookies.get("jwtToken");
   const config = {
     method: "post",
     url: commentsApiUrl,
@@ -111,6 +111,7 @@ export const likesApi = async (id) => {
 
 //GET SAVED BLOGS API
 export const getSavedBlogsApi = async () => {
+  const token = Cookies.get("jwtToken");
   const config = {
     method: "get",
     url: getSavedBlogsApiUrl,
@@ -124,6 +125,7 @@ export const getSavedBlogsApi = async () => {
 
 //SAVING A BLOG API
 export const saveBlogApi = async (_id) => {
+  const token = Cookies.get("jwtToken");
   const config = {
     method: "post",
     url: saveBLogApiUrl,
@@ -138,6 +140,7 @@ export const saveBlogApi = async (_id) => {
 
 //REMOVE BLOG FROM SAVED ARRAY API
 export const removeSaveBlogApi = async (_id) => {
+  const token = Cookies.get("jwtToken");
   const config = {
     method: "put",
     url: saveBLogApiUrl,

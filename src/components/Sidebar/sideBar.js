@@ -1,38 +1,59 @@
-import { Box, Typography, Chip, Divider, Fab, Tooltip } from "@mui/material";
-import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import PaletteIcon from "@mui/icons-material/Palette";
-import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
-import SportsBaseballIcon from "@mui/icons-material/SportsBaseball";
-import WomanIcon from "@mui/icons-material/Woman";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Typography,
+  Chip,
+  Divider,
+  Fab,
+  Tooltip,
+} from "@mui/material";
+
 import CreateIcon from "@mui/icons-material/Create";
-import LocalMoviesOutlinedIcon from "@mui/icons-material/LocalMoviesOutlined";
-import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
-import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
-import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
-import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
-import InsightsIcon from "@mui/icons-material/Insights";
-import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
+
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import Category from "./Category";
+import aapmorlogo from "../../assets/Aapmorlogodark.png";
 
+const categories = [
+  { label: "All" },
+  { label: "Fitness" },
+  { label: "Technology" },
+  { label: "Arts" },
+  { label: "Gaming" },
+  { label: "Sports" },
+  { label: "Fashion" },
+  { label: "Food & Health" },
+  { label: "Entertainment" },
+  { label: "Artificial Intelligence" },
+  { label: "Science" },
+  { label: "Politics" },
+  { label: "International" },
+  { label: "Insights" },
+];
 const SideBar = ({ category, setCategory }) => {
   const navigate = useNavigate();
   const jwtToken = Cookies.get("jwtToken");
   return (
     <Box
       sx={{
+        display: "flex",
+        flexDirection: "column",
         width: "max-content",
-        maxWidth: "13%",
+        maxWidth: "100%",
         paddingLeft: 1,
         boxSizing: "border-box",
-        display: { xs: "none", md: "flex", flexDirection: "column" },
+        position: "sticky",
+        top: "10vh",
       }}
     >
-      <Typography variant="body1" gutterBottom fontWeight={600} marginTop={2}>
+      <Typography variant="h6" gutterBottom fontWeight={600} marginTop={2}>
         Categories
       </Typography>
       {/* Category chips */}
@@ -44,119 +65,16 @@ const SideBar = ({ category, setCategory }) => {
           marginBottom: 1,
         }}
       >
-        <Chip
-          size="small"
-          icon={<AllInclusiveIcon />}
-          label="All"
-          variant={category === "All" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<FitnessCenterIcon />}
-          label="Fitness"
-          variant={category === "Fitness" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<PsychologyIcon />}
-          label="Technology"
-          variant={category === "Technology" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<PaletteIcon />}
-          label="Arts"
-          variant={category === "Arts" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<SportsEsportsIcon />}
-          label="Gaming"
-          variant={category === "Gaming" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<SportsBaseballIcon />}
-          label="Sports"
-          variant={category === "Sports" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<WomanIcon />}
-          label="Fashion"
-          variant={category === "Fashion" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<FastfoodIcon />}
-          label="Food & Health"
-          variant={category === "Food & Health" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-
-        <Chip
-          size="small"
-          icon={<LocalMoviesOutlinedIcon />}
-          label="Entertainment"
-          variant={category === "Entertainment" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<SmartToyOutlinedIcon />}
-          label="Artificial Intelligence"
-          variant={
-            category === "Artificial Intelligence" ? "filled" : "outlined"
-          }
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<BiotechOutlinedIcon />}
-          label="Science"
-          variant={category === "Science" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<NewspaperOutlinedIcon />}
-          label="News"
-          variant={category === "News" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<GavelOutlinedIcon />}
-          label="Politics"
-          color="default"
-          variant={category === "Politics" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<AirplanemodeActiveIcon />}
-          label="International"
-          color="default"
-          variant={category === "International" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
-        <Chip
-          size="small"
-          icon={<InsightsIcon />}
-          label="Insights"
-          color="default"
-          variant={category === "Insights" ? "filled" : "outlined"}
-          onClick={(e) => setCategory(e.target.innerText)}
-        />
+        {categories.map(({ label }, index) => (
+          <Category
+            key={index}
+            setCategory={setCategory}
+            label={label}
+            category={category}
+          />
+        ))}
       </Box>
-      <Divider orientation="horizontal" flexItem />
+      <Divider orientation="horizontal" flexItem sx={{ mb: 1 }} />
       {jwtToken ? (
         <Tooltip
           title="Create new blog "
@@ -167,8 +85,9 @@ const SideBar = ({ category, setCategory }) => {
           <Fab
             variant="extended"
             color="error"
-            size="small"
+            size="medium"
             onClick={() => navigate("/createblog")}
+            sx={{ borderRadius: 2 }}
           >
             <CreateIcon sx={{ mr: 1 }} />
             Create
@@ -177,12 +96,48 @@ const SideBar = ({ category, setCategory }) => {
       ) : (
         <Box sx={{ p: 1 }}>
           <Typography variant="caption" color={"GrayText"}>
-            <span onClick={() => navigate("/login")}>Login</span> to create blog
+            <span
+              style={{ cursor: "pointer", textDecoration: "underline" }}
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </span>{" "}
+            to create blog
           </Typography>
         </Box>
       )}
-      <Divider orientation="horizontal" flexItem />
+      <Divider orientation="horizontal" flexItem sx={{ mt: 1 }} />
       {/* <RecentBlogs /> */}
+      <Grid item p={1} m={1}>
+        <img src={aapmorlogo} alt="aapmor-logo" style={{ width: "200px" }} />
+        <Grid item gap={2}>
+          <IconButton component="a" href="#">
+            <TwitterIcon
+              sx={{ color: "#00acee", height: "30px", width: "30px" }}
+            />
+          </IconButton>
+          <IconButton component="a" href="#">
+            <FacebookIcon
+              color="primary"
+              sx={{ color: "#1877F2", height: "30px", width: "30px" }}
+            />
+          </IconButton>
+          <IconButton component="a" href="_blank">
+            <InstagramIcon
+              sx={{ color: "#ed2147", height: "30px", width: "30px" }}
+            />
+          </IconButton>
+          <IconButton
+            component="a"
+            href="https://www.linkedin.com/company/aapmor-technologies/"
+            target="_blank"
+          >
+            <LinkedInIcon
+              sx={{ color: " #0072b1 ", height: "30px", width: "30px" }}
+            />
+          </IconButton>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

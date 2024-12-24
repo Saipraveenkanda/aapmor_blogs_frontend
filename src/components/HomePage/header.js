@@ -21,6 +21,7 @@ import { SearchOutlined } from "@mui/icons-material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import BookIcon from "@mui/icons-material/Book";
+import aapmorlogo from "../../assets/Aapmorlogo.png";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -63,12 +64,7 @@ const Header = () => {
           }}
           onClick={() => navigate("/")}
         >
-          <img
-            height="60px"
-            width="60px"
-            src="https://res.cloudinary.com/ddahy4bbc/image/upload/v1698670236/1697545876900-removebg-preview_d7xrcu.png"
-            alt="logoAapmor"
-          />
+          <img width={"160px"} src={aapmorlogo} alt="logoAapmor" />
           <Divider
             orientation="vertical"
             flexItem
@@ -79,8 +75,12 @@ const Header = () => {
               alignSelf: "center",
             }}
           />
-          <Typography variant="h6" color={"#ffffff"}>
-            BLOGS
+          <Typography
+            variant="h6"
+            color={"#ffffff"}
+            fontFamily={"Playwrite CO Guides, serif"}
+          >
+            Blogs
           </Typography>
         </Box>
         <Box

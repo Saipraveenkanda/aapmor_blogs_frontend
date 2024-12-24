@@ -35,8 +35,7 @@ import {
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 
-// const host = "192.168.0.122";
-const host = "localhost";
+const host = process.env.REACT_APP_API_URL;
 
 const BlogView = () => {
   const navigate = useNavigate();
@@ -108,7 +107,7 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
-    const response = await axios.get(`http://${host}:3005/blogs/${id}`);
+    const response = await axios.get(`${host}/blogs/${id}`);
     const blogDetails = await response.data;
     if (response.status === 200) {
       setApiStatus("SUCCESS");
@@ -421,7 +420,7 @@ const BlogView = () => {
               </Box>
             )}
 
-            <Divider sx={{ mt: 1 }} />
+            {/* <Divider sx={{ mt: 1 }} /> */}
 
             {comments.length > 0 ? renderComments() : renderNoCommentsView()}
             {/* Comments box */}
@@ -451,15 +450,17 @@ const BlogView = () => {
       <Header />
       <IconButton
         sx={{
-          pl: 2,
-          pt: 2,
-          height: "12px",
-          width: "12px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 1,
+          ml: 1,
         }}
-        size="small"
+        size="medium"
+        title="Go back"
         onClick={() => navigate("/")}
       >
-        <ArrowBackIosIcon />
+        <ArrowBackIosIcon fontSize="medium" />
       </IconButton>
 
       {renderBlogDetails()}

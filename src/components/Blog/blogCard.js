@@ -38,23 +38,30 @@ const Blog = (blogDetails) => {
       {/* WEB VIEW */}
       <Card
         sx={{
-          display: { xs: "none", sm: "block" },
-          height: "max-content",
-          width: { xs: "100%", sm: 300, md: 250 },
+          display: { xs: "none", sm: "flex" },
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          height: "60vh",
+          width: "80%",
+          backgroundColor: "#2196f310",
+          backdropFilter: "blur(12px)",
           "&:hover": {
-            transform: "scale(1.02)",
+            // transform: "scale(1.02)",
             boxShadow: "0px 0px 10px 0px #00000050 ",
+            border: "0.5px solid #bfbfbf",
           },
         }}
       >
+        {/* Image Details */}
         <Box
           sx={{
             backgroundImage: `url(
               ${blogImage}
             )`,
             backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            height: 120,
+            height: "60%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -62,7 +69,7 @@ const Blog = (blogDetails) => {
         >
           <Chip
             label={category}
-            size="small"
+            size="medium"
             sx={{
               justifySelf: "flex-start",
               alignSelf: "flex-end",
@@ -80,64 +87,91 @@ const Blog = (blogDetails) => {
               boxSizing: "border-box",
             }}
           >
-            <Typography variant="subtitle2" color={"#ffffff"}>
-              {username}
+            <Typography variant="h6" color={"#ffffff"}>
+              {username || "Anonymous"}
             </Typography>
             <Typography
               variant="caption"
               color={"#ffffff"}
               sx={{ display: "flow" }}
             >
-              {userrole}
+              {userrole || "-"}
             </Typography>
           </Box>
         </Box>
+
+        {/* Description */}
         <Box
           sx={{
-            pl: 1,
-            pr: 1,
-            boxSizing: "border-box",
             display: "flex",
             flexDirection: "column",
-            minHeight: 100,
-          }}
-        >
-          <Typography
-            variant="caption"
-            color={"darkgray"}
-            fontSize={"10px"}
-            mt={0.5}
-          >
-            Posted at {formattedDate}
-          </Typography>
-          <Typography variant="p" fontWeight={700}>
-            {title.slice(0, 50)}
-          </Typography>
-          <Typography variant="caption" color={"grey"}>
-            {description.slice(0, 60)}...
-          </Typography>
-        </Box>
-        <Divider flexItem orientation="horizontal" />
-
-        <Box
-          sx={{
-            display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
-            height: "max-content",
-            padding: "0px 10px",
-            alignSelf: "flex-end",
-            cursor: "pointer",
-            "&:hover": {
-              color: "#e65100",
-            },
+            // alignItems: "center",
+            height: "50%",
           }}
-          onClick={handleReadMore}
         >
-          <Typography variant="body2">Read more</Typography>
-          <IconButton>
-            <ArrowForwardIcon />
-          </IconButton>
+          <Box
+            sx={{
+              padding: "4px 8px",
+              boxSizing: "border-box",
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 100,
+              backgroundColor: "transparent",
+            }}
+          >
+            <Typography
+              variant="caption"
+              color={"darkgray"}
+              fontSize={"10px"}
+              mt={0.5}
+            >
+              Posted at {formattedDate}
+            </Typography>
+            <Typography variant="h6" fontWeight={700}>
+              {title}
+            </Typography>
+            <Typography
+              variant="caption"
+              color={"CaptionText"}
+              sx={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                // whiteSpace: "nowrap",
+              }}
+            >
+              {description}
+            </Typography>
+          </Box>
+          <Divider
+            variant="middle"
+            sx={{ justifySelf: "flex-end" }}
+            flexItem
+            orientation="horizontal"
+          />
+          {/* Readmore button */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              height: "max-content",
+              padding: "0px 10px",
+              // alignSelf: "flex-end",
+              cursor: "pointer",
+              "&:hover": {
+                color: "#e65100",
+              },
+              // justifySelf: "flex-end",
+              // alignSelf: "flex-end",
+            }}
+            onClick={handleReadMore}
+          >
+            <Typography variant="body2">Read more</Typography>
+            <IconButton>
+              <ArrowForwardIcon />
+            </IconButton>
+          </Box>
         </Box>
       </Card>
 

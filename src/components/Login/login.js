@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
+import aapmorlogo from "../../assets/Aapmorlogodark.png";
 
 //MAIN FUNCTION
 const Login = () => {
@@ -157,29 +158,41 @@ const Login = () => {
           justifyContent: "center",
           alignItems: "center",
           padding: "20px",
+          gap: 2,
         }}
       >
-        <Stack direction={"row"} spacing={2} alignItems="center">
+        <Stack
+          direction={"row"}
+          spacing={2}
+          alignItems="center"
+          justifyContent={"center"}
+        >
           <img
-            src="https://res.cloudinary.com/ddahy4bbc/image/upload/v1698670236/1697545876900-removebg-preview_d7xrcu.png"
+            // src="https://res.cloudinary.com/ddahy4bbc/image/upload/v1698670236/1697545876900-removebg-preview_d7xrcu.png"
+            src={aapmorlogo}
             alt="logoAapmor"
+            style={{ width: "40%" }}
           />
           <Divider
             orientation="vertical"
             flexItem
             sx={{
               borderRightWidth: 5,
-              borderColor: "#000EE6",
+              borderColor: "#D52221",
               height: "80px",
               alignSelf: "center",
             }}
           />
-          <Typography variant="h4" color={"#2C007E"}>
-            BLOGS
+          <Typography
+            variant="h4"
+            color={"#2C007E"}
+            fontFamily={"Playwrite CO Guides, serif"}
+          >
+            Blogs
           </Typography>
         </Stack>
         <Typography
-          mt={-3}
+          // mt={-3}
           variant="body2"
           textAlign={"center"}
           width={400}

@@ -33,19 +33,20 @@ const SavedBlogs = () => {
           height: "85vh",
         }}
       >
-        <Typography>Loading saved blogs...</Typography>
-        <CircularProgress />
+        <Typography sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          Loading saved blogs <CircularProgress />
+        </Typography>
       </Box>
     );
   };
 
   const renderFailureView = () => {
     return (
-      <Box>
+      <Box sx={{ display: "grid", placeItems: "center", height: "90vh" }}>
         <Typography variant="subtitle1" fontWeight={600} fontSize={18}>
           Oops! Something went wrong while trying to fetch the blogs.
           <br />
-          Please check your internet connection and try again later
+          Please check your internet connection or try again later
         </Typography>
       </Box>
     );
@@ -54,7 +55,12 @@ const SavedBlogs = () => {
   const renderBlogsView = () => {
     return (
       <Box>
-        <Typography variant="h6" sx={{ pl: 2, pt: 2 }} fontWeight={700}>
+        <Typography
+          variant="h6"
+          sx={{ pl: 2, pt: 2 }}
+          fontWeight={700}
+          textAlign={"center"}
+        >
           Your Saved Blogs
         </Typography>
         <Box
@@ -63,6 +69,8 @@ const SavedBlogs = () => {
             flexWrap: "wrap",
             gap: 2,
             p: 2,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {savedBlogs.map((blogItem) => {

@@ -18,6 +18,7 @@ import {
   Box,
   Alert,
   Backdrop,
+  Grid,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -29,6 +30,8 @@ import { setBlogsData } from "../Slices/blogSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import Cookies from "js-cookie";
+import blogsbackground from "../../assets/blogs_bg2.png";
+import RecentBlogs from "../RecentBlogs/recentBlogs";
 
 const style = {
   position: "absolute",
@@ -175,6 +178,7 @@ const Home = () => {
           justifyContent: "center",
           alignItems: "center",
           width: "100%",
+          height: "50vh",
         }}
       >
         <Typography
@@ -205,20 +209,56 @@ const Home = () => {
     return (
       <Box
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row", md: "row" },
-          width: { sm: "100vw" },
-          flexWrap: "wrap",
-          minHeight: "90vh",
-          padding: "20px",
-          boxSizing: "border-box",
+          height: "91vh",
+          // backgroundImage: `url(${blogsbackground})`,
+          // backgroundSize: "cover",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          overflowY: "auto",
+          // scrollbarWidth: "none",
+          "&::-webkit-scrollbar": {
+            width: "10px",
+            marginRight: 2,
+            marginLeft: -2,
+          },
+          "&::-webkit-scrollbar-track": {
+            // background: "#f1f1f1",
+            background: "transparent",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#2196f350",
+            borderRadius: 2,
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#2196f3",
+          },
         }}
-        gap={2}
       >
-        <Typography sx={{ display: { xs: "block", md: "none" } }} variant="h6">
-          Hello {userName}, Good Day!
-        </Typography>
-        {blogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+            // width: { sm: "80%" },
+            // flexWrap: "wrap",
+            minHeight: "91vh",
+            padding: "24px",
+            boxSizing: "border-box",
+            // overflowY: "auto",
+            // scrollbarWidth: "thin",
+            backdropFilter: "blur(10px)",
+            // backgroundPosition: "center",
+            // scrollbarWidth: 0,
+          }}
+          gap={4}
+        >
+          <Typography variant="h6" fontWeight={"bold"}>
+            Good day {userName}
+          </Typography>
+          {blogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
+        </Box>
       </Box>
     );
   };
@@ -341,12 +381,21 @@ const Home = () => {
     <>
       <Header />
 
-      <Box sx={{ display: "flex" }}>
-        <SideBar setCategory={setCategory} category={category} />
-        {renderBlogsApi()}
-      </Box>
+      <Grid container xs={12}>
+        <Grid item xs={2}>
+          <SideBar setCategory={setCategory} category={category} />
+        </Grid>
+        <Grid item xs={10} container>
+          <Grid item xs={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
+            {renderBlogsApi()}
+          </Grid>
+          <Grid item xs={3}>
+            <RecentBlogs />
+          </Grid>
+        </Grid>
+      </Grid>
 
-      <Footer />
+      {/* <Footer /> */}
 
       {profile && showPopupProfile()}
 
