@@ -10,20 +10,32 @@ import {
   MenuItem,
   Avatar,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
+import { profileCheckingApi } from "../ApiCalls/apiCalls";
 
 const UserProfile = (props) => {
   const [designation, setDesignation] = useState("");
   const [gender, setGender] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [profile, setProfile] = useState({});
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
     setImage(base64);
   };
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const response = await profileCheckingApi();
+      if (response) {
+        setProfile(response.data.res);
+      }
+    };
+    getProfile();
+  }, []);
 
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -75,8 +87,9 @@ const UserProfile = (props) => {
             <TextField
               required
               size="small"
-              value={name}
-              label="Full Name"
+              value={profile.name}
+              // label="Full Name"
+              disabled={profile.name}
               onChange={(e) => setName(e.target.value)}
             />
 
@@ -86,7 +99,7 @@ const UserProfile = (props) => {
               </InputLabel>
               <Select
                 onChange={(e) => setDesignation(e.target.value)}
-                value={designation}
+                value={profile.designation}
                 required
                 label="Designation"
               >
@@ -104,7 +117,7 @@ const UserProfile = (props) => {
             <FormControl size="small">
               <InputLabel id="demo-simple-select-label">Gender *</InputLabel>
               <Select
-                value={gender}
+                value={profile.gender}
                 label="Gender"
                 onChange={(e) => setGender(e.target.value)}
                 required
