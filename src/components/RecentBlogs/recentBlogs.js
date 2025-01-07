@@ -17,10 +17,10 @@ const RecentBlogs = () => {
   const navigate = useNavigate();
 
   return (
-    <Box>
+    <Box sx={{ mt: 2 }}>
       {recentBlogsList.length > 0 ? (
         <>
-          <Typography variant="body1" fontWeight={600} marginTop={2}>
+          <Typography variant="h6" fontWeight={600} marginTop={2}>
             Recent blogs you might like
           </Typography>
           <List

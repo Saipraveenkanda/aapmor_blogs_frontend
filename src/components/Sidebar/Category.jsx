@@ -21,74 +21,100 @@ const Category = ({ category, setCategory, label }) => {
       case "All":
         return (
           <AllInclusiveIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "#016A70" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Fitness":
         return (
           <FitnessCenterIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Technology":
         return (
-          <PsychologyIcon color={category === label ? "warning" : "primary"} />
+          <PsychologyIcon
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
+          />
         );
       case "Arts":
         return (
-          <PaletteIcon color={category === label ? "warning" : "primary"} />
+          <PaletteIcon
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
+          />
         );
       case "Gaming":
         return (
           <SportsEsportsIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Sports":
         return (
           <SportsBaseballIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Fashion":
-        return <WomanIcon color={category === label ? "warning" : "primary"} />;
+        return (
+          <WomanIcon
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
+          />
+        );
       case "Food & Health":
         return (
-          <FastfoodIcon color={category === label ? "warning" : "primary"} />
+          <FastfoodIcon
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
+          />
         );
       case "Entertainment":
         return (
           <LocalMoviesOutlinedIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Artificial Intelligence":
         return (
           <SmartToyOutlinedIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Science":
         return (
           <BiotechOutlinedIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Politics":
         return (
           <NewspaperOutlinedIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "International":
         return (
           <AirplanemodeActiveIcon
-            color={category === label ? "warning" : "primary"}
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
           />
         );
       case "Insights":
         return (
-          <InsightsIcon color={category === label ? "warning" : "primary"} />
+          <InsightsIcon
+            // color={category === label ? "primary" : "disabled"}
+            sx={{ color: category === label ? "#016A70" : "lightgrey" }}
+          />
         );
       default:
         return null;
@@ -101,41 +127,44 @@ const Category = ({ category, setCategory, label }) => {
         sx={{
           borderRadius: "50%",
           height: "30px",
-          width: "30px",
+          width: "34px",
           zIndex: 10,
           marginRight: "-15px",
           boxShadow: `-2px 0px 4px 0px ${
-            category === label ? "#d32f2f50" : "#2196f350"
+            category === label ? "#016A7050" : "lightgrey"
           } inset`,
           backgroundColor: "#ffffff",
           display: "grid",
           placeItems: "center",
           borderLeft: `1px solid ${
-            category === label ? "#d32f2f" : "#2196f3"
+            category === label ? "#016A70" : "lightgrey"
           }`,
         }}
       >
         {renderIcon()}
       </Box>
       <Button
-        // size="medium"
+        size="small"
         // startIcon={renderIcon()}
         value={label}
         variant={category === label ? "contained" : "outlined"}
         onClick={(e) => setCategory(e.target.value)}
         sx={{
-          border: `1px solid ${category === label ? "#d32f2f" : "#2196f3"}`,
-
+          border: `1px solid ${category === label ? "#016A70" : "lightgrey"}`,
+          height: "40px",
+          width: "100%",
           borderRadius: 2,
           textTransform: "none",
-          backgroundColor: category === label ? "#d32f2f20" : "#fff",
-          color: category === label ? "#d32f2f" : "#000",
+          backgroundColor: "#fff",
+          color: category === label ? "#016A70" : "#000",
+          fontWeight: category === label ? "bold" : "",
           p: "6px 6px 6px 24px",
+          mr: 0.5,
           "&:hover": {
             backgroundColor: "unset",
-            borderColor: "#2196f3",
+            borderColor: "#016A70",
           },
-          boxShadow: "2px 0px 4px 0px #bfbfbf",
+          // boxShadow: "2px 0px 4px 0px #bfbfbf",
         }}
       >
         {label}

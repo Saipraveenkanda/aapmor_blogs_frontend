@@ -4,6 +4,7 @@ import {
   Card,
   Chip,
   Divider,
+  Grid,
   IconButton,
   Stack,
   Typography,
@@ -14,6 +15,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { useNavigate } from "react-router-dom";
+import { DotOutline } from "@phosphor-icons/react";
 
 const Blog = (blogDetails) => {
   const navigate = useNavigate();
@@ -39,48 +41,59 @@ const Blog = (blogDetails) => {
       <Card
         sx={{
           display: { xs: "none", sm: "flex" },
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "flex-start",
-          height: "60vh",
-          width: "80%",
-          backgroundColor: "#2196f310",
+          height: "25vh",
+          width: "100%",
+          borderRadius: 2,
           backdropFilter: "blur(12px)",
+          border: "0.5px solid transparent",
           "&:hover": {
-            // transform: "scale(1.02)",
-            boxShadow: "0px 0px 10px 0px #00000050 ",
+            boxShadow: "0px 0px 2px 0px #00000050",
             border: "0.5px solid #bfbfbf",
           },
+          cursor: "pointer",
         }}
+        elevation={0}
+        onClick={handleReadMore}
       >
-        {/* Image Details */}
-        <Box
-          sx={{
-            backgroundImage: `url(
-              ${blogImage}
-            )`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            height: "60%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
-          <Chip
-            label={category}
-            size="medium"
-            sx={{
-              justifySelf: "flex-start",
-              alignSelf: "flex-end",
-              m: "4px 4px 0px 0px",
-              backgroundColor: "#00000090",
-              fontSize: "10px",
-              color: "#ffffff",
-              border: "0.5px solid #ffffff",
-            }}
-          />
-          <Box
+        <Grid container xs={12} sx={{ zIndex: 10 }}>
+          {/* Image Details */}
+          <Grid item xs={4}>
+            <Box
+              sx={{
+                flex: 1,
+                backgroundImage: `url(${blogImage})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                p: 1,
+                boxSizing: "border-box",
+                // alignItems: "",
+              }}
+            >
+              {/* <img
+                src={blogImage}
+                alt={"blog-image"}
+                style={{ width: "60%" }}
+              /> */}
+              <Chip
+                label={category}
+                size="medium"
+                sx={{
+                  alignSelf: "flex-start",
+                  // m: "4px 4px 0px 0px",
+                  backgroundColor: "#00000090",
+                  fontSize: "10px",
+                  color: "#ffffff",
+                  border: "0.5px solid #ffffff",
+                }}
+              />
+              {/* <Box
             sx={{
               background: "linear-gradient(to top, #000000, #00000002 )",
               paddingLeft: 1,
@@ -97,60 +110,75 @@ const Blog = (blogDetails) => {
             >
               {userrole || "-"}
             </Typography>
-          </Box>
-        </Box>
-
-        {/* Description */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            // alignItems: "center",
-            height: "50%",
-          }}
-        >
-          <Box
-            sx={{
-              padding: "4px 8px",
-              boxSizing: "border-box",
-              display: "flex",
-              flexDirection: "column",
-              minHeight: 100,
-              backgroundColor: "transparent",
-            }}
-          >
-            <Typography
-              variant="caption"
-              color={"darkgray"}
-              fontSize={"10px"}
-              mt={0.5}
-            >
-              Posted at {formattedDate}
-            </Typography>
-            <Typography variant="h6" fontWeight={700}>
-              {title}
-            </Typography>
-            <Typography
-              variant="caption"
-              color={"CaptionText"}
+          </Box> */}
+            </Box>
+          </Grid>
+          {/* Description */}
+          <Grid item xs={8}>
+            <Box
               sx={{
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                // whiteSpace: "nowrap",
+                display: "flex",
+                flexDirection: "column",
+                // justifyContent: "space-between",
+                // alignItems: "center",
+                // height: "50%",
+                padding: "4px 8px",
               }}
             >
-              {description}
-            </Typography>
-          </Box>
-          <Divider
+              <Box
+                sx={{
+                  boxSizing: "border-box",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  // minHeight: 100,
+                  backgroundColor: "transparent",
+                }}
+              >
+                <Typography variant="p" color={""}>
+                  {username || "Anonymous"}
+                </Typography>
+                <DotOutline size={20} />
+                <Typography
+                  variant="p"
+                  color={""}
+                  sx={{ display: "flow" }}
+                >
+                  {userrole || "-"}
+                </Typography>
+                <DotOutline size={20} />
+                <Typography
+                  variant="p"
+                  color={"darkgray"}
+                  mt={0.5}
+                >
+                  Posted at {formattedDate}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="h6" fontWeight={700}>
+                  {title}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color={"CaptionText"}
+                  sx={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    // whiteSpace: "nowrap",
+                  }}
+                >
+                  {description}
+                </Typography>
+              </Box>
+              {/* <Divider
             variant="middle"
             sx={{ justifySelf: "flex-end" }}
             flexItem
             orientation="horizontal"
-          />
-          {/* Readmore button */}
-          <Box
+          /> */}
+              {/* Readmore button */}
+              {/* <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
@@ -171,8 +199,10 @@ const Blog = (blogDetails) => {
             <IconButton>
               <ArrowForwardIcon />
             </IconButton>
-          </Box>
-        </Box>
+          </Box> */}
+            </Box>
+          </Grid>
+        </Grid>
       </Card>
 
       {/* MOBILE VIEW */}
@@ -266,6 +296,11 @@ const Blog = (blogDetails) => {
           </Stack>
         </Stack>
       </Card>
+      <Divider
+        orientation="horizontal"
+        flexItem
+        sx={{ borderColor: "#016A70" }}
+      />
     </>
   );
 };

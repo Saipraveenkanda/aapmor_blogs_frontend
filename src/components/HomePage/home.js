@@ -160,7 +160,7 @@ const Home = () => {
           width: "80vw",
         }}
       >
-        <CircularProgress />
+        <CircularProgress sx={{color:"#016A70"}}/>
       </Box>
     );
   };
@@ -216,7 +216,7 @@ const Home = () => {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           overflowY: "auto",
-          // scrollbarWidth: "none",
+          scrollbarWidth: "none",
           "&::-webkit-scrollbar": {
             width: "10px",
             marginRight: 2,
@@ -239,7 +239,7 @@ const Home = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "flex-start",
             width: "100%",
             // width: { sm: "80%" },
             // flexWrap: "wrap",
@@ -254,8 +254,8 @@ const Home = () => {
           }}
           gap={4}
         >
-          <Typography variant="h6" fontWeight={"bold"}>
-            Good day {userName}
+          <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
+            Hello! Welcome {userName}
           </Typography>
           {blogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
         </Box>
@@ -381,7 +381,7 @@ const Home = () => {
     <>
       <Header />
 
-      <Grid container xs={12}>
+      <Grid container xs={12} sx={{ pl: "40px", pr: "40px" }}>
         <Grid item xs={2}>
           <SideBar setCategory={setCategory} category={category} />
         </Grid>

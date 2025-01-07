@@ -21,7 +21,7 @@ import { SearchOutlined } from "@mui/icons-material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import BookIcon from "@mui/icons-material/Book";
-import aapmorlogo from "../../assets/Aapmorlogo.png";
+import aapmorlogo from "../../assets/Aapmorlogodark.png";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,10 +44,19 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="sticky" top={0}>
+    <AppBar
+      position="sticky"
+      top={0}
+      sx={{
+        backgroundColor: "#fff",
+        borderBottom: "0.5px solid lightgrey",
+        color: "#000",
+      }}
+      elevation={0}
+    >
       <Toolbar
-        bgcolor={"background.default"}
-        color={"text.primary"}
+        bgcolor={"transparent"}
+        color={"#000"}
         sx={{
           display: "flex",
           flexDirection: "row",
@@ -77,8 +86,9 @@ const Header = () => {
           />
           <Typography
             variant="h6"
-            color={"#ffffff"}
+            color={"#016A70"}
             fontFamily={"Playwrite CO Guides, serif"}
+            fontWeight={500}
           >
             Blogs
           </Typography>
@@ -88,14 +98,22 @@ const Header = () => {
             display: { xs: "none", sm: "flex" },
             alignItems: "center",
             width: "30%",
-            backgroundColor: "#ffffff95",
-            pl: 1,
-            pr: 1,
-            borderRadius: 2,
+            backgroundColor: "#ffffff",
+            border: "0.5px solid lightgrey",
+            // pl: 1,
+            // pr: 1,
+            // p: 0.5,
+            borderRadius: 8,
+            pr: 2,
           }}
         >
-          <InputBase type="search" placeholder="Search..." fullWidth disabled />
-          <SearchOutlined color="primary" sx={{ cursor: "not-allowed" }} />
+          <InputBase
+            type="search"
+            placeholder="Search..."
+            fullWidth
+            sx={{ p: 0.5, pl: 2, color: "grey", boxSizing: "border-box" }}
+          />
+          <SearchOutlined color="action" sx={{ cursor: "pointer" }} />
         </Box>
 
         {/* WEB NAVIGATION AFTER LOGIN */}
@@ -105,6 +123,8 @@ const Header = () => {
             sx={{
               display: { xs: "none", md: "flex" },
               alignItems: "center",
+              gap: 1,
+              color: "grey",
             }}
           >
             <Button
@@ -112,6 +132,7 @@ const Header = () => {
               color="inherit"
               disableElevation
               onClick={() => navigate("/user/profile")}
+              sx={{ textTransform: "none", borderRadius: 4 }}
             >
               Profile
             </Button>
@@ -121,6 +142,7 @@ const Header = () => {
               color="inherit"
               disableElevation
               onClick={() => navigate("/user/saved")}
+              sx={{ textTransform: "none", borderRadius: 4 }}
             >
               Saved
             </Button>
@@ -130,27 +152,34 @@ const Header = () => {
               color="inherit"
               disableElevation
               href="/user/blogs"
-              disabled
+              sx={{ textTransform: "none", borderRadius: 4 }}
+              // disabled
             >
               Your blogs
             </Button>
             {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            <Tooltip title="logout">
-              <Button
-                variant="text"
-                color="inherit"
-                disableElevation
-                sx={{ gap: 1 }}
-                onClick={handleLogout}
-              >
-                <Stack direction={"column"} alignItems={"center"}>
-                  <LogoutIcon />
-                  <Typography variant="caption" fontSize={10}>
-                    Logout
-                  </Typography>
-                </Stack>
-              </Button>
-            </Tooltip>
+            {/* <Tooltip title="logout"> */}
+            <Button
+              size="small"
+              variant="text"
+              color="inherit"
+              disableElevation
+              sx={{
+                borderRadius: 4,
+                border: "0.5px solid #016A70",
+                textTransform: "none",
+                color: "grey",
+              }}
+              onClick={handleLogout}
+            >
+              Logout
+              {/* <Stack direction={"column"} alignItems={"center"}> */}
+              {/* <LogoutIcon /> */}
+              {/* <Typography variant="caption" fontSize={10}> */}
+              {/* </Typography> */}
+              {/* </Stack> */}
+            </Button>
+            {/* </Tooltip> */}
           </Box>
         ) : (
           <Tooltip

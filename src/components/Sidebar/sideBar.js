@@ -20,6 +20,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Category from "./Category";
 import aapmorlogo from "../../assets/Aapmorlogodark.png";
+import writeIcon from "../../assets/pencil-simple-line.svg";
 
 const categories = [
   { label: "All" },
@@ -51,6 +52,7 @@ const SideBar = ({ category, setCategory }) => {
         boxSizing: "border-box",
         position: "sticky",
         top: "10vh",
+        zIndex: 100,
       }}
     >
       <Typography variant="h6" gutterBottom fontWeight={600} marginTop={2}>
@@ -60,9 +62,13 @@ const SideBar = ({ category, setCategory }) => {
       <Box
         sx={{
           display: "flex",
-          flexWrap: "wrap",
+          // flexWrap: "wrap",
+          flexDirection: "column",
           gap: 1,
           marginBottom: 1,
+          maxHeight: "80vh",
+          overflowY: "auto",
+          scrollbarWidth: "none",
         }}
       >
         {categories.map(({ label }, index) => (
@@ -74,23 +80,41 @@ const SideBar = ({ category, setCategory }) => {
           />
         ))}
       </Box>
-      <Divider orientation="horizontal" flexItem sx={{ mb: 1 }} />
+      {/* <Divider orientation="horizontal" flexItem sx={{ mb: 1 }} /> */}
       {jwtToken ? (
-        <Tooltip
-          title="Create new blog "
-          arrow
-          placement="left"
-          sx={{ mt: 1, position: "sticky", top: 80, mb: 1 }}
-        >
+        <Tooltip title="Create new blog " arrow placement="left" sx={{ mt: 1 }}>
           <Fab
             variant="extended"
-            color="error"
+            // color="inherit"
             size="medium"
             onClick={() => navigate("/createblog")}
-            sx={{ borderRadius: 2 }}
+            sx={{
+              backgroundColor: "#016A70",
+              boxShadow: "-1px 0px 1px 0px grey ",
+              borderRadius: 2,
+              position: "fixed",
+              bottom: 30,
+              right: 30,
+              width: "180px",
+              height: "48px",
+              textTransform: "none",
+              fontSize: "16px",
+              border: "4px solid #fff",
+              "&:hover": {
+                border: "4px solid #016A70",
+                boxShadow: "1px 0px 4px 0px #ffffff inset",
+                backgroundColor: "#016A70",
+              },
+              color: "#ffffff",
+            }}
           >
-            <CreateIcon sx={{ mr: 1 }} />
-            Create
+            {/* <CreateIcon sx={{ mr: 1 }} /> */}
+            <img
+              src={writeIcon}
+              alt="write_icon"
+              style={{ height: "30px", paddingRight: "8px" }}
+            />
+            Write
           </Fab>
         </Tooltip>
       ) : (
@@ -106,11 +130,12 @@ const SideBar = ({ category, setCategory }) => {
           </Typography>
         </Box>
       )}
-      <Divider orientation="horizontal" flexItem sx={{ mt: 1 }} />
+      {/* <Divider orientation="horizontal" flexItem sx={{ mt: 1 }} /> */}
       {/* <RecentBlogs /> */}
-      <Grid item p={1} m={1}>
-        <img src={aapmorlogo} alt="aapmor-logo" style={{ width: "200px" }} />
-        <Grid item gap={2}>
+      {/* <Grid item p={1} m={1}> */}
+      {/* <img src={aapmorlogo} alt="aapmor-logo" style={{ width: "200px" }} /> */}
+      {/* Social media icons */}
+      {/* <Grid item gap={2}>
           <IconButton component="a" href="#">
             <TwitterIcon
               sx={{ color: "#00acee", height: "30px", width: "30px" }}
@@ -136,8 +161,8 @@ const SideBar = ({ category, setCategory }) => {
               sx={{ color: " #0072b1 ", height: "30px", width: "30px" }}
             />
           </IconButton>
-        </Grid>
-      </Grid>
+        </Grid> */}
+      {/* </Grid> */}
     </Box>
   );
 };

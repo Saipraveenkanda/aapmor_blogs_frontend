@@ -123,7 +123,7 @@ const CreateBlog = () => {
       description,
       blogImage,
       category,
-      date: dateObject,
+      date: newDate,
       likes: 0,
       comments: [],
       htmlFile: editorHtml,
