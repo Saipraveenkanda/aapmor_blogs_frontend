@@ -12,6 +12,7 @@ import {
   saveBLogApiUrl,
   getSavedBlogsApiUrl,
   commentsApiUrl,
+  uploadThumbnailUrl,
 } from "../Url/configUrls";
 import axios from "axios";
 const host = process.env.REACT_APP_API_URL;
@@ -148,6 +149,20 @@ export const removeSaveBlogApi = async (_id) => {
       Authorization: `Bearer ${token}`,
     },
     data: { _id },
+  };
+  const response = await axios(config);
+  return response;
+};
+
+export const uploadThumbnail = async (image) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "post",
+    url: uploadThumbnailUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: image,
   };
   const response = await axios(config);
   return response;

@@ -81,7 +81,7 @@ const SideBar = ({ category, setCategory }) => {
         ))}
       </Box>
       {/* <Divider orientation="horizontal" flexItem sx={{ mb: 1 }} /> */}
-      {jwtToken ? (
+      {jwtToken && (
         <Tooltip title="Create new blog " arrow placement="left" sx={{ mt: 1 }}>
           <Fab
             variant="extended"
@@ -90,7 +90,7 @@ const SideBar = ({ category, setCategory }) => {
             onClick={() => navigate("/createblog")}
             sx={{
               backgroundColor: "#016A70",
-              boxShadow: "-1px 0px 1px 0px grey ",
+              boxShadow: "2px 2px 4px 0px grey ",
               borderRadius: 2,
               position: "fixed",
               bottom: 30,
@@ -117,18 +117,6 @@ const SideBar = ({ category, setCategory }) => {
             Write
           </Fab>
         </Tooltip>
-      ) : (
-        <Box sx={{ p: 1 }}>
-          <Typography variant="caption" color={"GrayText"}>
-            <span
-              style={{ cursor: "pointer", textDecoration: "underline" }}
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </span>{" "}
-            to create blog
-          </Typography>
-        </Box>
       )}
       {/* <Divider orientation="horizontal" flexItem sx={{ mt: 1 }} /> */}
       {/* <RecentBlogs /> */}

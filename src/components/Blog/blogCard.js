@@ -49,8 +49,8 @@ const Blog = (blogDetails) => {
           backdropFilter: "blur(12px)",
           border: "0.5px solid transparent",
           "&:hover": {
-            boxShadow: "0px 0px 2px 0px #00000050",
-            border: "0.5px solid #bfbfbf",
+            // boxShadow: "0px 0px 2px 0px #016A70",
+            border: "0.5px solid #016A70",
           },
           cursor: "pointer",
         }}
@@ -73,7 +73,7 @@ const Blog = (blogDetails) => {
                 justifyContent: "flex-start",
                 p: 1,
                 boxSizing: "border-box",
-                // alignItems: "",
+                whiteSpace: "nowrap",
               }}
             >
               {/* <img
@@ -123,8 +123,10 @@ const Blog = (blogDetails) => {
                 // alignItems: "center",
                 // height: "50%",
                 padding: "4px 8px",
+                gap: 1,
               }}
             >
+              {/* INFO */}
               <Box
                 sx={{
                   boxSizing: "border-box",
@@ -139,33 +141,32 @@ const Blog = (blogDetails) => {
                   {username || "Anonymous"}
                 </Typography>
                 <DotOutline size={20} />
-                <Typography
-                  variant="p"
-                  color={""}
-                  sx={{ display: "flow" }}
-                >
+                <Typography variant="p" color={""} sx={{ display: "flow" }}>
                   {userrole || "-"}
                 </Typography>
                 <DotOutline size={20} />
-                <Typography
-                  variant="p"
-                  color={"darkgray"}
-                  mt={0.5}
-                >
+                <Typography variant="p" color={"darkgray"}>
                   Posted at {formattedDate}
                 </Typography>
               </Box>
+              {/* TITLE DESCRIPTION */}
               <Box>
                 <Typography variant="h6" fontWeight={700}>
                   {title}
                 </Typography>
                 <Typography
-                  variant="caption"
+                  variant="p"
                   color={"CaptionText"}
                   sx={{
                     textOverflow: "ellipsis",
-                    overflow: "hidden",
+                    // overflow: "hidden",
+                    // maxHeight:"100%",
                     // whiteSpace: "nowrap",
+                    // width: "100%",
+                    display: "-webkit-box",
+                    "-webkitBoxOrient": "vertical",
+                    overflow: "hidden",
+                    "-webkitLineClamp": 5 /* Number of lines to display */,
                   }}
                 >
                   {description}
@@ -298,6 +299,7 @@ const Blog = (blogDetails) => {
       </Card>
       <Divider
         orientation="horizontal"
+        variant="middle"
         flexItem
         sx={{ borderColor: "#016A70" }}
       />

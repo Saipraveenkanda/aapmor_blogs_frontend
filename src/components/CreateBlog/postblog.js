@@ -15,7 +15,11 @@ import {
 } from "@mui/material";
 import { Image } from "@mui/icons-material";
 import { useState, React } from "react";
-import { createBlogApi, publishBlogApi } from "../ApiCalls/apiCalls";
+import {
+  createBlogApi,
+  publishBlogApi,
+  uploadThumbnail,
+} from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 import ReactQuill from "react-quill";
@@ -97,22 +101,14 @@ const CreateBlog = () => {
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
-    setBlogImage(base64);
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await uploadThumbnail(formData);
+    if (response) {
+      setBlogImage(response.data.url);
+    }
   };
-
-  function convertToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  }
+  console.log(blogImage);
 
   const submitPost = async () => {
     setLoading(true);

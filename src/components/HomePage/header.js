@@ -173,13 +173,7 @@ const Header = () => {
               onClick={handleLogout}
             >
               Logout
-              {/* <Stack direction={"column"} alignItems={"center"}> */}
-              {/* <LogoutIcon /> */}
-              {/* <Typography variant="caption" fontSize={10}> */}
-              {/* </Typography> */}
-              {/* </Stack> */}
             </Button>
-            {/* </Tooltip> */}
           </Box>
         ) : (
           <Tooltip
@@ -187,19 +181,19 @@ const Header = () => {
             sx={{ display: { xs: "none", md: "block" } }}
           >
             <Button
-              xs={1}
+              size="small"
               variant="text"
               color="inherit"
+              disableElevation
+              sx={{
+                borderRadius: 4,
+                border: "0.5px solid #016A70",
+                textTransform: "none",
+                color: "grey",
+              }}
               onClick={() => navigate("/login")}
-              sx={{ alignItems: "center", gap: 1 }}
             >
-              <Stack direction={"column"} alignItems={"center"}>
-                <LoginIcon />
-
-                <Typography variant="caption" fontSize={10}>
-                  Login
-                </Typography>
-              </Stack>
+              Login
             </Button>
           </Tooltip>
         )}

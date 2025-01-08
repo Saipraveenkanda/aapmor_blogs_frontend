@@ -13,6 +13,7 @@ import {
 import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
 import aapmorlogo from "../../assets/Aapmorlogodark.png";
+import loginVector from "../../assets/Login vector.png";
 
 //MAIN FUNCTION
 const Login = () => {
@@ -140,27 +141,43 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#E4F4FF",
+        // backgroundColor: "#E4F4FF",
         height: { xs: "100vh", md: "100vh" },
+        // width: "50vw",
         boxSizing: "border-box",
       }}
     >
-      <Paper
-        elevation={5}
+      <Box
+        // elevation={0}
         sx={{
-          borderRadius: { md: "15px" },
-          borderTopRightRadius: { md: "60px" },
-          borderBottomLeftRadius: { md: "60px" },
-          height: { xs: "100%", lg: "80%" },
-          width: { xs: "100%", sm: "80%", md: "70%", lg: "40%" },
+          position: "relative",
+          // borderRadius: { md: "15px" },
+          // borderTopRightRadius: { md: "60px" },
+          // borderBottomLeftRadius: { md: "60px" },
+          // height: { xs: "100%", lg: "90%" },
+          // width: { xs: "100%", sm: "80%", md: "70%", lg: "50%" },
+          borderRadius: "16px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           padding: "20px",
-          gap: 2,
+          gap: 3,
+          // width: "50%",
+          width: "fit-content",
+          border: "10px double #016A70",
         }}
       >
+        <img
+          src={loginVector}
+          alt={"login vector logo"}
+          style={{
+            height: "90%",
+            position: "absolute",
+            left: "-150px",
+            marginBottom: "-60px",
+          }}
+        />
         <Stack
           direction={"row"}
           spacing={2}
@@ -171,21 +188,23 @@ const Login = () => {
             // src="https://res.cloudinary.com/ddahy4bbc/image/upload/v1698670236/1697545876900-removebg-preview_d7xrcu.png"
             src={aapmorlogo}
             alt="logoAapmor"
-            style={{ width: "40%" }}
+            style={{ width: "300px" }}
           />
           <Divider
             orientation="vertical"
             flexItem
             sx={{
-              borderRightWidth: 5,
-              borderColor: "#D52221",
+              borderRightWidth: 4,
+              borderColor: "#016A70",
               height: "80px",
               alignSelf: "center",
+              borderRadius: "50%",
             }}
           />
           <Typography
+            color={"#016A70"}
+            fontWeight={500}
             variant="h4"
-            color={"#2C007E"}
             fontFamily={"Playwrite CO Guides, serif"}
           >
             Blogs
@@ -193,20 +212,19 @@ const Login = () => {
         </Stack>
         <Typography
           // mt={-3}
-          variant="body2"
+          variant="p"
           textAlign={"center"}
-          width={400}
+          maxWidth={"500px"}
+          sx={{ whiteSpace: "break-spaces" }}
           color={"grey"}
           gutterBottom
+          fontSize={"24px"}
+          fontFamily={"Source sans pro"}
         >
           Explore, engage, and be inspired. Dive into a world of captivating
           content. Let's get started!
         </Typography>
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{ fontFamily: "cambria Math" }}
-        >
+        <Typography variant="h5" gutterBottom fontFamily={"Source sans pro"}>
           Login / Signup
         </Typography>
         {/* email Input */}
@@ -311,7 +329,7 @@ const Login = () => {
             </Typography>
           </Box>
         )}
-      </Paper>
+      </Box>
     </Box>
   );
 };

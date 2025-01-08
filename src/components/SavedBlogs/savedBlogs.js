@@ -54,12 +54,12 @@ const SavedBlogs = () => {
 
   const renderBlogsView = () => {
     return (
-      <Box>
+      <Box sx={{ p: 3 }}>
         <Typography
           variant="h6"
-          sx={{ pl: 2, pt: 2 }}
           fontWeight={700}
-          textAlign={"center"}
+          gutterBottom
+          // textAlign={""}
         >
           Your Saved Blogs
         </Typography>
@@ -68,9 +68,10 @@ const SavedBlogs = () => {
             display: "flex",
             flexWrap: "wrap",
             gap: 2,
-            p: 2,
+            // p: 2,
             alignItems: "center",
             justifyContent: "center",
+            width: "70%",
           }}
         >
           {savedBlogs.map((blogItem) => {

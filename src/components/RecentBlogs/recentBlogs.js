@@ -17,10 +17,10 @@ const RecentBlogs = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ mt: 2 }}>
+    <Box sx={{ mt: "24px" }}>
       {recentBlogsList.length > 0 ? (
         <>
-          <Typography variant="h6" fontWeight={600} marginTop={2}>
+          <Typography variant="h6" fontWeight={600}>
             Recent blogs you might like
           </Typography>
           <List
@@ -58,29 +58,29 @@ const RecentBlogs = () => {
                           variant="rounded"
                         />
                       </ListItemAvatar>
-                      <Stack direction={"column"} spacing={0}>
+                      <Stack direction={"column"} spacing={0.5}>
                         <Typography
-                          variant="subtitle2"
-                          fontSize={12}
+                          variant="p"
+                          // fontSize={12}
                           style={{
                             // minWidth: "200px",
                             textOverflow: "ellipsis",
                           }}
                           fontWeight={600}
                         >
-                          {/* {title.slice(0, 26)}... */}
-                          {title}
+                          {title.slice(0, 26)}...
+                          {/* {title} */}
                         </Typography>
 
                         <Typography
                           sx={{ display: "inline", maxWidth: "85%" }}
                           component="span"
-                          variant="caption"
-                          fontSize={11}
+                          variant="p"
+                          fontSize={12}
                           color="text.primary"
                           textOverflow={"ellipsis"}
                         >
-                          {username || "Anonymous"}
+                          <b>{username || "Anonymous"}</b>
                           {` - ${description.slice(0, 50)}...`}
                         </Typography>
                       </Stack>
