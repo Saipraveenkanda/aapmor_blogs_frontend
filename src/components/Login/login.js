@@ -14,7 +14,6 @@ import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
 import aapmorlogo from "../../assets/Aapmorlogodark.png";
 import loginVector from "../../assets/Login vector.png";
-import bgVideo from "../../assets/bgvideo.mp4";
 import LoginAnimation from "../../helpers/LoginAnimation";
 
 //MAIN FUNCTION
