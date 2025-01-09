@@ -5,51 +5,39 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import aapmorlogo from "../../assets/Aapmorlogodark.png";
 
 const Footer = () => {
   return (
     <Paper
-      elevation={5}
+      elevation={0}
       bgcolor={"background.default"}
       color={"text.primary"}
-      sx={{ position: "relative", bottom: "0px", maxWidth: "100vw" }}
+      sx={{
+        position: "relative",
+        bottom: "0px",
+        borderRadius: "none",
+        padding: "0px 24px",
+        background: "linear-gradient( to top, #00000020 , #ffffff10)",
+      }}
     >
       <Grid
         container
         spacing={1}
         sx={{
           display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          paddingTop: "20px",
-          paddingBottom: "10px",
-          bottom: "100px",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <Grid item p={1} m={1}>
-          <img
+        <Grid item>
+          {/* <img
             src="https://aapmor.com/assets/img/aapmore-logo-.jpg"
             alt="aapmor-logo"
             style={{ width: "200px" }}
-          />
-          <Grid item gap={2}>
-            <IconButton component="a" href="#">
-              <TwitterIcon
-                sx={{ color: "#00acee", height: "30px", width: "30px" }}
-              />
-            </IconButton>
-            <IconButton component="a" href="#">
-              <FacebookIcon
-                color="primary"
-                sx={{ color: "#1877F2", height: "30px", width: "30px" }}
-              />
-            </IconButton>
-            <IconButton component="a" href="_blank">
-              <InstagramIcon
-                sx={{ color: "#ed2147", height: "30px", width: "30px" }}
-              />
-            </IconButton>
+          /> */}
+          <img width={"160px"} src={aapmorlogo} alt="logoAapmor" />
+          {/* <Grid item gap={2}>
             <IconButton
               component="a"
               href="https://www.linkedin.com/company/aapmor-technologies/"
@@ -59,9 +47,9 @@ const Footer = () => {
                 sx={{ color: " #0072b1 ", height: "30px", width: "30px" }}
               />
             </IconButton>
-          </Grid>
+          </Grid> */}
         </Grid>
-        <Grid item p={1} m={1}>
+        {/* <Grid item p={1} m={1}>
           <Typography
             variant="h6"
             sx={{ fontFamily: "cambria Math", fontWeight: "bold" }}
@@ -116,6 +104,11 @@ const Footer = () => {
             target="_blank"
           >
             www.aapmor.com
+          </Typography>
+        </Grid> */}
+        <Grid item>
+          <Typography>
+            © {new Date().getFullYear()} Aapmor Technologies Inc.
           </Typography>
         </Grid>
       </Grid>

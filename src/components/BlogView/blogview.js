@@ -4,6 +4,7 @@ import {
   Chip,
   CircularProgress,
   Divider,
+  Grid,
   IconButton,
   Stack,
   TextField,
@@ -34,6 +35,7 @@ import {
 } from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
+import { PaperPlaneTilt } from "@phosphor-icons/react";
 
 const host = process.env.REACT_APP_API_URL;
 
@@ -267,30 +269,29 @@ const BlogView = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "flex-start",
-            padding: { md: 4, xs: "16px" },
-            paddingTop: 0,
-            ml: { md: 8, xs: 0 },
+            // padding: { md: 4, xs: "16px" },
+            // padding:"24px",
+            // paddingTop: 0,
+            // ml: { md: 8, xs: 0 },
             maxWidth: { md: "100%", xs: "100%", sm: "90%" },
             boxSizing: "border-box",
+            gap: 1,
           }}
         >
-          <Chip
-            label={category}
-            size="small"
-            color="primary"
-            sx={{
-              fontSize: "12px",
-              color: "#ffffff",
-              padding: 1,
-              mb: 2,
-            }}
-          />
-          <Typography gutterBottom variant="h5">
-            {title}
-          </Typography>
-
-          <Box sx={{ display: "flex", gap: 1, pb: 1 }}>
-            <Avatar>P</Avatar>
+          <Box sx={{ display: "flex", gap: 1, pb: 1, alignItems: "center" }}>
+            <Avatar
+              sx={{
+                backgroundColor: "#016A7050",
+                width: 30,
+                height: 30,
+                border: `2px solid #016A70`,
+                backdropFilter: "blur(40px)",
+              }}
+            >
+              <Typography color={"#016A70"}>
+                {name ? name?.split("")[0] : "U"}
+              </Typography>
+            </Avatar>
             <Stack direction={"column"} spacing={0}>
               <Typography variant="p">{username}</Typography>
               <Stack direction={"row"} spacing={2}>
@@ -299,6 +300,17 @@ const BlogView = () => {
                 </Typography>
               </Stack>
             </Stack>
+            <Chip
+              label={category}
+              // size="medium"
+              sx={{
+                // fontSize: "12px",
+                color: "#ffffff",
+                // padding: 1,
+                backgroundColor: "#016A70",
+                // mb: 2,
+              }}
+            />
 
             {/* SAVE OR UNSAVE ICON */}
 
@@ -320,7 +332,13 @@ const BlogView = () => {
               </>
             )}
           </Box>
-
+          <Typography
+            variant="h5"
+            fontWeight={"bold"}
+            fontFamily={"Source sans pro"}
+          >
+            {title}
+          </Typography>
           <Divider orientation="horizontal" flexItem />
 
           {/* HTML FILE */}
@@ -358,19 +376,16 @@ const BlogView = () => {
 
         <Box
           sx={{
-            paddingLeft: 4,
-            ml: { md: 8, xs: 0 },
+            // paddingLeft: 4,
+            // ml: { md: 8, xs: 0 },
             backgroundColor: "#fff",
             width: { md: "70%", xs: "90%", sm: "90%" },
           }}
         >
-          <Box>
-            <Stack direction={"row"} spacing={2} alignItems={"center"}>
-              <ChatBubbleOutlineOutlinedIcon />
-              <Typography fontFamily={"Lora"} fontSize={"24px"}>
-                Comments
-              </Typography>
-            </Stack>
+          <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+            <Typography fontFamily={"Source sans pro"} variant="h6">
+              Comments
+            </Typography>
             <Divider orientation="horizontal" flexItem />
             {token && (
               <Box
@@ -382,11 +397,16 @@ const BlogView = () => {
                   mt: 1,
                 }}
               >
-                <Stack direction={"row"} spacing={3} sx={{ mt: 1 }}>
-                  <Avatar>{name[0].toUpperCase()}</Avatar>
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  spacing={1}
+                  sx={{}}
+                >
+                  {/* <Avatar>{name[0].toUpperCase()}</Avatar> */}
                   <Stack
-                    direction={"column"}
-                    alignItems={"flex-end"}
+                    direction={"row"}
+                    alignItems={"center"}
                     spacing={1}
                     sx={{ width: "100%" }}
                   >
@@ -408,12 +428,22 @@ const BlogView = () => {
                     <LoadingButton
                       variant="contained"
                       loading={loading}
-                      size="small"
+                      // size="small"
                       disabled={disableCommentButton}
                       onClick={handleCommentApi}
-                      endIcon={<SendOutlinedIcon />}
+                      // endIcon={}
+                      sx={{
+                        height: "40px",
+                        // borderRadius: "50%",
+                        backgroundColor: "#016A70",
+                        "&:hover": {
+                          backgroundColor: "#016A70",
+                        },
+                      }}
                     >
-                      Send
+                      {/* <SendOutlinedIcon /> */}
+                      <PaperPlaneTilt size={30} />
+                      {/* Send */}
                     </LoadingButton>
                   </Stack>
                 </Stack>
@@ -448,22 +478,29 @@ const BlogView = () => {
   return (
     <>
       <Header />
-      <IconButton
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt: 1,
-          ml: 1,
-        }}
-        size="medium"
-        title="Go back"
-        onClick={() => navigate("/")}
-      >
-        <ArrowBackIosIcon fontSize="medium" />
-      </IconButton>
-
-      {renderBlogDetails()}
+      <Grid container sx={{ flexDirection: "row", p: 3 }} xs={12}>
+        <Grid item xs={0.4}>
+          <IconButton
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              // mt: 1,
+              // ml: 1,
+              position: "sticky",
+              top: "10%",
+            }}
+            // size="medium"
+            title="Go back"
+            onClick={() => navigate("/")}
+          >
+            <ArrowBackIosIcon fontSize="medium" />
+          </IconButton>
+        </Grid>
+        <Grid xs={11.6} item>
+          {renderBlogDetails()}
+        </Grid>
+      </Grid>
       <Footer />
     </>
   );

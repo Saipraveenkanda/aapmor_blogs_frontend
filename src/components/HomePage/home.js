@@ -160,7 +160,7 @@ const Home = () => {
           width: "80vw",
         }}
       >
-        <CircularProgress sx={{color:"#016A70"}}/>
+        <CircularProgress sx={{ color: "#016A70" }} />
       </Box>
     );
   };
@@ -379,9 +379,8 @@ const Home = () => {
   console.log(profile, "show profile");
   return (
     <>
-      <Header />
-
       <Grid container xs={12} sx={{ pl: "40px", pr: "40px" }}>
+        <Header />
         <Grid item xs={2}>
           <SideBar setCategory={setCategory} category={category} />
         </Grid>

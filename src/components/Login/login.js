@@ -14,6 +14,8 @@ import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
 import aapmorlogo from "../../assets/Aapmorlogodark.png";
 import loginVector from "../../assets/Login vector.png";
+import bgVideo from "../../assets/bgvideo.mp4";
+import LoginAnimation from "../../helpers/LoginAnimation";
 
 //MAIN FUNCTION
 const Login = () => {
@@ -137,25 +139,21 @@ const Login = () => {
   //RETURN
   return (
     <Box
+      className="login-container"
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "#E4F4FF",
         height: { xs: "100vh", md: "100vh" },
-        // width: "50vw",
         boxSizing: "border-box",
       }}
     >
+      <Box>
+        <LoginAnimation />
+      </Box>
       <Box
-        // elevation={0}
         sx={{
           position: "relative",
-          // borderRadius: { md: "15px" },
-          // borderTopRightRadius: { md: "60px" },
-          // borderBottomLeftRadius: { md: "60px" },
-          // height: { xs: "100%", lg: "90%" },
-          // width: { xs: "100%", sm: "80%", md: "70%", lg: "50%" },
           borderRadius: "16px",
           display: "flex",
           flexDirection: "column",
@@ -163,9 +161,9 @@ const Login = () => {
           alignItems: "center",
           padding: "20px",
           gap: 3,
-          // width: "50%",
           width: "fit-content",
-          border: "10px double #016A70",
+          border: "6px double #016A70",
+          backdropFilter: "blur(10px)",
         }}
       >
         <img
@@ -280,6 +278,10 @@ const Login = () => {
               width: { xs: "90%", lg: "60%" },
               height: "52px",
               fontWeight: 500,
+              backgroundColor: "#016A70",
+              "&:hover": {
+                backgroundColor: "#016A70",
+              },
             }}
           >
             {buttonText}
@@ -293,6 +295,10 @@ const Login = () => {
               width: { xs: "90%", lg: "60%" },
               height: "48px",
               marginBottom: { xs: "30px", lg: "0px" },
+              backgroundColor: "#016A70",
+              "&:hover": {
+                backgroundColor: "#016A70",
+              },
             }}
             onClick={handleOtpEntered}
             disabled={isOtpButtonDisable}
@@ -325,7 +331,7 @@ const Login = () => {
               >
                 click here
               </span>{" "}
-              to update your email address.{" "}
+              to update your Email{" "}
             </Typography>
           </Box>
         )}

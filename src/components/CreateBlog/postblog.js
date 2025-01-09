@@ -135,7 +135,16 @@ const CreateBlog = () => {
       var blogId = data.message;
       navigate("/");
     }
-    const content = { title, description, blogImage, dateObject, blogId };
+    const content = {
+      title,
+      description,
+      blogImage,
+      dateObject,
+      blogId,
+      name,
+      role,
+      editorHtml,
+    };
     await publishBlogApi(content);
   };
 

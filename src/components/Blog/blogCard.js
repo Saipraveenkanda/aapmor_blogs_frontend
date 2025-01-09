@@ -301,7 +301,7 @@ const Blog = (blogDetails) => {
         orientation="horizontal"
         variant="middle"
         flexItem
-        sx={{ borderColor: "#016A70" }}
+        sx={{ borderColor: "#016A7050" }}
       />
     </>
   );

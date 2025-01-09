@@ -48,14 +48,16 @@ const Header = () => {
       position="sticky"
       top={0}
       sx={{
-        backgroundColor: "#fff",
+        background: "transparent",
+        backdropFilter: "blur(24px)",
         borderBottom: "0.5px solid lightgrey",
         color: "#000",
+        zIndex: 10,
       }}
       elevation={0}
     >
       <Toolbar
-        bgcolor={"transparent"}
+        // bgcolor={"transparent"}
         color={"#000"}
         sx={{
           display: "flex",
@@ -98,7 +100,7 @@ const Header = () => {
             display: { xs: "none", sm: "flex" },
             alignItems: "center",
             width: "30%",
-            backgroundColor: "#ffffff",
+            backgroundColor: "#transparent",
             border: "0.5px solid lightgrey",
             // pl: 1,
             // pr: 1,
