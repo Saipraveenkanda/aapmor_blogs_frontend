@@ -9,17 +9,23 @@ import {
   Typography,
   MenuItem,
   Avatar,
+  IconButton,
+  Stack,
+  FormHelperText,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
-import { profileCheckingApi } from "../ApiCalls/apiCalls";
+import { profileCheckingApi, profileUpdateApi } from "../ApiCalls/apiCalls";
+import Cookies from "js-cookie";
 
 const UserProfile = (props) => {
   const [designation, setDesignation] = useState("");
-  const [gender, setGender] = useState("");
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
   const [profile, setProfile] = useState({});
+  const [gender, setGender] = useState(profile?.gender || "");
+  const [name, setName] = useState(profile?.name || "");
+  const [image, setImage] = useState("");
+  const [email, setEmail] = useState(profile?.email || "");
+  console.log(profile, "PROFILE");
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -31,11 +37,35 @@ const UserProfile = (props) => {
     const getProfile = async () => {
       const response = await profileCheckingApi();
       if (response) {
-        setProfile(response.data.res);
+        const profile = response.data.res;
+        setProfile(profile);
+        setName(profile?.name);
+        setEmail(profile?.email);
+        setGender(profile?.gender);
+        setDesignation(profile.designation);
       }
     };
     getProfile();
   }, []);
+
+  const updateProfile = async () => {
+    const profileDetails = {
+      gender,
+      designation,
+      email,
+      name: name,
+      isProfileUpdated: true,
+    };
+    const response = await profileUpdateApi(profileDetails);
+    console.log(response, "UPDATED PROFILE");
+    if (response?.status === 200) {
+      const profile = response?.data?.profile;
+      Cookies.set("userEmail", profile?.email);
+      Cookies.get("username", profile?.name);
+      Cookies.get("userrole", profile?.designation);
+      window.history.back();
+    }
+  };
 
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -56,9 +86,10 @@ const UserProfile = (props) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: "flex-start",
+          // alignItems: "center",
           height: "85vh",
+          paddingLeft: 2,
         }}
       >
         <Card
@@ -71,8 +102,9 @@ const UserProfile = (props) => {
 
             backgroundColor: "transparent",
             backdropFilter: "blur(20px)",
-            boxShadow: "2px 2px 16px 3px #2196f3",
+            // boxShadow: "2px 2px 16px 3px #2196f3",
           }}
+          elevation={0}
         >
           <Box
             sx={{
@@ -80,26 +112,58 @@ const UserProfile = (props) => {
               flexDirection: "column",
               width: "50%",
               maxWidth: "50%",
-              gap: 1.5,
+              gap: 3,
             }}
           >
-            <Typography variant="h5">Profile Update</Typography>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: "#016A70" }}
+            >
+              Profile Update
+            </Typography>
+            {/* Image */}
+            {/* <Stack
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
+              <Avatar
+                component="label"
+                htmlFor="uploadImage"
+                src={image}
+                alt="profile picture"
+                sx={{
+                  height: "60px",
+                  width: "60px",
+                  cursor: "pointer",
+                }}
+              />
+              <input
+                accept="image/*"
+                id="uploadImage"
+                style={{ display: "none" }}
+                type="file"
+                alt="profile-image"
+                onChange={handleFileUpload}
+              />
+            </Stack> */}
+            {/* Name */}
             <TextField
               required
               size="small"
-              value={profile.name}
-              // label="Full Name"
-              disabled={profile.name}
+              helperText="Update your user name"
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
 
+            {/* Designation */}
             <FormControl size="small">
               <InputLabel id="demo-simple-select-label">
                 Designation *
               </InputLabel>
               <Select
                 onChange={(e) => setDesignation(e.target.value)}
-                value={profile.designation}
+                value={designation}
                 required
                 label="Designation"
               >
@@ -113,11 +177,13 @@ const UserProfile = (props) => {
                 </MenuItem>
                 <MenuItem value="UI / UX">UI / UX</MenuItem>
               </Select>
+              <FormHelperText>Update your designation</FormHelperText>
             </FormControl>
+            {/* Gender */}
             <FormControl size="small">
               <InputLabel id="demo-simple-select-label">Gender *</InputLabel>
               <Select
-                value={profile.gender}
+                value={gender}
                 label="Gender"
                 onChange={(e) => setGender(e.target.value)}
                 required
@@ -126,60 +192,33 @@ const UserProfile = (props) => {
                 <MenuItem value="Female">Female</MenuItem>
                 <MenuItem value="Other">Other</MenuItem>
               </Select>
+              <FormHelperText>Update your gender</FormHelperText>
             </FormControl>
+            {/* Email */}
             <TextField
-              multiline
-              placeholder="Few lines about you"
+              helperText="Update your email"
               rows={4}
-              label="Bio"
-            />
-            <TextField
+              label="Email"
               size="small"
-              value={name}
-              label="Location"
-              onChange={(e) => setName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Button variant="outlined">Save</Button>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "50%",
-              gap: 2,
-            }}
-          >
-            <Avatar
-              component="label"
-              htmlFor="uploadImage"
-              src={image}
-              alt="profile picture"
+
+            <Button
+              onClick={updateProfile}
               sx={{
-                height: "200px",
-                width: "200px",
-                cursor: "pointer",
+                boxShadow: "-4px 4px 4px 0px #016A7050",
+                textTransform: "none",
+                color: "#016A70",
+                borderColor: "#016A70",
                 "&:hover": {
-                  boxShadow: "1px 1px 8px 0px red",
+                  borderColor: "#016A70",
+                  backgroundColor: "unset",
                 },
               }}
-            />
-            <input
-              accept="image/*"
-              id="uploadImage"
-              style={{ display: "none" }}
-              type="file"
-              alt="profile-image"
-              onChange={handleFileUpload}
-            />
-            <Button
-              variant="text"
-              sx={{ cursor: "pointer", color: "red" }}
-              disableFocusRipple
-              onClick={() => setImage("")}
+              variant="outlined"
             >
-              Remove image
+              Update
             </Button>
           </Box>
         </Card>

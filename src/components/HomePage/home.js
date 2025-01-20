@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Header from "./header";
-import Footer from "./footer";
 import Blog from "../Blog/blogCard";
 import SideBar from "../Sidebar/sideBar";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
 import {
   Button,
-  CircularProgress,
   Divider,
   FormControl,
   IconButton,
@@ -30,8 +28,8 @@ import { setBlogsData } from "../Slices/blogSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import Cookies from "js-cookie";
-import blogsbackground from "../../assets/blogs_bg2.png";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
+import HomeLoading from "../../helpers/homeLoading";
 
 const style = {
   position: "absolute",
@@ -108,12 +106,12 @@ const Home = () => {
         } else if (response.status === 200) {
           clearInterval(intervalId);
           setProfile(false);
-          if (Cookies.get("username") === undefined) {
-            Cookies.set("username", response.data.res.name);
-          }
-          if (Cookies.get("userrole") === undefined) {
-            Cookies.set("userrole", response.data.res.designation);
-          }
+          // if (Cookies.get("username") === undefined) {
+          Cookies.set("username", response.data.res.name);
+          // }
+          // if (Cookies.get("userrole") === undefined) {
+          Cookies.set("userrole", response.data.res.designation);
+          // }
         }
         clearInterval(intervalId);
       };
@@ -157,10 +155,12 @@ const Home = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "90vh",
-          width: "80vw",
+          width: "100%",
         }}
       >
-        <CircularProgress sx={{ color: "#016A70" }} />
+        {/* <CircularProgress sx={{ color: "#016A70" }} /> */}
+        {/* <img src={loadingHand} alt="loading hand" style={{ height: "200px" }} /> */}
+        <HomeLoading />
       </Box>
     );
   };

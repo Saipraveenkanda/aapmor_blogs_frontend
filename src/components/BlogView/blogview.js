@@ -289,7 +289,7 @@ const BlogView = () => {
               }}
             >
               <Typography color={"#016A70"}>
-                {name ? name?.split("")[0] : "U"}
+                {username ? username?.split("")[0] : "U"}
               </Typography>
             </Avatar>
             <Stack direction={"column"} spacing={0}>
