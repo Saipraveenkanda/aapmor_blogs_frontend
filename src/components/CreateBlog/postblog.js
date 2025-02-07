@@ -30,9 +30,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import { LoadingButton } from "@mui/lab";
 
-const name = Cookies.get("username");
-const role = Cookies.get("userrole");
-
 const modules = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -73,7 +70,8 @@ const CreateBlog = () => {
     savedData !== false ? savedData.content : ""
   );
   const [loading, setLoading] = useState(false);
-
+  const name = Cookies.get("username");
+  const role = Cookies.get("userrole");
   const handleSave = () => {
     const saveBlogData = {
       category,
@@ -109,7 +107,7 @@ const CreateBlog = () => {
     }
   };
   console.log(blogImage);
-
+  console.log(name, role, "Name, Role");
   const submitPost = async () => {
     setLoading(true);
     const blogDetails = {

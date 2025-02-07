@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import React from "react";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";

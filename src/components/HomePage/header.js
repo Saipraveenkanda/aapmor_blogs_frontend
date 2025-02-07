@@ -13,13 +13,11 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  Stack,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { SearchOutlined } from "@mui/icons-material";
 import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
 import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/Aapmorlogodark.png";
 

@@ -1,25 +1,7 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  Typography,
-  Chip,
-  Divider,
-  Fab,
-  Tooltip,
-} from "@mui/material";
-
-import CreateIcon from "@mui/icons-material/Create";
-
+import { Box, Typography, Fab, Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import RecentBlogs from "../RecentBlogs/recentBlogs";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Category from "./Category";
-import aapmorlogo from "../../assets/Aapmorlogodark.png";
 import writeIcon from "../../assets/pencil-simple-line.svg";
 
 const categories = [

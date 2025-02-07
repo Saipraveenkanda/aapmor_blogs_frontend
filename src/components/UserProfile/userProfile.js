@@ -8,9 +8,6 @@ import {
   Select,
   Typography,
   MenuItem,
-  Avatar,
-  IconButton,
-  Stack,
   FormHelperText,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -23,15 +20,15 @@ const UserProfile = (props) => {
   const [profile, setProfile] = useState({});
   const [gender, setGender] = useState(profile?.gender || "");
   const [name, setName] = useState(profile?.name || "");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [email, setEmail] = useState(profile?.email || "");
   console.log(profile, "PROFILE");
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
-    setImage(base64);
-  };
+  // const handleFileUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   const base64 = await convertToBase64(file);
+  //   setImage(base64);
+  // };
 
   useEffect(() => {
     const getProfile = async () => {
