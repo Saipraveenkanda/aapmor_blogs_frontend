@@ -220,6 +220,7 @@ const CreateBlog = () => {
                     <MenuItem value={"Gaming"}>Gaming</MenuItem>
                     <MenuItem value={"Technology"}>Technology</MenuItem>
                     <MenuItem value={"Arts"}>Arts</MenuItem>
+                    <MenuItem value={"Travel"}>Travel</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
