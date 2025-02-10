@@ -173,6 +173,9 @@ const UserProfile = (props) => {
                   Full Stack Developer
                 </MenuItem>
                 <MenuItem value="UI / UX">UI / UX</MenuItem>
+                <MenuItem value="Business Analyst">Business Analyst</MenuItem>
+                <MenuItem value="SAP ABAP Consultant">SAP ABAP Consultant</MenuItem>
+                <MenuItem value="SAP GRC Consultant">SAP GRC Consultant</MenuItem>
               </Select>
               <FormHelperText>Update your designation</FormHelperText>
             </FormControl>
