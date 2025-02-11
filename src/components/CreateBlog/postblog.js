@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Image } from "@mui/icons-material";
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import {
   createBlogApi,
   publishBlogApi,
@@ -29,6 +29,7 @@ import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import { LoadingButton } from "@mui/lab";
+import ProfilePopup from "../HomePage/ProfilePopup";
 
 const modules = {
   toolbar: [
@@ -70,6 +71,7 @@ const CreateBlog = () => {
     savedData !== false ? savedData.content : ""
   );
   const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState(false);
   const name = Cookies.get("username");
   const role = Cookies.get("userrole");
   const handleSave = () => {
@@ -85,6 +87,24 @@ const CreateBlog = () => {
       localStorage.setItem("blogData", JSON.stringify(saveBlogData));
       setLoading(false);
     }
+  };
+  const disablePublishButton =
+    !!category &&
+    !!title &&
+    !!description &&
+    !!blogImage &&
+    !!editorHtml &&
+    editorHtml !== "<p><br></p>";
+
+  useEffect(() => {
+    if (name && role && disablePublishButton) {
+      console.log("submitting by default");
+      submitPost();
+    }
+  }, [name, role]);
+
+  const handleClose = () => {
+    setProfile(false);
   };
 
   const navigate = useNavigate();
@@ -109,50 +129,45 @@ const CreateBlog = () => {
   console.log(blogImage);
   console.log(name, role, "Name, Role");
   const submitPost = async () => {
-    setLoading(true);
-    const blogDetails = {
-      username: name,
-      userrole: role,
-      title,
-      description,
-      blogImage,
-      category,
-      date: newDate,
-      likes: 0,
-      comments: [],
-      htmlFile: editorHtml,
-      savedUsers: [],
-    };
-    console.log(blogDetails);
-
-    const response = await createBlogApi(blogDetails);
-    console.log(response);
-    if (response.status === 200) {
-      setLoading(false);
-      const data = await response.json();
-      var blogId = data.message;
-      navigate("/");
+    if (!name || !role) {
+      setProfile(true);
+    } else {
+      setLoading(true);
+      const blogDetails = {
+        username: name,
+        userrole: role,
+        title,
+        description,
+        blogImage,
+        category,
+        date: newDate,
+        likes: 0,
+        comments: [],
+        htmlFile: editorHtml,
+        savedUsers: [],
+      };
+      console.log(blogDetails);
+      const response = await createBlogApi(blogDetails);
+      console.log(response);
+      if (response.status === 200) {
+        setLoading(false);
+        const data = await response.json();
+        var blogId = data.message;
+        navigate("/");
+      }
+      const content = {
+        title,
+        description,
+        blogImage,
+        dateObject,
+        blogId,
+        name,
+        role,
+        editorHtml,
+      };
+      await publishBlogApi(content);
     }
-    const content = {
-      title,
-      description,
-      blogImage,
-      dateObject,
-      blogId,
-      name,
-      role,
-      editorHtml,
-    };
-    await publishBlogApi(content);
   };
-
-  const disablePublishButton =
-    !!category &&
-    !!title &&
-    !!description &&
-    !!blogImage &&
-    !!editorHtml &&
-    editorHtml !== "<p><br></p>";
 
   return (
     <>
@@ -341,6 +356,11 @@ const CreateBlog = () => {
           </Box>
         </Box>
       </Box>
+      <ProfilePopup
+        profile={profile}
+        setProfile={setProfile}
+        handleClose={handleClose}
+      />
     </>
   );
 };
