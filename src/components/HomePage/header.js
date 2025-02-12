@@ -33,6 +33,7 @@ const Header = () => {
 
   const navigate = useNavigate();
   const token = Cookies.get("jwtToken");
+  const name = Cookies.get("username");
 
   const handleLogout = () => {
     Cookies.remove("jwtToken");
@@ -71,7 +72,10 @@ const Header = () => {
             gap: 1,
             cursor: "pointer",
           }}
-          onClick={() => navigate("/")}
+          onClick={() => {
+            Cookies.set("selectedTab", "home");
+            navigate("/");
+          }}
         >
           <img width={"160px"} src={aapmorlogo} alt="logoAapmor" />
           <Divider
@@ -210,7 +214,9 @@ const Header = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+              <Avatar sx={{ width: 32, height: 32 }}>
+                {name?.split("")[0]}
+              </Avatar>
             </IconButton>
           </Tooltip>
           <Menu

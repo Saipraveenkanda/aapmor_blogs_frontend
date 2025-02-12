@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import { useNavigate } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import Cookies from "js-cookie";
 
 const BottomNavbar = (props) => {
-  const [value, setValue] = React.useState("home");
+  const tab = Cookies.get("selectedTab");
+  const token = Cookies.get("jwtToken");
   const navigate = useNavigate();
+  const [selectedTab, setSelectedTab] = useState(tab || "home");
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = (path) => {
+    Cookies.set("selectedTab", path);
+    setSelectedTab(path);
+    navigate(
+      path === "createblog"
+        ? "/createblog"
+        : path === "home"
+        ? "/"
+        : `/user/${path}`
+    );
   };
   return (
     <Paper
@@ -24,29 +36,32 @@ const BottomNavbar = (props) => {
       }}
       elevation={3}
     >
-      <BottomNavigation value={value} onChange={handleChange}>
+      <BottomNavigation value={selectedTab}>
         <BottomNavigationAction
           label="Home"
           value="home"
           icon={<HomeOutlinedIcon />}
-          onClick={() => navigate("/")}
+          onClick={(e) => handleChange("home")}
         />
-        <BottomNavigationAction
-          label="Search"
-          value="search"
-          icon={<SearchOutlinedIcon />}
-        />
+        {token && (
+          <BottomNavigationAction
+            label="Create"
+            value="createblog"
+            icon={<CreateOutlinedIcon />}
+            onClick={(e) => handleChange("createblog")}
+          />
+        )}
         <BottomNavigationAction
           label="Saved"
           value="saved"
           icon={<BookmarkBorderOutlinedIcon />}
-          onClick={() => navigate("/user/saved")}
+          onClick={(e) => handleChange("saved")}
         />
         <BottomNavigationAction
           label="Settings"
-          value="settings"
+          value="profile"
           icon={<SettingsOutlinedIcon />}
-          onClick={() => navigate("/profile")}
+          onClick={(e) => handleChange("profile")}
         />
       </BottomNavigation>
     </Paper>

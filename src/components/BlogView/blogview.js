@@ -6,6 +6,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Popover,
   Stack,
   TextField,
   Tooltip,
@@ -24,9 +25,11 @@ import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import Footer from "../HomePage/footer";
-
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import "./style.css";
-
+import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
+import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
 import {
   commentsApi,
   likesApi,
@@ -36,6 +39,7 @@ import {
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 import { PaperPlaneTilt } from "@phosphor-icons/react";
+import ProfilePopup from "../HomePage/ProfilePopup";
 
 const host = process.env.REACT_APP_API_URL;
 
@@ -50,6 +54,20 @@ const BlogView = () => {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [disableCommentButton, setDisableCommentButton] = useState(true);
+  const [profile, setProfile] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const popoverid = open ? "simple-popover" : undefined;
+  console.log(open, "OPEN");
 
   useEffect(() => {
     getBlogItem();
@@ -101,10 +119,15 @@ const BlogView = () => {
   };
 
   const handleLikes = async () => {
-    const response = await likesApi({ id });
-    console.log(response);
-    if (response.status === 200) {
-      getBlogItem();
+    const name = cookiesName;
+    if (!name) {
+      setProfile(true);
+    } else {
+      const response = await likesApi(id, name);
+      console.log(response);
+      if (response.status === 200) {
+        getBlogItem();
+      }
     }
   };
 
@@ -165,6 +188,9 @@ const BlogView = () => {
     } else {
       return seconds + " seconds ago";
     }
+  };
+  const handleClose = () => {
+    setProfile(false);
   };
 
   // SAVE BLOG TO USER SAVED
@@ -252,6 +278,7 @@ const BlogView = () => {
   const renderBLogView = () => {
     document.title = `Blog: ${title}`;
     const saved = savedUsers.includes(email) ? true : false;
+    const liked = likes.some((like) => like.email === email);
     const formattedDate = new Date(date).toDateString();
     return (
       <Box
@@ -361,9 +388,21 @@ const BlogView = () => {
                 sx={{ marginTop: 0, padding: 0 }}
               >
                 {/* <ThumbUpOutlinedIcon /> */}
-                <FontAwesomeIcon icon={faHandsClapping} />
+                {/* <FontAwesomeIcon icon={faHandsClapping} /> */}
+                {liked ? (
+                  <ThumbUpAltIcon sx={{ color: "#016A70" }} />
+                ) : (
+                  <ThumbUpOffAltIcon />
+                )}
               </IconButton>
-              <Typography>{likes} </Typography>
+              <Typography
+                sx={{
+                  cursor: "pointer",
+                }}
+                onClick={(e) => handleClick(e)}
+              >
+                {likes?.length}{" "}
+              </Typography>
             </Stack>
             <Stack direction={"column"} alignItems={"center"} mt={2}>
               <InsertCommentOutlinedIcon />
@@ -501,6 +540,44 @@ const BlogView = () => {
           {renderBlogDetails()}
         </Grid>
       </Grid>
+      <ProfilePopup
+        profile={profile}
+        setProfile={setProfile}
+        handleClose={handleClose}
+      />
+      <Popover
+        id={popoverid}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        sx={{ borderRadius: 4 }}
+      >
+        <Stack direction={"column"} alignItems={"flex-start"} spacing={1}>
+          {likes?.length > 0 ? (
+            likes?.map((eachUser) => {
+              return (
+                <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
+                  <PersonOutlineTwoToneIcon sx={{ color: "#016A70" }} />
+                  <Typography variant="p" fontWeight={"500"}>
+                    {eachUser.name}
+                  </Typography>
+                </Stack>
+              );
+            })
+          ) : (
+            <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
+              <SentimentDissatisfiedOutlinedIcon sx={{ color: "#016A70" }} />
+              <Typography variant="p" fontWeight={"500"}>
+                No likes
+              </Typography>
+            </Stack>
+          )}
+        </Stack>
+      </Popover>
       <Footer />
     </>
   );

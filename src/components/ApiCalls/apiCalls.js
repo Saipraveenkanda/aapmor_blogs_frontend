@@ -105,8 +105,17 @@ export const publishBlogApi = async (content) => {
 };
 
 // LIKES API
-export const likesApi = async (id) => {
-  const response = await axios.put(likesApiUrl, id);
+export const likesApi = async (id, name) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "put",
+    url: likesApiUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: { id, name },
+  };
+  const response = await axios(config);
   return response;
 };
 

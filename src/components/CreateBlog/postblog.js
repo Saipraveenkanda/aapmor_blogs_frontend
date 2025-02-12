@@ -30,6 +30,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import { LoadingButton } from "@mui/lab";
 import ProfilePopup from "../HomePage/ProfilePopup";
+import BottomNavbar from "../BottomNavigation/bottomNavigation";
 
 const modules = {
   toolbar: [
@@ -141,7 +142,7 @@ const CreateBlog = () => {
         blogImage,
         category,
         date: newDate,
-        likes: 0,
+        likes: [],
         comments: [],
         htmlFile: editorHtml,
         savedUsers: [],
@@ -361,6 +362,7 @@ const CreateBlog = () => {
         setProfile={setProfile}
         handleClose={handleClose}
       />
+      <BottomNavbar />
     </>
   );
 };

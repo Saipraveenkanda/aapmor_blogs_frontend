@@ -72,6 +72,7 @@ const SavedBlogs = () => {
             alignItems: "center",
             justifyContent: "center",
             width: "70%",
+            "@media(max-width:480px)": { width: "100%" },
           }}
         >
           {savedBlogs.map((blogItem) => {

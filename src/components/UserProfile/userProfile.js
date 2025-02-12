@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
 import { profileCheckingApi, profileUpdateApi } from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
+import BottomNavbar from "../BottomNavigation/bottomNavigation";
 
 const UserProfile = (props) => {
   const [designation, setDesignation] = useState("");
@@ -86,12 +87,18 @@ const UserProfile = (props) => {
           justifyContent: "flex-start",
           // alignItems: "center",
           height: "85vh",
-          paddingLeft: 2,
+          // paddingLeft: 2,
         }}
       >
         <Card
           sx={{
-            width: "50%",
+            // width: "50%",
+            "@media(max-width:480px)": {
+              width: "100%",
+            },
+            "@media(min-width:481px)": {
+              width: "50%",
+            },
             height: "auto",
             p: 2,
             display: "flex",
@@ -107,8 +114,14 @@ const UserProfile = (props) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              width: "50%",
-              maxWidth: "50%",
+              // width: "50%",
+              // maxWidth: "50%",
+              "@media(max-width:480px)": {
+                width: "100%",
+              },
+              "@media(min-width:481px)": {
+                width: "50%",
+              },
               gap: 3,
             }}
           >
@@ -174,8 +187,12 @@ const UserProfile = (props) => {
                 </MenuItem>
                 <MenuItem value="UI / UX">UI / UX</MenuItem>
                 <MenuItem value="Business Analyst">Business Analyst</MenuItem>
-                <MenuItem value="SAP ABAP Consultant">SAP ABAP Consultant</MenuItem>
-                <MenuItem value="SAP GRC Consultant">SAP GRC Consultant</MenuItem>
+                <MenuItem value="SAP ABAP Consultant">
+                  SAP ABAP Consultant
+                </MenuItem>
+                <MenuItem value="SAP GRC Consultant">
+                  SAP GRC Consultant
+                </MenuItem>
               </Select>
               <FormHelperText>Update your designation</FormHelperText>
             </FormControl>
@@ -223,6 +240,7 @@ const UserProfile = (props) => {
           </Box>
         </Card>
       </Box>
+      <BottomNavbar />
     </>
   );
 };

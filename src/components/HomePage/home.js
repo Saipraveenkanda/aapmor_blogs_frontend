@@ -205,7 +205,7 @@ const Home = () => {
             // backgroundPosition: "center",
             // scrollbarWidth: 0,
           }}
-          gap={4}
+          gap={{ xs: 2, md: 4 }}
         >
           <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
             Hello! Welcome {userName}
@@ -252,16 +252,28 @@ const Home = () => {
   console.log(profile, "show profile");
   return (
     <>
-      <Grid container xs={12} sx={{ pl: "40px", pr: "40px" }}>
+      <Grid
+        container
+        xs={12}
+        sx={{ "@media(min-width:480px)": { pl: "40px", pr: "40px" } }}
+      >
         <Header />
-        <Grid item xs={2}>
+        <Grid
+          item
+          xs={2}
+          sx={{ "@media(max-width:480px)": { display: "none" } }}
+        >
           <SideBar setCategory={setCategory} category={category} />
         </Grid>
-        <Grid item xs={10} container>
-          <Grid item xs={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
+        <Grid item sx={{ flexBasis: { xs: "100%", sm: "83.33%" } }} container>
+          <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
           </Grid>
-          <Grid item xs={3}>
+          <Grid
+            item
+            xs={3}
+            sx={{ "@media(max-width:480px)": { display: "none" } }}
+          >
             <RecentBlogs />
           </Grid>
         </Grid>
