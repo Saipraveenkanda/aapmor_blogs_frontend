@@ -545,6 +545,7 @@ const BlogView = () => {
         setProfile={setProfile}
         handleClose={handleClose}
       />
+      {/* Likes popover */}
       <Popover
         id={popoverid}
         open={open}
@@ -554,9 +555,19 @@ const BlogView = () => {
           vertical: "bottom",
           horizontal: "left",
         }}
-        sx={{ borderRadius: 4 }}
       >
-        <Stack direction={"column"} alignItems={"flex-start"} spacing={1}>
+        <Stack
+          direction={"column"}
+          alignItems={"flex-start"}
+          spacing={1}
+          sx={{
+            borderRadius: 1,
+            border: "0.5px solid #016A70",
+            maxHeight: "200px",
+            overflowY: "auto",
+            scrollbarWidth: "thin",
+          }}
+        >
           {likes?.length > 0 ? (
             likes?.map((eachUser) => {
               return (
