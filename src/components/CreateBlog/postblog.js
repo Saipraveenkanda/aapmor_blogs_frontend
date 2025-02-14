@@ -6,14 +6,13 @@ import {
   Input,
   Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Tooltip,
-  Divider,
   IconButton,
   Typography,
+  Grid,
+  Fab,
+  CircularProgress,
 } from "@mui/material";
-import { Image } from "@mui/icons-material";
 import { useState, React, useEffect } from "react";
 import {
   createBlogApi,
@@ -28,9 +27,11 @@ import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
-import { LoadingButton } from "@mui/lab";
 import ProfilePopup from "../HomePage/ProfilePopup";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import CloseIcon from "@mui/icons-material/Close";
+import SendIcon from "@mui/icons-material/Send";
 
 const modules = {
   toolbar: [
@@ -97,12 +98,12 @@ const CreateBlog = () => {
     !!editorHtml &&
     editorHtml !== "<p><br></p>";
 
-  useEffect(() => {
-    if (name && role && disablePublishButton) {
-      console.log("submitting by default");
-      submitPost();
-    }
-  }, [name, role]);
+  // useEffect(() => {
+  //   if (name && role && disablePublishButton) {
+  //     console.log("submitting by default");
+  //     submitPost();
+  //   }
+  // }, [name, role]);
 
   const handleClose = () => {
     setProfile(false);
@@ -170,6 +171,23 @@ const CreateBlog = () => {
     }
   };
 
+  const catoreries = [
+    "Insights",
+    "Fitness",
+    "Artificial Intelligence",
+    "Entertainment",
+    "Politics",
+    "International",
+    "News",
+    "Sports",
+    "Fashion",
+    "Food & Health",
+    "Gaming",
+    "Technology",
+    "Arts",
+    "Travel",
+  ];
+
   return (
     <>
       <Header />
@@ -186,120 +204,144 @@ const CreateBlog = () => {
             width: "80%",
           }}
         >
-          {/* HEADER BOX */}
-          <Box
+          {/* pradeep  */}
+          <Grid
             sx={{
               display: "flex",
-              justifyContent: "space-evenly",
-              alignItems: "flex-end",
-              backgroundColor: "#bfbfbf20",
-              pb: 1,
-              borderRadius: "6px",
-              boxSizing: "border-box",
-              border: "0.5px solid #bfbfbf",
-              marginTop: 2,
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              margin: "20px 0px",
             }}
+            container
           >
-            <TextField
-              placeholder="Enter your blog title"
-              label="Blog title"
-              onChange={(e) => setTitle(e.target.value)}
-              sx={{ width: "50%" }}
-              variant="standard"
-              required
-              value={title}
-            />
-            <Divider orientation="vertical" flexItem />
-            <Stack direction="row" spacing={1} alignItems="flex-end">
-              <Box sx={{ minWidth: 200 }}>
-                <FormControl fullWidth variant="standard">
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    value={category}
-                    label={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    fullWidth
-                    size="small"
-                  >
-                    <MenuItem value={"Insights"}>Insights</MenuItem>
-                    <MenuItem value={"Fitness"}>Fitness</MenuItem>
-                    <MenuItem value={"Artificial Intelligence"}>
-                      Artificial Intelligence
-                    </MenuItem>
-                    <MenuItem value={"Entertainment"}>Entertainment</MenuItem>
-                    <MenuItem value={"Politics"}>Politics</MenuItem>
-                    <MenuItem value={"International"}>International</MenuItem>
-                    <MenuItem value={"News"}>News</MenuItem>
-                    <MenuItem value={"Sports"}>Sports</MenuItem>
-                    <MenuItem value={"Fashion"}>Fashion</MenuItem>
-                    <MenuItem value={"Food & Health"}>Food & health</MenuItem>
-                    <MenuItem value={"Gaming"}>Gaming</MenuItem>
-                    <MenuItem value={"Technology"}>Technology</MenuItem>
-                    <MenuItem value={"Arts"}>Arts</MenuItem>
-                    <MenuItem value={"Travel"}>Travel</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  localStorage.removeItem("blogData");
-                  navigate("/");
-                }}
+            <Grid item xs={12} md={7.7}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", color: "grey" }}
               >
-                Cancel
-              </Button>
-              <LoadingButton
-                loading={loading}
-                variant="contained"
-                onClick={submitPost}
-                disabled={!disablePublishButton}
-              >
-                Publish
-              </LoadingButton>
-              <LoadingButton
-                loading={loading}
-                loadingPosition="start"
-                startIcon={<SaveIcon />}
-                onClick={handleSave}
-              ></LoadingButton>
-            </Stack>
-          </Box>
-          <Box
-            sx={{
-              mt: 0.5,
-              backgroundColor: "#bfbfbf10",
-              padding: 2,
-              borderRadius: "6px",
-              border: "0.5px solid #bfbfbf",
-              boxSizing: "border-box",
-            }}
-          >
-            <Stack direction={"row"} spacing={4} alignItems={"flex-end"}>
+                TITLE<span style={{ color: "red" }}>*</span>
+              </Typography>
               <TextField
+                placeholder="Enter your blog title"
+                onChange={(e) => setTitle(e.target.value)}
+                sx={{ minWidth: { xs: "350px", sm: "500px", md: "600px" } }}
                 variant="standard"
-                placeholder="Enter few lines about your blog"
-                fullWidth
                 required
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={title}
               />
-              <Divider orientation="vertical" flexItem />
-              <Input
-                accept="image/*"
-                multiple
-                type="file"
-                onChange={handleFileUpload}
-                id="imageFile"
-                sx={{ display: "none" }}
-              />
+            </Grid>
+            <Grid item xs={9} md={3} sx={{ paddingRight: "4px" }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", color: "grey" }}
+              >
+                Catogery<span style={{ color: "red" }}>*</span>
+              </Typography>
+              <Select
+                value={category}
+                label={category}
+                onChange={(e) => setCategory(e.target.value)}
+                fullWidth
+                size="small"
+              >
+                {catoreries.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Grid>
+            <Grid item xs={2} md={1.3}>
               <Tooltip title="Insert thumbnail image for your blog">
-                <label htmlFor="imageFile">
-                  <Image sx={{ cursor: "pointer" }} />
-                </label>
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<AddPhotoAlternateIcon />}
+                  sx={{ textTransform: "none", marginTop: "20px" }}
+                  required
+                >
+                  Upload<span style={{ color: "red" }}>*</span>
+                  <Input
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={handleFileUpload}
+                    id="imageFile"
+                    sx={{ display: "none" }}
+                  />
+                  <label htmlFor="imageFile"></label>
+                </Button>
               </Tooltip>
-            </Stack>
-          </Box>
+            </Grid>
+          </Grid>
+          <Grid>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: "bold", color: "grey" }}
+            >
+              Blog Description<span style={{ color: "red" }}>*</span>
+            </Typography>
+            <TextField
+              variant="standard"
+              placeholder="Enter few lines about your blog"
+              fullWidth
+              required
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Grid>
+          <Grid
+            sx={{
+              position: "fixed",
+              bottom: "12%",
+              right: "3%",
+              zIndex: 2,
+            }}
+          >
+            <Fab
+              aria-label="add"
+              // onClick={handleSave}
+              // disabled={loading}
+              disabled={true}
+              size="small"
+              sx={{ marginRight: "4px", background: "#5CB338" }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                <SaveIcon sx={{ color: "white" }} />
+              )}
+            </Fab>
+            <Fab
+              aria-label="add"
+              onClick={() => {
+                localStorage.removeItem("blogData");
+                navigate("/");
+              }}
+              size="small"
+              sx={{ marginRight: "4px", background: "#F93827" }}
+            >
+              <CloseIcon sx={{ color: "white" }} />
+            </Fab>
+            <Fab
+              aria-label="publish"
+              onClick={submitPost}
+              disabled={!disablePublishButton}
+              size="small"
+              sx={{ marginRight: "4px", background: "#024CAA" }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                <SendIcon sx={{ color: "white" }} />
+              )}
+            </Fab>
+          </Grid>
+          {/* pradeep  */}
+
           {/* EDITOR BOX*/}
           {blogImage !== "" && (
             <Box
@@ -313,7 +355,7 @@ const CreateBlog = () => {
                 height: "200px",
                 mt: 1,
                 borderRadius: 2,
-                boxShadow: "0px 0px 10px 0px #00000050",
+                // boxShadow: "0px 0px 10px 0px #00000050",
               }}
             >
               <Stack
