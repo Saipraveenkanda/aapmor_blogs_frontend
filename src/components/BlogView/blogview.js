@@ -1,6 +1,8 @@
 import {
+  Alert,
   Avatar,
   Box,
+  Button,
   Chip,
   CircularProgress,
   Divider,
@@ -32,7 +34,9 @@ import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
 import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
 import {
   commentsApi,
+  deleteBlogApi,
   likesApi,
+  profileCheckingApi,
   removeSaveBlogApi,
   saveBlogApi,
 } from "../ApiCalls/apiCalls";
@@ -40,6 +44,8 @@ import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 import { PaperPlaneTilt } from "@phosphor-icons/react";
 import ProfilePopup from "../HomePage/ProfilePopup";
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 const host = process.env.REACT_APP_API_URL;
 
@@ -56,23 +62,28 @@ const BlogView = () => {
   const [disableCommentButton, setDisableCommentButton] = useState(true);
   const [profile, setProfile] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [userCreatedBlog, setUserCreatedBlog] = useState([]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
-
   const open = Boolean(anchorEl);
   const popoverid = open ? "simple-popover" : undefined;
-  console.log(open, "OPEN");
 
   useEffect(() => {
+    getUserDetail();
     getBlogItem();
     // eslint-disable-next-line
   }, []);
+
+  const getUserDetail = async () => {
+    const response = await profileCheckingApi();
+    if (response) {
+      setUserCreatedBlog(response?.data?.res?.createdBlogs);
+    }
+  };
 
   const token = Cookies.get("jwtToken");
   const cookiesName = Cookies.get("username");
@@ -118,6 +129,20 @@ const BlogView = () => {
     }
   };
 
+  const handleEdit = () => {
+    navigate("/createblog", { state: { editBlog: blogDetails, isEdit: true } });
+  };
+
+  const handleDelete = async () => {
+    const response = await deleteBlogApi(id);
+    if (response.status === 200) {
+      navigate("/");
+    }
+    if (response.status === 404) {
+      <Alert>Blog not found</Alert>;
+    }
+  };
+
   const handleLikes = async () => {
     const name = cookiesName;
     if (!name) {
@@ -132,12 +157,19 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
+    setApiStatus("INITIAL");
     const response = await axios.get(`${host}/blogs/${id}`);
-    const blogDetails = await response.data;
-    if (response.status === 200) {
+    console.log(response, "BBBBBB");
+    if (response) {
       setApiStatus("SUCCESS");
-      setBlogDetails(blogDetails);
-    } else {
+      if (response.status === 200) {
+        const blogDetails = await response.data;
+        setBlogDetails(blogDetails);
+      } else {
+        setApiStatus("FAILURE");
+      }
+    }
+    if (response.status === 500) {
       setApiStatus("FAILURE");
     }
   };
@@ -210,7 +242,7 @@ const BlogView = () => {
   };
 
   const addImageClass = (htmlContent) => {
-    return htmlContent.replace(/<img/g, '<img class="quill-blog-image"');
+    return htmlContent?.replace(/<img/g, '<img class="quill-blog-image"');
   };
 
   const createMarkup = (content) => {
@@ -277,8 +309,8 @@ const BlogView = () => {
   //RENDERING BLOG VIEW
   const renderBLogView = () => {
     document.title = `Blog: ${title}`;
-    const saved = savedUsers.includes(email) ? true : false;
-    const liked = likes.some((like) => like.email === email);
+    const saved = savedUsers?.includes(email) ? true : false;
+    const liked = likes?.some((like) => like.email === email);
     const formattedDate = new Date(date).toDateString();
     return (
       <Box
@@ -346,7 +378,7 @@ const BlogView = () => {
                 {saved ? (
                   <Tooltip title="Remove from saved blogs">
                     <IconButton onClick={handleBlogUnsave}>
-                      <BookmarkAddedIcon color="primary" />
+                      <BookmarkAddedIcon sx={{ color: "#016A70" }} />
                     </IconButton>
                   </Tooltip>
                 ) : (
@@ -358,6 +390,42 @@ const BlogView = () => {
                 )}
               </>
             )}
+            {token !== undefined &&
+              userCreatedBlog?.includes(blogDetails?._id) && (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<ModeEditOutlinedIcon fontSize="small" />}
+                  sx={{
+                    textTransform: "none",
+                    borderColor: "#016A70",
+                    color: "#016A70",
+                    fontWeight: "bold",
+                    "&:hover": { borderColor: "#016A70" },
+                  }}
+                  onClick={handleEdit}
+                >
+                  Edit
+                </Button>
+              )}
+            {token !== undefined &&
+              userCreatedBlog?.includes(blogDetails?._id) && (
+                <IconButton
+                  title="Delete Blog"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    textTransform: "none",
+                    borderColor: "#016A70",
+                    color: "#016A70",
+                    fontWeight: "bold",
+                    "&:hover": { borderColor: "#016A70" },
+                  }}
+                  onClick={handleDelete}
+                >
+                  <DeleteOutlineOutlinedIcon fontSize="medium" />
+                </IconButton>
+              )}
           </Box>
           <Typography
             variant="h5"
@@ -406,7 +474,7 @@ const BlogView = () => {
             </Stack>
             <Stack direction={"column"} alignItems={"center"} mt={2}>
               <InsertCommentOutlinedIcon />
-              <Typography>{comments.length} </Typography>
+              <Typography>{comments?.length} </Typography>
             </Stack>
           </Stack>
         </Box>
@@ -491,7 +559,7 @@ const BlogView = () => {
 
             {/* <Divider sx={{ mt: 1 }} /> */}
 
-            {comments.length > 0 ? renderComments() : renderNoCommentsView()}
+            {comments?.length > 0 ? renderComments() : renderNoCommentsView()}
             {/* Comments box */}
           </Box>
         </Box>

@@ -18,9 +18,10 @@ import { useState, React, useEffect } from "react";
 import {
   createBlogApi,
   publishBlogApi,
+  updateBlogApi,
   uploadThumbnail,
 } from "../ApiCalls/apiCalls";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 import ReactQuill from "react-quill";
 
@@ -50,11 +51,13 @@ const modules = {
   },
 };
 
-const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
-const savedData = savedBlogData !== null && savedBlogData;
-console.log(savedData);
-
 const CreateBlog = () => {
+  const location = useLocation();
+  const { editBlog, isEdit } = location.state || {};
+  const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
+  const savedData =
+    (savedBlogData !== null && savedBlogData) ||
+    (editBlog !== undefined && editBlog);
   document.title = "Create New Blog";
   const [category, setCategory] = useState(
     savedData !== false ? savedData.category : ""
@@ -66,10 +69,10 @@ const CreateBlog = () => {
     savedData !== false ? savedData.description : ""
   );
   const [blogImage, setBlogImage] = useState(
-    savedData !== false ? savedData.blog_img : ""
+    savedData !== false ? savedData.blogImage : ""
   );
   const [editorHtml, setEditorHtml] = useState(
-    savedData !== false ? savedData.content : ""
+    savedData !== false ? savedData.html : ""
   );
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(false);
@@ -80,8 +83,8 @@ const CreateBlog = () => {
       category,
       title,
       description,
-      blog_img: blogImage,
-      content: editorHtml,
+      blogImage: blogImage,
+      html: editorHtml,
     };
     if (title && description && blogImage && category && editorHtml) {
       setLoading(true);
@@ -97,12 +100,12 @@ const CreateBlog = () => {
     !!editorHtml &&
     editorHtml !== "<p><br></p>";
 
-  useEffect(() => {
-    if (name && role && disablePublishButton) {
-      console.log("submitting by default");
-      submitPost();
-    }
-  }, [name, role]);
+  // useEffect(() => {
+  //   if (name && role && disablePublishButton) {
+  //     console.log("submitting by default");
+  //     submitPost();
+  //   }
+  // }, [name, role]);
 
   const handleClose = () => {
     setProfile(false);
@@ -127,8 +130,6 @@ const CreateBlog = () => {
       setBlogImage(response.data.url);
     }
   };
-  console.log(blogImage);
-  console.log(name, role, "Name, Role");
   const submitPost = async () => {
     if (!name || !role) {
       setProfile(true);
@@ -147,13 +148,23 @@ const CreateBlog = () => {
         htmlFile: editorHtml,
         savedUsers: [],
       };
+      const updatedData = {
+        _id: editBlog._id,
+        title,
+        description,
+        blogImage,
+        category,
+        htmlFile: editorHtml,
+      };
       console.log(blogDetails);
-      const response = await createBlogApi(blogDetails);
+      const response = await (isEdit
+        ? updateBlogApi(editBlog?._id, updatedData)
+        : createBlogApi(blogDetails));
       console.log(response);
       if (response.status === 200) {
         setLoading(false);
-        const data = await response.json();
-        var blogId = data.message;
+        const data = !isEdit && (await response.json());
+        var blogId = data?.message;
         navigate("/");
       }
       const content = {
@@ -166,7 +177,7 @@ const CreateBlog = () => {
         role,
         editorHtml,
       };
-      await publishBlogApi(content);
+      !isEdit && (await publishBlogApi(content));
     }
   };
 
@@ -255,7 +266,7 @@ const CreateBlog = () => {
                 onClick={submitPost}
                 disabled={!disablePublishButton}
               >
-                Publish
+                {isEdit ? "Update" : "Publish"}
               </LoadingButton>
               <LoadingButton
                 loading={loading}

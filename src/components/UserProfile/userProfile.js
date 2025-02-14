@@ -17,8 +17,8 @@ import Cookies from "js-cookie";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
 
 const UserProfile = (props) => {
-  const [designation, setDesignation] = useState("");
   const [profile, setProfile] = useState({});
+  const [designation, setDesignation] = useState(profile?.designation || "");
   const [gender, setGender] = useState(profile?.gender || "");
   const [name, setName] = useState(profile?.name || "");
   // const [image, setImage] = useState("");
@@ -40,7 +40,7 @@ const UserProfile = (props) => {
         setName(profile?.name);
         setEmail(profile?.email);
         setGender(profile?.gender);
-        setDesignation(profile.designation);
+        setDesignation(profile?.designation);
       }
     };
     getProfile();

@@ -13,6 +13,7 @@ import {
   getSavedBlogsApiUrl,
   commentsApiUrl,
   uploadThumbnailUrl,
+  deleteBlogUrl,
 } from "../Url/configUrls";
 import axios from "axios";
 const host = process.env.REACT_APP_API_URL;
@@ -42,6 +43,41 @@ export const createBlogApi = async (blogDetails) => {
     body: JSON.stringify(blogDetails),
   };
   const response = await fetch(createBlogApiUrl, options);
+  return response;
+};
+
+export const deleteBlogApi = async (id) => {
+  const token = Cookies.get("jwtToken");
+  const options = {
+    method: "DELETE",
+    url: `${deleteBlogUrl}/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios(options);
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const updateBlogApi = async (id, updatedData) => {
+  const token = Cookies.get("jwtToken");
+  const options = {
+    method: "PUT",
+    url: `${deleteBlogUrl}/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: JSON.stringify(updatedData),
+  };
+  const response = await axios(options);
   return response;
 };
 export const getBlogsApi = async (category) => {

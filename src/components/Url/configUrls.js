@@ -13,3 +13,4 @@ export const getSavedBlogsApiUrl = `${host}/usersaved`;
 export const profileCheckingApiUrl = `${host}/profile/check`;
 export const commentsApiUrl = `${host}/comments`;
 export const uploadThumbnailUrl = `${host}/post/blogthumb`;
+export const deleteBlogUrl = `${host}/blogs`;
