@@ -272,15 +272,26 @@ const Blog = (blogDetails) => {
           <Typography variant="body2" fontWeight={700}>
             {title.slice(0, 50)}
           </Typography>
-          <Stack direction={"row"} spacing={1} minWidth={"100%"}>
-            <Avatar sx={{ width: 22, height: 22 }} />
-            <Stack direction={"column"} spacing={0}>
-              <Typography variant="caption" fontSize={10}>
-                {username}
-              </Typography>
-              <Typography variant="caption" fontSize={10}>
-                {userrole}
-              </Typography>
+          <Stack
+            direction={"row"}
+            justifyContent={"space-between"}
+            spacing={1}
+            minWidth={"100%"}
+          >
+            <Stack direction={"row"} alignItems={"center"} spacing={1}>
+              <Avatar
+                sx={{ width: 24, height: 24, p: 1, boxSizing: "border-box" }}
+              >
+                {username?.split("")[0]}
+              </Avatar>
+              <Stack direction={"column"} spacing={0}>
+                <Typography variant="caption" fontSize={10}>
+                  {username}
+                </Typography>
+                <Typography variant="caption" fontSize={8}>
+                  {userrole}
+                </Typography>
+              </Stack>
             </Stack>
             {isBookmarked ? (
               <IconButton

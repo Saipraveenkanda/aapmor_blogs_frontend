@@ -17,6 +17,8 @@ import {
   Alert,
   Backdrop,
   Grid,
+  Tooltip,
+  Fab,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -31,6 +33,9 @@ import Cookies from "js-cookie";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
 import HomeLoading from "../../helpers/homeLoading";
 import ProfilePopup from "./ProfilePopup";
+import noBlogsImage from "../../assets/noblogs.png";
+import { useNavigate } from "react-router-dom";
+import writeIcon from "../../assets/pencil-simple-line.svg";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -39,12 +44,14 @@ const Home = () => {
   const [apiStatus, setApiStatus] = useState("INITIAL");
   const blogObj = useSelector((state) => state.blogs);
   const blogs = blogObj.blogs;
+  const [updatedBlogs, setUpdatedBlogs] = useState(blogs);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-
+  const [searchInput, setSearchInput] = useState("");
   const user = Cookies.get("username");
-
   const userName = user !== undefined ? user : "User";
+  const token = Cookies.get("jwtToken");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = Cookies.get("jwtToken");
@@ -83,6 +90,10 @@ const Home = () => {
     }, 2000);
   }, [showAlert]);
 
+  useEffect(() => {
+    setUpdatedBlogs(blogs);
+  }, [blogs]);
+
   //GET BLOGS API CALL
   const getBlogsData = async () => {
     const response = await getBlogsApi(category);
@@ -119,7 +130,7 @@ const Home = () => {
   };
 
   const renderBlogsView = () =>
-    blogs.map((blogItem) => {
+    updatedBlogs.map((blogItem) => {
       return <Blog blogDetails={blogItem} key={blogItem._id} />;
     });
 
@@ -129,18 +140,26 @@ const Home = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          height: "50vh",
+          height: "60vh",
         }}
       >
+        <img
+          src={noBlogsImage}
+          alt="no-blog-image"
+          style={{
+            width: "40%",
+          }}
+        />
         <Typography
           variant="subtitle1"
           fontWeight={600}
           color={"GrayText"}
-          sx={{ textAlign: "center", maxWidth: "40%" }}
+          sx={{ textAlign: "center", maxWidth: { md: "40%" } }}
         >
-          There are no blogs in this category, please select other categories or{" "}
+          No matching blogs found. Please adjust your search criteria or{" "}
           <a
             style={{
               fontStyle: "italic",
@@ -150,7 +169,7 @@ const Home = () => {
             }}
             href="/"
           >
-            load
+            reload
           </a>{" "}
           all blogs
         </Typography>
@@ -163,8 +182,6 @@ const Home = () => {
       <Box
         sx={{
           height: "91vh",
-          // backgroundImage: `url(${blogsbackground})`,
-          // backgroundSize: "cover",
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -176,7 +193,6 @@ const Home = () => {
             marginLeft: -2,
           },
           "&::-webkit-scrollbar-track": {
-            // background: "#f1f1f1",
             background: "transparent",
           },
           "&::-webkit-scrollbar-thumb": {
@@ -194,23 +210,17 @@ const Home = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             width: "100%",
-            // width: { sm: "80%" },
-            // flexWrap: "wrap",
             minHeight: "91vh",
             padding: "24px",
             boxSizing: "border-box",
-            // overflowY: "auto",
-            // scrollbarWidth: "thin",
             backdropFilter: "blur(10px)",
-            // backgroundPosition: "center",
-            // scrollbarWidth: 0,
           }}
           gap={{ xs: 2, md: 4 }}
         >
           <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
             Hello! Welcome {userName}
           </Typography>
-          {blogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
+          {updatedBlogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
         </Box>
       </Box>
     );
@@ -249,6 +259,27 @@ const Home = () => {
     setProfile(false);
   };
 
+  useEffect(() => {
+    if (!searchInput || searchInput === "") {
+      setUpdatedBlogs(blogs);
+      return;
+    }
+    const query = searchInput.toLowerCase();
+    const filteredBlogs = blogs.filter((blog) => {
+      const blogMonth = new Date(blog.date)
+        .toLocaleString("default", { month: "long" })
+        .toLowerCase();
+
+      return (
+        blog.username.toLowerCase().includes(query) ||
+        blog.title.toLowerCase().includes(query) ||
+        blog.category.toLowerCase().includes(query) ||
+        blogMonth.includes(query)
+      );
+    });
+    setUpdatedBlogs(filteredBlogs);
+  }, [searchInput]);
+
   console.log(profile, "show profile");
   return (
     <>
@@ -257,15 +288,15 @@ const Home = () => {
         xs={12}
         sx={{ "@media(min-width:480px)": { pl: "40px", pr: "40px" } }}
       >
-        <Header />
-        <Grid
+        <Header setSearchInput={setSearchInput} />
+        {/* <Grid
           item
           xs={2}
           sx={{ "@media(max-width:480px)": { display: "none" } }}
         >
           <SideBar setCategory={setCategory} category={category} />
-        </Grid>
-        <Grid item sx={{ flexBasis: { xs: "100%", sm: "83.33%" } }} container>
+        </Grid> */}
+        <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
           </Grid>
@@ -296,6 +327,44 @@ const Home = () => {
           <Alert severity="success">{alertMessage}</Alert>
         </Box>
       </Backdrop>
+
+      {token && (
+        <Tooltip title="Create new blog " arrow placement="left" sx={{ mt: 1 }}>
+          <Fab
+            variant="extended"
+            // color="inherit"
+            size="medium"
+            onClick={() => navigate("/createblog")}
+            sx={{
+              backgroundColor: "#016A70",
+              boxShadow: "2px 2px 4px 0px grey ",
+              borderRadius: 2,
+              position: "fixed",
+              bottom: 60,
+              right: 30,
+              width: "180px",
+              height: "52px",
+              textTransform: "none",
+              fontSize: "16px",
+              border: "4px solid #fff",
+              "&:hover": {
+                border: "4px solid #016A70",
+                boxShadow: "1px 0px 4px 0px #ffffff inset",
+                backgroundColor: "#016A70",
+              },
+              color: "#ffffff",
+            }}
+          >
+            {/* <CreateIcon sx={{ mr: 1 }} /> */}
+            <img
+              src={writeIcon}
+              alt="write_icon"
+              style={{ height: "30px", paddingRight: "8px" }}
+            />
+            Write
+          </Fab>
+        </Tooltip>
+      )}
     </>
   );
 };

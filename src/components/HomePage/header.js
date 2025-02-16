@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Button,
@@ -20,9 +20,11 @@ import { SearchOutlined } from "@mui/icons-material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/Aapmorlogodark.png";
+// import "./SearchBar.css";
 
-const Header = () => {
+const Header = ({ setSearchInput }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [placeholder, setPlaceholder] = useState("Search by User...");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,6 +43,23 @@ const Header = () => {
     Cookies.remove("userrole");
     navigate("/login");
   };
+  const placeholderMessages = [
+    "Search by User Name...",
+    "Search by Blog Title...",
+    "Search by Month...",
+    "Search by Category...",
+    // "Search by Keywords...",
+  ];
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setPlaceholder(placeholderMessages[index]);
+      index = (index + 1) % placeholderMessages.length;
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <AppBar
@@ -104,20 +123,32 @@ const Header = () => {
             width: "30%",
             backgroundColor: "#transparent",
             border: "0.5px solid lightgrey",
-            // pl: 1,
-            // pr: 1,
-            // p: 0.5,
             borderRadius: 8,
             pr: 2,
           }}
         >
           <InputBase
+            // className="animated-placeholder"
+            sx={{
+              p: 0.5,
+              pl: 2,
+              color: "#016A70",
+              boxSizing: "border-box",
+              "&::placeholder": {
+                color: "grey",
+                opacity: 1,
+                animation: "slideUp 2s ease-in-out infinite",
+              },
+            }}
             type="search"
-            placeholder="Search..."
+            placeholder={placeholder}
             fullWidth
-            sx={{ p: 0.5, pl: 2, color: "grey", boxSizing: "border-box" }}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-          <SearchOutlined color="action" sx={{ cursor: "pointer" }} />
+          <SearchOutlined
+            color="action"
+            sx={{ cursor: "pointer", color: "#016A70" }}
+          />
         </Box>
 
         {/* WEB NAVIGATION AFTER LOGIN */}

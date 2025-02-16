@@ -16,12 +16,16 @@ const RecentBlogs = () => {
   const recentBlogsList = blogObj.blogs;
   const navigate = useNavigate();
 
+  const top5LikedBlogs = [...recentBlogsList]
+    .sort((a, b) => b.likes.length - a.likes.length) // Sort descending by likes count
+    .slice(0, 5);
+
   return (
     <Box sx={{ mt: "24px" }}>
-      {recentBlogsList.length > 0 ? (
+      {top5LikedBlogs.length > 0 ? (
         <>
           <Typography variant="h6" fontWeight={600}>
-            Recent blogs you might like
+            Most liked blogs
           </Typography>
           <List
             sx={{
@@ -32,9 +36,8 @@ const RecentBlogs = () => {
               scrollbarWidth: "thin",
             }}
           >
-            {recentBlogsList
-              .slice(0, 5)
-              .map(({ blogImage, description, title, username, _id }) => {
+            {top5LikedBlogs.map(
+              ({ blogImage, description, title, username, _id }) => {
                 return (
                   <>
                     <ListItem
@@ -88,7 +91,8 @@ const RecentBlogs = () => {
                     <Divider orientation="horizontal" />
                   </>
                 );
-              })}
+              }
+            )}
           </List>
         </>
       ) : null}

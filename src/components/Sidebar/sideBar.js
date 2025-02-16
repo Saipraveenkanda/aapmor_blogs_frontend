@@ -1,8 +1,9 @@
-import { Box, Typography, Fab, Tooltip } from "@mui/material";
+import { Box, Typography, Fab, Tooltip, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Category from "./Category";
 import writeIcon from "../../assets/pencil-simple-line.svg";
+import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
 
 const categories = [
   { label: "All" },
@@ -37,9 +38,18 @@ const SideBar = ({ category, setCategory }) => {
         zIndex: 100,
       }}
     >
-      <Typography variant="h6" gutterBottom fontWeight={600} marginTop={2}>
-        Categories
-      </Typography>
+      <Stack direction={"row"} alignItems={"center"} spacing={1} mb={1}>
+        <CalendarMonthTwoToneIcon sx={{ color: "#016A70" }} />
+        <Typography
+          variant="h6"
+          gutterBottom
+          fontWeight={600}
+          marginTop={2}
+          color={"#016A70"}
+        >
+          Select Month
+        </Typography>
+      </Stack>
       {/* Category chips */}
       <Box
         sx={{
