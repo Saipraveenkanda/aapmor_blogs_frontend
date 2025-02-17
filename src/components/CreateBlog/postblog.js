@@ -150,7 +150,7 @@ const CreateBlog = () => {
         savedUsers: [],
       };
       const updatedData = {
-        _id: editBlog._id,
+        _id: editBlog?._id,
         title,
         description,
         blogImage,
