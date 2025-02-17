@@ -87,11 +87,11 @@ const CreateBlog = () => {
       blogImage: blogImage,
       html: editorHtml,
     };
-    if (title && description && blogImage && category && editorHtml) {
-      setLoading(true);
-      localStorage.setItem("blogData", JSON.stringify(saveBlogData));
-      setLoading(false);
-    }
+    // if (title && description && blogImage && category && editorHtml) {
+    setLoading(true);
+    localStorage.setItem("blogData", JSON.stringify(saveBlogData));
+    setLoading(false);
+    // }
   };
   const disablePublishButton =
     !!category &&
