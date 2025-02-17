@@ -150,7 +150,6 @@ const CreateBlog = () => {
         savedUsers: [],
       };
       const updatedData = {
-        _id: editBlog?._id,
         title,
         description,
         blogImage,
@@ -247,7 +246,7 @@ const CreateBlog = () => {
                 variant="body1"
                 sx={{ fontWeight: "bold", color: "grey" }}
               >
-                Catogery<span style={{ color: "red" }}>*</span>
+                Category<span style={{ color: "red" }}>*</span>
               </Typography>
               <Select
                 value={category}
