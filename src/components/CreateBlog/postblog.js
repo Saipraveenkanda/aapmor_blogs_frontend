@@ -314,9 +314,8 @@ const CreateBlog = () => {
           >
             <Fab
               aria-label="add"
-              // onClick={handleSave}
-              // disabled={loading}
-              disabled={true}
+              onClick={handleSave}
+              disabled={loading}
               size="small"
               sx={{ marginRight: "4px", background: "#5CB338" }}
             >
