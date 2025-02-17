@@ -23,7 +23,6 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 import ReactQuill from "react-quill";
-
 import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -33,6 +32,7 @@ import BottomNavbar from "../BottomNavigation/bottomNavigation";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
+import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 
 const modules = {
   toolbar: [
@@ -323,7 +323,10 @@ const CreateBlog = () => {
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                <SaveIcon sx={{ color: "white" }} />
+                <SaveIcon
+                  titleAccess="Save"
+                  sx={{ color: "white", "&:hover": { color: "#000" } }}
+                />
               )}
             </Fab>
             <Fab
@@ -335,7 +338,10 @@ const CreateBlog = () => {
               size="small"
               sx={{ marginRight: "4px", background: "#F93827" }}
             >
-              <CloseIcon sx={{ color: "white" }} />
+              <CloseIcon
+                titleAccess="Close"
+                sx={{ color: "white", "&:hover": { color: "#000" } }}
+              />
             </Fab>
             <Fab
               aria-label="publish"
@@ -346,8 +352,16 @@ const CreateBlog = () => {
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
+              ) : isEdit ? (
+                <UpdateOutlinedIcon
+                  titleAccess="Update"
+                  sx={{ color: "white", "&:hover": { color: "#000" } }}
+                />
               ) : (
-                <SendIcon sx={{ color: "white" }} />
+                <SendIcon
+                  titleAccess="Publish"
+                  sx={{ color: "white", "&:hover": { color: "#000" } }}
+                />
               )}
             </Fab>
           </Grid>

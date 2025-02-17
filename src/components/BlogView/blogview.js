@@ -46,6 +46,8 @@ import { PaperPlaneTilt } from "@phosphor-icons/react";
 import ProfilePopup from "../HomePage/ProfilePopup";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import Slide from "@mui/material/Slide";
+import DeletePopup from "./DeletePoup";
 
 const host = process.env.REACT_APP_API_URL;
 
@@ -63,6 +65,8 @@ const BlogView = () => {
   const [profile, setProfile] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [userCreatedBlog, setUserCreatedBlog] = useState([]);
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -421,7 +425,7 @@ const BlogView = () => {
                     fontWeight: "bold",
                     "&:hover": { borderColor: "#016A70" },
                   }}
-                  onClick={handleDelete}
+                  onClick={() => setOpenDeletePopup(true)}
                 >
                   <DeleteOutlineOutlinedIcon fontSize="medium" />
                 </IconButton>
@@ -657,6 +661,11 @@ const BlogView = () => {
           )}
         </Stack>
       </Popover>
+      <DeletePopup
+        open={openDeletePopup}
+        setOpen={setOpenDeletePopup}
+        handleDelete={handleDelete}
+      />
       <Footer />
     </>
   );
