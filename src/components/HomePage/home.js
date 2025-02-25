@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Header from "./header";
 import Blog from "../Blog/blogCard";
-import SideBar from "../Sidebar/sideBar";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
 import {
-  Button,
-  Divider,
-  FormControl,
-  IconButton,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
   Typography,
   Box,
   Alert,
@@ -24,11 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getBlogsApi,
   profileCheckingApi,
-  profileUpdateApi,
 } from "../ApiCalls/apiCalls";
 import { setBlogsData } from "../Slices/blogSlice";
-import CloseIcon from "@mui/icons-material/Close";
-import SaveIcon from "@mui/icons-material/Save";
 import Cookies from "js-cookie";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
 import HomeLoading from "../../helpers/homeLoading";

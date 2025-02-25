@@ -95,20 +95,6 @@ const BlogView = () => {
   const email = Cookies.get("userEmail");
   const dateObject = new Date();
 
-  /*   var dateObject = new Date();
-  var datetime =
-    dateObject.getDay() +
-    "/" +
-    dateObject.getMonth() +
-    "/" +
-    dateObject.getFullYear() +
-    " @ " +
-    dateObject.getHours() +
-    ":" +
-    dateObject.getMinutes() +
-    ":" +
-    dateObject.getSeconds(); */
-
   useEffect(() => {
     if (comment.length >= 1) {
       setDisableCommentButton(false);
@@ -161,9 +147,9 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
-    setApiStatus("INITIAL");
+    // setApiStatus("INITIAL");
     const response = await axios.get(`${host}/blogs/${id}`);
-    console.log(response, "BBBBBB");
+    console.log(response, "Blog Details");
     if (response) {
       setApiStatus("SUCCESS");
       if (response.status === 200) {
