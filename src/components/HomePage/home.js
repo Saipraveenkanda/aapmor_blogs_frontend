@@ -10,12 +10,10 @@ import {
   Grid,
   Tooltip,
   Fab,
+  Stack,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getBlogsApi,
-  profileCheckingApi,
-} from "../ApiCalls/apiCalls";
+import { getBlogsApi, profileCheckingApi } from "../ApiCalls/apiCalls";
 import { setBlogsData } from "../Slices/blogSlice";
 import Cookies from "js-cookie";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
@@ -205,9 +203,22 @@ const Home = () => {
           }}
           gap={{ xs: 2, md: 4 }}
         >
-          <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
-            Hello! Welcome {userName}
-          </Typography>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            width={"100%"}
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
+              Hello! Welcome {userName}
+            </Typography>
+            <Alert variant="outlined" severity="warning">
+              <span style={{ fontSize: "12px", color: "red" }}>
+                Posting blogs will be enabled from 10th March 2025
+              </span>
+            </Alert>
+          </Stack>
+
           {updatedBlogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
         </Box>
       </Box>
@@ -321,6 +332,7 @@ const Home = () => {
           <Fab
             variant="extended"
             // color="inherit"
+            disabled
             size="medium"
             onClick={() => navigate("/createblog")}
             sx={{

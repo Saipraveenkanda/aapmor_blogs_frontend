@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -19,6 +20,44 @@ const RecentBlogs = () => {
   const top5LikedBlogs = [...recentBlogsList]
     .sort((a, b) => b.likes.length - a.likes.length) // Sort descending by likes count
     .slice(0, 5);
+
+  const renderLoadingView = () => {
+    return (
+      <Box sx={{ width: "100%", mb: 1.5 }}>
+        <Skeleton
+          variant="text"
+          sx={{ fontSize: "32px", width: "70%", mb: 2 }}
+        />
+        {[1, 2, 3, 4, 5].map((each, index) => (
+          <>
+            <Box
+              key={index}
+              sx={{ display: "flex", flexDirection: "row", gap: 1, mb: 1.5 }}
+            >
+              <Skeleton
+                variant="rectangular"
+                sx={{ width: "84px", height: "72px", borderRadius: "4px" }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  width: "100%",
+                  marginTop: 0,
+                }}
+              >
+                <Skeleton sx={{ width: "100%", height: "24px" }} />
+                <Skeleton sx={{ width: "100%", height: "20px" }} />
+                <Skeleton sx={{ width: "100%", height: "20px" }} />
+              </Box>
+            </Box>
+            <Divider sx={{ mb: 1 }} />
+          </>
+        ))}
+      </Box>
+    );
+  };
 
   return (
     <Box sx={{ mt: "24px" }}>
@@ -95,7 +134,9 @@ const RecentBlogs = () => {
             )}
           </List>
         </>
-      ) : null}
+      ) : (
+        renderLoadingView()
+      )}
     </Box>
   );
 };
