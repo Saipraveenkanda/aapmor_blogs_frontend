@@ -14,6 +14,8 @@ import {
   commentsApiUrl,
   uploadThumbnailUrl,
   deleteBlogUrl,
+  postWinnerUrl,
+  getWinnerUrl,
 } from "../Url/configUrls";
 import axios from "axios";
 const host = process.env.REACT_APP_API_URL;
@@ -208,6 +210,40 @@ export const uploadThumbnail = async (image) => {
       Authorization: `Bearer ${token}`,
     },
     data: image,
+  };
+  const response = await axios(config);
+  return response;
+};
+
+export const postWinnerDetails = async (data) => {
+  const token = Cookies.get("jwtToken");
+  try {
+    const config = {
+      method: "post",
+      url: postWinnerUrl,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    const response = await axios(config);
+    console.log(response, "RESP");
+
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getWinnerOfTheMonth = async () => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "get",
+    url: getWinnerUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
   const response = await axios(config);
   return response;

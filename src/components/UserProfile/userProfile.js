@@ -15,6 +15,7 @@ import Header from "../HomePage/header";
 import { profileCheckingApi, profileUpdateApi } from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = (props) => {
   const [profile, setProfile] = useState({});
@@ -24,7 +25,7 @@ const UserProfile = (props) => {
   // const [image, setImage] = useState("");
   const [email, setEmail] = useState(profile?.email || "");
   console.log(profile, "PROFILE");
-
+  const navigate = useNavigate();
   // const handleFileUpload = async (e) => {
   //   const file = e.target.files[0];
   //   const base64 = await convertToBase64(file);
@@ -240,6 +241,23 @@ const UserProfile = (props) => {
           </Box>
         </Card>
       </Box>
+      {profile?.admin && (
+        <Button
+          variant="outlined"
+          color="inherit"
+          disableElevation
+          onClick={() => navigate("/announcewinner")}
+          sx={{
+            textTransform: "none",
+            borderRadius: 4,
+            position: "fixed",
+            top: "80px",
+            right: "40px",
+          }}
+        >
+          Announce Winner
+        </Button>
+      )}
       <BottomNavbar />
     </>
   );

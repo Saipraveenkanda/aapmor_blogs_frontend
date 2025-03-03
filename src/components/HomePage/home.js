@@ -13,7 +13,11 @@ import {
   Stack,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogsApi, profileCheckingApi } from "../ApiCalls/apiCalls";
+import {
+  getBlogsApi,
+  getWinnerOfTheMonth,
+  profileCheckingApi,
+} from "../ApiCalls/apiCalls";
 import { setBlogsData } from "../Slices/blogSlice";
 import Cookies from "js-cookie";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
@@ -22,11 +26,13 @@ import ProfilePopup from "./ProfilePopup";
 import noBlogsImage from "../../assets/noblogs.png";
 import { useNavigate } from "react-router-dom";
 import writeIcon from "../../assets/pencil-simple-line.svg";
+import WinnerAnnouncement from "../BlogWinner";
 
 const Home = () => {
   const dispatch = useDispatch();
   const [profile, setProfile] = useState(false);
   const [category, setCategory] = useState("All");
+  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [apiStatus, setApiStatus] = useState("INITIAL");
   const blogObj = useSelector((state) => state.blogs);
   const blogs = blogObj.blogs;
@@ -34,6 +40,7 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const [winnerDetails, setWinnerDetails] = useState({});
   const user = Cookies.get("username");
   const userName = user !== undefined ? user : "User";
   const token = Cookies.get("jwtToken");
@@ -71,6 +78,21 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    const showFirstTime = localStorage.getItem("showAnnouncement");
+    if (
+      (showFirstTime === null || showFirstTime === "true") &&
+      apiStatus === "SUCCESS"
+    ) {
+      setShowAnnouncement(true);
+    }
+  }, [apiStatus]);
+
+  const handleAnnouncementClose = () => {
+    setShowAnnouncement(false);
+    localStorage.setItem("showAnnouncement", "false");
+  };
+
+  useEffect(() => {
     setTimeout(() => {
       setShowAlert(false);
     }, 2000);
@@ -91,9 +113,17 @@ const Home = () => {
     }
   };
 
+  const getWinnerDetails = async () => {
+    const response = await getWinnerOfTheMonth();
+    if (response) {
+      setWinnerDetails(response?.data);
+    }
+  };
+
   useEffect(() => {
     document.title = "AAPMOR | Blogs";
     setApiStatus("INITIAL");
+    getWinnerDetails();
     getBlogsData();
   }, [category]);
 
@@ -279,7 +309,6 @@ const Home = () => {
     setUpdatedBlogs(filteredBlogs);
   }, [searchInput]);
 
-  console.log(profile, "show profile");
   return (
     <>
       <Grid
@@ -288,13 +317,6 @@ const Home = () => {
         sx={{ "@media(min-width:480px)": { pl: "40px", pr: "40px" } }}
       >
         <Header setSearchInput={setSearchInput} />
-        {/* <Grid
-          item
-          xs={2}
-          sx={{ "@media(max-width:480px)": { display: "none" } }}
-        >
-          <SideBar setCategory={setCategory} category={category} />
-        </Grid> */}
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
@@ -364,6 +386,13 @@ const Home = () => {
             Write
           </Fab>
         </Tooltip>
+      )}
+      {showAnnouncement && !winnerDetails?.message && (
+        <WinnerAnnouncement
+          isOpen={showAnnouncement}
+          onClose={handleAnnouncementClose}
+          winnerDetails={winnerDetails}
+        />
       )}
     </>
   );

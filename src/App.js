@@ -8,6 +8,7 @@ import SavedBlogs from "./components/SavedBlogs/savedBlogs.js";
 import ProtectedRoute from "./components/ProtectedRoute/protectedRoute.js";
 import UserProfile from "./components/UserProfile/userProfile.js";
 import UserBlogs from "./components/UserBlogs/userBlogs.js";
+import AdminWinnerForm from "./components/SetWinner.jsx";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route exact path="/user/saved" element={<SavedBlogs />} />
         <Route exact path="/user/profile" element={<UserProfile />} />
         <Route exact path="/user/blogs" element={<UserBlogs />} />
+        <Route exact path="/announcewinner" element={<AdminWinnerForm />} />
       </Route>
     </Routes>
   );
