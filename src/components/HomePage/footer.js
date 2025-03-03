@@ -1,7 +1,8 @@
 import { Grid, Paper, Typography } from "@mui/material";
 
 import React from "react";
-import aapmorlogo from "../../assets/Aapmorlogodark.png";
+import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
+import aapmortext from "../../assets/aapmortext.svg";
 
 const Footer = () => {
   return (
@@ -26,13 +27,14 @@ const Footer = () => {
           alignItems: "center",
         }}
       >
-        <Grid item>
+        <Grid item sx={{ display: "flex", alignItems: "center" }}>
           {/* <img
             src="https://aapmor.com/assets/img/aapmore-logo-.jpg"
             alt="aapmor-logo"
             style={{ width: "200px" }}
           /> */}
-          <img width={"160px"} src={aapmorlogo} alt="logoAapmor" />
+          <img src={aapmorlogo} alt="logoAapmor" />
+          <img src={aapmortext} alt="aapmortext" />
           {/* <Grid item gap={2}>
             <IconButton
               component="a"

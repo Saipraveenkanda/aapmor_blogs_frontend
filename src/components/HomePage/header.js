@@ -19,7 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { SearchOutlined } from "@mui/icons-material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BookIcon from "@mui/icons-material/Book";
-import aapmorlogo from "../../assets/Aapmorlogodark.png";
+import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
+import aapmortext from "../../assets/aapmortext.svg";
 // import "./SearchBar.css";
 
 const Header = ({ setSearchInput }) => {
@@ -96,7 +97,8 @@ const Header = ({ setSearchInput }) => {
             navigate("/");
           }}
         >
-          <img width={"160px"} src={aapmorlogo} alt="logoAapmor" />
+          <img src={aapmorlogo} alt="logoAapmor" />
+          <img src={aapmortext} alt="aapmortext" />
           <Divider
             orientation="vertical"
             flexItem
