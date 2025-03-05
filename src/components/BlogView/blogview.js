@@ -9,6 +9,7 @@ import {
   Grid,
   IconButton,
   Popover,
+  Snackbar,
   Stack,
   TextField,
   Tooltip,
@@ -36,6 +37,7 @@ import {
   commentsApi,
   deleteBlogApi,
   likesApi,
+  postWinnerDetails,
   profileCheckingApi,
   removeSaveBlogApi,
   saveBlogApi,
@@ -48,7 +50,8 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import Slide from "@mui/material/Slide";
 import DeletePopup from "./DeletePoup";
-
+import blogAward from "../../assets/starlogo.png";
+import BestBlogRibbon from "../Blog/BestBlogRibbon";
 const host = process.env.REACT_APP_API_URL;
 
 const BlogView = () => {
@@ -66,7 +69,9 @@ const BlogView = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [userCreatedBlog, setUserCreatedBlog] = useState([]);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
-
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [openSnackbar, setOpenSnackBar] = useState(false);
+  const [snackMessage, setSnackMessage] = useState("");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -86,6 +91,9 @@ const BlogView = () => {
     const response = await profileCheckingApi();
     if (response) {
       setUserCreatedBlog(response?.data?.res?.createdBlogs);
+      setIsAdmin(
+        response?.data?.res?.admin ? response?.data?.res?.admin : false
+      );
     }
   };
 
@@ -110,7 +118,6 @@ const BlogView = () => {
       setLoading(true);
       const commentObject = { comment, id, name, dateObject };
       const response = await commentsApi(commentObject);
-      console.log(response);
       if (response.status === 200) {
         setLoading(false);
         getBlogItem();
@@ -139,7 +146,6 @@ const BlogView = () => {
       setProfile(true);
     } else {
       const response = await likesApi(id, name);
-      console.log(response);
       if (response.status === 200) {
         getBlogItem();
       }
@@ -147,9 +153,7 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
-    // setApiStatus("INITIAL");
     const response = await axios.get(`${host}/blogs/${id}`);
-    console.log(response, "Blog Details");
     if (response) {
       setApiStatus("SUCCESS");
       if (response.status === 200) {
@@ -174,6 +178,7 @@ const BlogView = () => {
     username,
     _id,
     savedUsers,
+    isBestBlog,
   } = blogDetails;
 
   const renderLoading = () => {
@@ -296,6 +301,38 @@ const BlogView = () => {
     );
   };
 
+  const handleSubmit = async () => {
+    const previousMonth = new Intl.DateTimeFormat("en-US", {
+      month: "long",
+    }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
+
+    const formData = {
+      winnerName: username,
+      blogTitle: title,
+      blogLink: window.location.href,
+      month: previousMonth,
+      blogId: _id,
+    };
+    try {
+      const response = await postWinnerDetails(formData);
+      if (response?.response?.data?.error) {
+        setSnackMessage(response?.response?.data?.error);
+        setOpenSnackBar(true);
+      }
+      if (!response.status === 201) {
+        throw new Error("Failed to save winner");
+      } else if (response.status === 201) {
+        setSnackMessage("Winner has been set successfully!");
+        setOpenSnackBar(true);
+        getBlogItem();
+      }
+    } catch (error) {
+      alert("Error: " + error.message);
+      setSnackMessage(error.message);
+      setOpenSnackBar(true);
+    }
+  };
+
   //RENDERING BLOG VIEW
   const renderBLogView = () => {
     document.title = `Blog: ${title}`;
@@ -416,6 +453,25 @@ const BlogView = () => {
                   <DeleteOutlineOutlinedIcon fontSize="medium" />
                 </IconButton>
               )}
+            {/* AWARD IMAGE */}
+            {isBestBlog && <BestBlogRibbon />}
+            {token !== undefined && isAdmin && !isBestBlog && (
+              <Button
+                variant="outlined"
+                color="inherit"
+                disableElevation
+                onClick={handleSubmit}
+                sx={{
+                  textTransform: "none",
+                  borderRadius: 4,
+                  position: "fixed",
+                  top: "80px",
+                  right: "40px",
+                }}
+              >
+                Announce Winner
+              </Button>
+            )}
           </Box>
           <Typography
             variant="h5"
@@ -517,9 +573,10 @@ const BlogView = () => {
                       }}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      variant="standard"
+                      variant="outlined"
                       multiline
-                      rows={2}
+                      rows={1}
+                      maxRows={1}
                       fullWidth
                     />
                     <LoadingButton
@@ -647,6 +704,20 @@ const BlogView = () => {
           )}
         </Stack>
       </Popover>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setOpenSnackBar(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackMessage}
+        </Alert>
+      </Snackbar>
       <DeletePopup
         open={openDeletePopup}
         setOpen={setOpenDeletePopup}

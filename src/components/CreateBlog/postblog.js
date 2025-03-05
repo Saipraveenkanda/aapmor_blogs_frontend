@@ -103,7 +103,6 @@ const CreateBlog = () => {
 
   // useEffect(() => {
   //   if (name && role && disablePublishButton) {
-  //     console.log("submitting by default");
   //     submitPost();
   //   }
   // }, [name, role]);

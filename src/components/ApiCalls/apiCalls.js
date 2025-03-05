@@ -22,7 +22,6 @@ const host = process.env.REACT_APP_API_URL;
 
 export const sendOtpApi = async (email) => {
   const response = await axios.post(forgetPassUrl, { email });
-  console.log(response);
   return response;
 };
 
@@ -228,8 +227,6 @@ export const postWinnerDetails = async (data) => {
     };
 
     const response = await axios(config);
-    console.log(response, "RESP");
-
     return response;
   } catch (error) {
     return error;

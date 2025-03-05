@@ -18,13 +18,6 @@ const generateConfetti = () => {
 
 export default function WinnerAnnouncement({ isOpen, onClose, winnerDetails }) {
   const [confetti, setConfetti] = useState([]);
-  const winner = {
-    name: winnerDetails?.winnerName,
-    blogTitle: winnerDetails?.blogTitle,
-    blogUrl: winnerDetails?.blogLink,
-    month: winnerDetails?.month,
-  };
-
   useEffect(() => {
     if (isOpen) {
       setConfetti(generateConfetti());
@@ -63,22 +56,27 @@ export default function WinnerAnnouncement({ isOpen, onClose, winnerDetails }) {
           <button className="close-button" onClick={onClose}>
             &times;
           </button>
-          <h2 className="winner-title">🏆 Blog of the Month 🏆</h2>
-          <p className="winner-text">
-            Congratulations, <span className="winner-name">{winner.name}</span>!
-          </p>
+          <h2 className="winner-title">🏆Best Blogs of the Month 🏆</h2>
+
           <p className="winner-description">
-            Your blog <span className="winner-blog">"{winner.blogTitle}"</span>{" "}
-            has won the best blog of the month in {winner.month}!
+            Congratulations to our top bloggers for this month! 🎉
           </p>
-          <a
-            href={winner.blogUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="winner-button"
-          >
-            View Blog
-          </a>
+
+          <ul className="winner-list">
+            {winnerDetails?.map((winner, index) => (
+              <li key={index} className="winner-item">
+                🏆 <span className="winner-name">{winner.winnerName}</span> for{" "}
+                <a
+                  href={winner.blogLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="winner-blog"
+                >
+                  "{winner.blogTitle}"
+                </a>
+              </li>
+            ))}
+          </ul>
         </motion.div>
       </div>
     </div>

@@ -63,7 +63,6 @@ const ProfilePopup = ({ profile, handleClose, setProfile }) => {
       isProfileUpdated: true,
     };
     const response = await profileUpdateApi(profileDetails);
-    console.log(response);
     if (response.status === 200) {
       Cookies.set("username", name, { expires: 30 });
       Cookies.set("userrole", designation, { expires: 30 });

@@ -78,7 +78,7 @@ const RecentBlogs = () => {
             {top5LikedBlogs.map(
               ({ blogImage, description, title, username, _id }) => {
                 return (
-                  <>
+                  <Box key={_id}>
                     <ListItem
                       key={_id}
                       alignItems="flex-start"
@@ -128,7 +128,7 @@ const RecentBlogs = () => {
                       </Stack>
                     </ListItem>
                     <Divider orientation="horizontal" />
-                  </>
+                  </Box>
                 );
               }
             )}

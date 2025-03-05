@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import "./awardribbon.css";
 
 import React, { useState } from "react";
 // import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -29,6 +30,7 @@ const Blog = (blogDetails) => {
     userrole,
     _id,
     blogImage,
+    isBestBlog,
   } = blogDetails.blogDetails;
   const formattedDate = new Date(date).toDateString();
 
@@ -38,7 +40,7 @@ const Blog = (blogDetails) => {
   return (
     <>
       {/* WEB VIEW */}
-      <Card
+      <Box
         sx={{
           display: { xs: "none", sm: "flex" },
           flexDirection: "row",
@@ -57,6 +59,15 @@ const Blog = (blogDetails) => {
         elevation={0}
         onClick={handleReadMore}
       >
+        {/* AWARD RIBBON */}
+        {isBestBlog && (
+          <div className="ribbon">
+            <span>Best of Feb</span>
+          </div>
+        )}
+        {/* <Box sx={{ position: "absolute", top: 0, right: -10, zIndex:100 }}>
+          <img src={awardLogo} alt="awardlogo" style={{ width: "80px" }} />
+        </Box> */}
         <Grid container xs={12} sx={{ zIndex: 10 }}>
           {/* Image Details */}
           <Grid item xs={4}>
@@ -93,24 +104,6 @@ const Blog = (blogDetails) => {
                   border: "0.5px solid #ffffff",
                 }}
               />
-              {/* <Box
-            sx={{
-              background: "linear-gradient(to top, #000000, #00000002 )",
-              paddingLeft: 1,
-              boxSizing: "border-box",
-            }}
-          >
-            <Typography variant="h6" color={"#ffffff"}>
-              {username || "Anonymous"}
-            </Typography>
-            <Typography
-              variant="caption"
-              color={"#ffffff"}
-              sx={{ display: "flow" }}
-            >
-              {userrole || "-"}
-            </Typography>
-          </Box> */}
             </Box>
           </Grid>
           {/* Description */}
@@ -158,53 +151,22 @@ const Blog = (blogDetails) => {
                   variant="p"
                   color={"CaptionText"}
                   sx={{
-                    textOverflow: "ellipsis",
-                    // overflow: "hidden",
-                    // maxHeight:"100%",
-                    // whiteSpace: "nowrap",
-                    // width: "100%",
                     display: "-webkit-box",
-                    "-webkitBoxOrient": "vertical",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 3,
                     overflow: "hidden",
-                    "-webkitLineClamp": 5 /* Number of lines to display */,
+                    textOverflow: "ellipsis",
+                    maxHeight: "100%",
+                    lineHeight: "1.5em",
                   }}
                 >
                   {description}
                 </Typography>
               </Box>
-              {/* <Divider
-            variant="middle"
-            sx={{ justifySelf: "flex-end" }}
-            flexItem
-            orientation="horizontal"
-          /> */}
-              {/* Readmore button */}
-              {/* <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              height: "max-content",
-              padding: "0px 10px",
-              // alignSelf: "flex-end",
-              cursor: "pointer",
-              "&:hover": {
-                color: "#e65100",
-              },
-              // justifySelf: "flex-end",
-              // alignSelf: "flex-end",
-            }}
-            onClick={handleReadMore}
-          >
-            <Typography variant="body2">Read more</Typography>
-            <IconButton>
-              <ArrowForwardIcon />
-            </IconButton>
-          </Box> */}
             </Box>
           </Grid>
         </Grid>
-      </Card>
+      </Box>
 
       {/* MOBILE VIEW */}
 

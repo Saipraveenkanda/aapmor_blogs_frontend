@@ -40,19 +40,53 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [winnerDetails, setWinnerDetails] = useState({});
+  const [winnerDetails, setWinnerDetails] = useState([]);
   const user = Cookies.get("username");
   const userName = user !== undefined ? user : "User";
   const token = Cookies.get("jwtToken");
   const navigate = useNavigate();
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const updateButtonState = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const day = now.getDate();
+
+      const startOfEnable = new Date(year, month, 8, 0, 0, 0); // 8th of the month
+      const endOfEnable = new Date(year, month, 27, 23, 59, 59); // 27th of the month
+
+      if (now >= startOfEnable && now <= endOfEnable) {
+        setIsEnabled(true);
+        setTimeLeft("");
+      } else {
+        setIsEnabled(false);
+        const nextEnableDate =
+          now < startOfEnable ? startOfEnable : new Date(year, month + 1, 8);
+        const timeDifference = nextEnableDate - now;
+
+        // Convert to days, hours, minutes
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+
+        setTimeLeft(`Writing blogs enables in ${days}d ${hours}h ${minutes}m`);
+      }
+    };
+
+    updateButtonState();
+    const timer = setInterval(updateButtonState, 60000); // Update every minute
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const token = Cookies.get("jwtToken");
     if (token !== undefined) {
       const checkProfileDetails = async () => {
-        console.log("now checking profile status");
         const response = await profileCheckingApi();
-        console.log(response);
         if (response.status === 202) {
           clearInterval(intervalId);
           setProfile(true);
@@ -69,7 +103,6 @@ const Home = () => {
         clearInterval(intervalId);
       };
       const intervalId = setInterval(() => {
-        console.log("waiting 5 sec for checking profile");
         checkProfileDetails();
       }, 5000);
     } else {
@@ -242,11 +275,13 @@ const Home = () => {
             <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
               Hello! Welcome {userName}
             </Typography>
-            <Alert variant="outlined" severity="warning">
-              <span style={{ fontSize: "12px", color: "red" }}>
-                Posting blogs will be enabled from 10th March 2025
-              </span>
-            </Alert>
+            {!isEnabled && (
+              <Alert variant="outlined" severity="warning">
+                <span style={{ fontSize: "12px", color: "red" }}>
+                  {timeLeft}
+                </span>
+              </Alert>
+            )}
           </Stack>
 
           {updatedBlogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
@@ -350,42 +385,40 @@ const Home = () => {
       </Backdrop>
 
       {token && (
-        <Tooltip title="Create new blog " arrow placement="left" sx={{ mt: 1 }}>
-          <Fab
-            variant="extended"
-            // color="inherit"
-            disabled
-            size="medium"
-            onClick={() => navigate("/createblog")}
-            sx={{
+        <Fab
+          variant="extended"
+          // color="inherit"
+          disabled
+          size="medium"
+          onClick={() => navigate("/createblog")}
+          sx={{
+            backgroundColor: "#016A70",
+            boxShadow: "2px 2px 4px 0px grey ",
+            borderRadius: 2,
+            position: "fixed",
+            bottom: 60,
+            right: 30,
+            width: "180px",
+            height: "52px",
+            textTransform: "none",
+            fontSize: "16px",
+            border: "4px solid #fff",
+            "&:hover": {
+              border: "4px solid #016A70",
+              boxShadow: "1px 0px 4px 0px #ffffff inset",
               backgroundColor: "#016A70",
-              boxShadow: "2px 2px 4px 0px grey ",
-              borderRadius: 2,
-              position: "fixed",
-              bottom: 60,
-              right: 30,
-              width: "180px",
-              height: "52px",
-              textTransform: "none",
-              fontSize: "16px",
-              border: "4px solid #fff",
-              "&:hover": {
-                border: "4px solid #016A70",
-                boxShadow: "1px 0px 4px 0px #ffffff inset",
-                backgroundColor: "#016A70",
-              },
-              color: "#ffffff",
-            }}
-          >
-            {/* <CreateIcon sx={{ mr: 1 }} /> */}
-            <img
-              src={writeIcon}
-              alt="write_icon"
-              style={{ height: "30px", paddingRight: "8px" }}
-            />
-            Write
-          </Fab>
-        </Tooltip>
+            },
+            color: "#ffffff",
+          }}
+        >
+          {/* <CreateIcon sx={{ mr: 1 }} /> */}
+          <img
+            src={writeIcon}
+            alt="write_icon"
+            style={{ height: "30px", paddingRight: "8px" }}
+          />
+          Write
+        </Fab>
       )}
       {showAnnouncement && !winnerDetails?.message && (
         <WinnerAnnouncement

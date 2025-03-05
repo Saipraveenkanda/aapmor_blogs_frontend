@@ -24,7 +24,6 @@ const UserProfile = (props) => {
   const [name, setName] = useState(profile?.name || "");
   // const [image, setImage] = useState("");
   const [email, setEmail] = useState(profile?.email || "");
-  console.log(profile, "PROFILE");
   const navigate = useNavigate();
   // const handleFileUpload = async (e) => {
   //   const file = e.target.files[0];
@@ -56,7 +55,6 @@ const UserProfile = (props) => {
       isProfileUpdated: true,
     };
     const response = await profileUpdateApi(profileDetails);
-    console.log(response, "UPDATED PROFILE");
     if (response?.status === 200) {
       const profile = response?.data?.profile;
       Cookies.set("userEmail", profile?.email);
