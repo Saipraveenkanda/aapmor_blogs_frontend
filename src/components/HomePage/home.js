@@ -388,7 +388,7 @@ const Home = () => {
         <Fab
           variant="extended"
           // color="inherit"
-          disabled
+          // disabled
           size="medium"
           onClick={() => navigate("/createblog")}
           sx={{
