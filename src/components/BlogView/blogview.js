@@ -72,6 +72,8 @@ const BlogView = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [openSnackbar, setOpenSnackBar] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState("");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -102,6 +104,13 @@ const BlogView = () => {
   const name = cookiesName !== undefined ? cookiesName : "U";
   const email = Cookies.get("userEmail");
   const dateObject = new Date();
+
+  useEffect(() => {
+    const liked = blogDetails?.likes?.some((like) => like.email === email);
+    const likesCount = blogDetails?.likes?.length;
+    setLiked(liked);
+    setLikesCount(likesCount);
+  }, [blogDetails]);
 
   useEffect(() => {
     if (comment.length >= 1) {
@@ -141,6 +150,13 @@ const BlogView = () => {
   };
 
   const handleLikes = async () => {
+    if (!liked) {
+      setLiked(true);
+      setLikesCount((prevCount) => prevCount + 1);
+    } else {
+      setLiked(false);
+      setLikesCount((prevCount) => prevCount - 1);
+    }
     const name = cookiesName;
     if (!name) {
       setProfile(true);
@@ -337,7 +353,7 @@ const BlogView = () => {
   const renderBLogView = () => {
     document.title = `Blog: ${title}`;
     const saved = savedUsers?.includes(email) ? true : false;
-    const liked = likes?.some((like) => like.email === email);
+    // const liked = likes?.some((like) => like.email === email);
     const formattedDate = new Date(date).toDateString();
     return (
       <Box
@@ -496,28 +512,28 @@ const BlogView = () => {
 
           {/* Comments and likes*/}
           <Stack direction={"row"} spacing={4} mt={2}>
-            <Stack direction={"column"} alignItems={"center"}>
-              <IconButton
-                onClick={handleLikes}
-                sx={{ marginTop: 0, padding: 0 }}
-              >
-                {/* <ThumbUpOutlinedIcon /> */}
-                {/* <FontAwesomeIcon icon={faHandsClapping} /> */}
-                {liked ? (
-                  <ThumbUpAltIcon sx={{ color: "#016A70" }} />
-                ) : (
-                  <ThumbUpOffAltIcon />
-                )}
-              </IconButton>
-              <Typography
-                sx={{
-                  cursor: "pointer",
-                }}
-                onClick={(e) => handleClick(e)}
-              >
-                {likes?.length}{" "}
-              </Typography>
-            </Stack>
+            {token && (
+              <Stack direction={"column"} alignItems={"center"}>
+                <IconButton
+                  onClick={handleLikes}
+                  sx={{ marginTop: 0, padding: 0 }}
+                >
+                  {liked ? (
+                    <ThumbUpAltIcon sx={{ color: "#016A70" }} />
+                  ) : (
+                    <ThumbUpOffAltIcon />
+                  )}
+                </IconButton>
+                <Typography
+                  sx={{
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => handleClick(e)}
+                >
+                  {likesCount}{" "}
+                </Typography>
+              </Stack>
+            )}
             <Stack direction={"column"} alignItems={"center"} mt={2}>
               <InsertCommentOutlinedIcon />
               <Typography>{comments?.length} </Typography>
