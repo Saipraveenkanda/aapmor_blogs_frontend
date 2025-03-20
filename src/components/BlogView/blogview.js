@@ -136,6 +136,7 @@ const BlogView = () => {
   };
 
   const handleEdit = () => {
+    localStorage.removeItem("blogData");
     navigate("/createblog", { state: { editBlog: blogDetails, isEdit: true } });
   };
 
