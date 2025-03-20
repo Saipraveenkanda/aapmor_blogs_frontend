@@ -153,7 +153,7 @@ const CreateBlog = () => {
         description,
         blogImage,
         category,
-        htmlFile: editorHtml,
+        html: editorHtml,
       };
       console.log(blogDetails);
       const response = await (isEdit
