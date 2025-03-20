@@ -9,17 +9,32 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const RecentBlogs = () => {
   const blogObj = useSelector((state) => state.blogs);
   const recentBlogsList = blogObj.blogs;
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentYear = currentDate.getFullYear();
   const top5LikedBlogs = [...recentBlogsList]
-    .sort((a, b) => b.likes.length - a.likes.length) // Sort descending by likes count
+    .filter((blog) => {
+      const blogDate = new Date(blog.date);
+      return (
+        blogDate.getMonth() === currentMonth &&
+        blogDate.getFullYear() === currentYear
+      );
+    })
+    .sort((a, b) => b.likes.length - a.likes.length)
     .slice(0, 5);
+
+  useEffect(() => {
+    top5LikedBlogs.length > 0 ? setLoading(false) : setLoading(true);
+  }, [top5LikedBlogs]);
 
   const renderLoadingView = () => {
     return (
@@ -135,8 +150,10 @@ const RecentBlogs = () => {
           </List>
         </>
       ) : (
-        renderLoadingView()
+        top5LikedBlogs.length === 0 &&
+        !loading && <Typography>No blogs this month!</Typography>
       )}
+      {loading && renderLoadingView()}
     </Box>
   );
 };

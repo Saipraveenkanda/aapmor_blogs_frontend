@@ -33,26 +33,35 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
+import { useRef } from "react";
+import ImageResize from "quill-image-resize-module-react";
+ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 const modules = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
     [{ size: [] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
     [
       { list: "ordered" },
       { list: "bullet" },
       { indent: "-1" },
       { indent: "+1" },
     ],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ color: [] }, { background: [] }],
     ["image", "video"],
   ],
   clipboard: {
-    matchVisual: false,
+    matchVisual: true,
+  },
+  imageResize: {
+    parchment: ReactQuill.Quill.import("parchment"),
+    modules: ["Resize", "DisplaySize", "Toolbar"],
   },
 };
 
 const CreateBlog = () => {
+  const quillRef = useRef(null);
   const location = useLocation();
   const { editBlog, isEdit } = location.state || {};
   const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
@@ -77,8 +86,23 @@ const CreateBlog = () => {
   );
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(false);
+  const [scrollPos, setScrollPos] = useState(0);
   const name = Cookies.get("username");
   const role = Cookies.get("userrole");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    document.querySelectorAll(".ql-toolbar button").forEach((button) => {
+      const format = button.classList[0]?.replace("ql-", "");
+      if (format) {
+        button.setAttribute(
+          "data-tooltip",
+          format.charAt(0).toUpperCase() + format.slice(1)
+        );
+      }
+    });
+  }, []);
+
   const handleSave = () => {
     const saveBlogData = {
       category,
@@ -87,11 +111,9 @@ const CreateBlog = () => {
       blogImage: blogImage,
       html: editorHtml,
     };
-    // if (title && description && blogImage && category && editorHtml) {
     setLoading(true);
     localStorage.setItem("blogData", JSON.stringify(saveBlogData));
     setLoading(false);
-    // }
   };
   const disablePublishButton =
     !!category &&
@@ -101,19 +123,22 @@ const CreateBlog = () => {
     !!editorHtml &&
     editorHtml !== "<p><br></p>";
 
-  // useEffect(() => {
-  //   if (name && role && disablePublishButton) {
-  //     submitPost();
-  //   }
-  // }, [name, role]);
-
   const handleClose = () => {
     setProfile(false);
   };
 
-  const navigate = useNavigate();
   const handleChange = (html) => {
+    const quill = quillRef.current?.getEditor();
+    if (!quill) return;
+
+    const scrollPos = quill.root.scrollTop;
     setEditorHtml(html);
+
+    setTimeout(() => {
+      if (quill) {
+        quill.root.scrollTop = scrollPos;
+      }
+    }, 0);
   };
 
   const newDate = new Date();
@@ -213,7 +238,6 @@ const CreateBlog = () => {
             width: "80%",
           }}
         >
-          {/* pradeep  */}
           <Grid
             sx={{
               display: "flex",
@@ -317,14 +341,10 @@ const CreateBlog = () => {
               size="small"
               sx={{ marginRight: "4px", background: "#5CB338" }}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                <SaveIcon
-                  titleAccess="Save"
-                  sx={{ color: "white", "&:hover": { color: "#000" } }}
-                />
-              )}
+              <SaveIcon
+                titleAccess="Save"
+                sx={{ color: "white", "&:hover": { color: "#000" } }}
+              />
             </Fab>
             <Fab
               aria-label="add"
@@ -362,7 +382,6 @@ const CreateBlog = () => {
               )}
             </Fab>
           </Grid>
-          {/* pradeep  */}
 
           {/* EDITOR BOX*/}
           {blogImage !== "" && (
@@ -413,6 +432,7 @@ const CreateBlog = () => {
             }}
           >
             <ReactQuill
+              ref={quillRef}
               theme="snow"
               value={editorHtml}
               onChange={handleChange}
@@ -421,6 +441,51 @@ const CreateBlog = () => {
           </Box>
         </Box>
       </Box>
+      <style>
+        {`
+        .ql-toolbar {
+          position: sticky !important;
+          top: 64px;
+          background: #F2F2F2;
+          z-index: 100;
+          border-bottom: 1px solid #ccc;
+        }
+        .ql-toolbar {
+          position: relative; 
+        }
+
+        .ql-toolbar button,
+        .ql-toolbar .ql-picker-label {
+          font-size: 18px !important; /* Increase toolbar icon size */
+          position: relative; /* Make sure tooltips are positioned relative to buttons */
+        }
+
+        .ql-toolbar button:hover::after {
+          content: attr(data-tooltip);
+          position: absolute;
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          font-size: 12px;
+          padding: 5px 8px;
+          border-radius: 4px;
+          top: -35px; /* Move tooltip above button */
+          left: 50%;
+          transform: translateX(-50%);
+          white-space: nowrap;
+          z-index: 10;
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .ql-toolbar button::after {
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.2s ease-in-out;
+        }
+
+
+      `}
+      </style>
       <ProfilePopup
         profile={profile}
         setProfile={setProfile}
