@@ -44,7 +44,7 @@ const RecentBlogs = () => {
           sx={{ fontSize: "32px", width: "70%", mb: 2 }}
         />
         {[1, 2, 3, 4, 5].map((each, index) => (
-          <>
+          <div key={index}>
             <Box
               key={index}
               sx={{ display: "flex", flexDirection: "row", gap: 1, mb: 1.5 }}
@@ -68,18 +68,21 @@ const RecentBlogs = () => {
               </Box>
             </Box>
             <Divider sx={{ mb: 1 }} />
-          </>
+          </div>
         ))}
       </Box>
     );
   };
+  const monthName = new Date().toLocaleString("default", {
+    month: "long",
+  });
 
   return (
     <Box sx={{ mt: "24px" }}>
       {top5LikedBlogs.length > 0 ? (
         <>
           <Typography variant="h6" fontWeight={600}>
-            Most liked blogs
+            Most liked blogs of {monthName}
           </Typography>
           <List
             sx={{
@@ -90,7 +93,7 @@ const RecentBlogs = () => {
               scrollbarWidth: "thin",
             }}
           >
-            {top5LikedBlogs.map(
+            {top5LikedBlogs?.map(
               ({ blogImage, description, title, username, _id }) => {
                 return (
                   <Box key={_id}>

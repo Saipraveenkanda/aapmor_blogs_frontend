@@ -33,6 +33,9 @@ const Blog = (blogDetails) => {
     isBestBlog,
   } = blogDetails.blogDetails;
   const formattedDate = new Date(date).toDateString();
+  const monthName = new Date(date).toLocaleString("default", {
+    month: "short",
+  });
 
   const handleReadMore = () => {
     navigate(`/blogs/${_id}`);
@@ -62,7 +65,7 @@ const Blog = (blogDetails) => {
         {/* AWARD RIBBON */}
         {isBestBlog && (
           <div className="ribbon">
-            <span>Best of Feb</span>
+            <span>Best of {monthName}</span>
           </div>
         )}
         {/* <Box sx={{ position: "absolute", top: 0, right: -10, zIndex:100 }}>

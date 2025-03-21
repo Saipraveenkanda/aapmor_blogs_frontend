@@ -248,7 +248,7 @@ const CreateBlog = () => {
             }}
             container
           >
-            <Grid item xs={12} md={7.7}>
+            <Grid item xs={12} md={6}>
               <Typography
                 variant="body1"
                 sx={{ fontWeight: "bold", color: "grey" }}
@@ -264,7 +264,7 @@ const CreateBlog = () => {
                 value={title}
               />
             </Grid>
-            <Grid item xs={9} md={3} sx={{ paddingRight: "4px" }}>
+            <Grid item xs={9} md={4} sx={{ paddingRight: "4px" }}>
               <Typography
                 variant="body1"
                 sx={{ fontWeight: "bold", color: "grey" }}
@@ -277,26 +277,43 @@ const CreateBlog = () => {
                 onChange={(e) => setCategory(e.target.value)}
                 fullWidth
                 size="small"
+                displayEmpty
               >
+                <MenuItem value="" disabled sx={{ color: "grey" }}>
+                  Select Category
+                </MenuItem>
                 {catoreries.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
+                  <>
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  </>
                 ))}
               </Select>
             </Grid>
-            <Grid item xs={2} md={1.3}>
+            <Grid item xs={2} md={2}>
               <Tooltip title="Insert thumbnail image for your blog">
                 <Button
                   component="label"
                   role={undefined}
-                  variant="contained"
+                  variant="outlined"
                   tabIndex={-1}
                   startIcon={<AddPhotoAlternateIcon />}
-                  sx={{ textTransform: "none", marginTop: "20px" }}
+                  sx={{
+                    textTransform: "none",
+                    marginTop: "24px",
+                    border: "1px solid #016A70",
+                    color: "#016A70",
+                    "&:hover": {
+                      color: "#ffffff",
+                      backgroundColor: "#016A7080",
+                      border: "1px solid #016A70",
+                    },
+                  }}
                   required
+                  size="large"
                 >
-                  Upload<span style={{ color: "red" }}>*</span>
+                  Add Thumbnail <span style={{ color: "red" }}> *</span>
                   <Input
                     accept="image/*"
                     multiple
