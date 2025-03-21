@@ -12,6 +12,7 @@ import {
   Grid,
   Fab,
   CircularProgress,
+  Skeleton,
 } from "@mui/material";
 import { useState, React, useEffect } from "react";
 import {
@@ -87,6 +88,7 @@ const CreateBlog = () => {
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(false);
   const [scrollPos, setScrollPos] = useState(0);
+  const [imageLoading, setImageLoading] = useState(false);
   const name = Cookies.get("username");
   const role = Cookies.get("userrole");
   const navigate = useNavigate();
@@ -147,14 +149,17 @@ const CreateBlog = () => {
   })}, ${newDate.getFullYear()}`;
 
   const handleFileUpload = async (e) => {
+    setImageLoading(true);
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("image", file);
     const response = await uploadThumbnail(formData);
     if (response) {
       setBlogImage(response.data.url);
+      setImageLoading(false);
     }
   };
+
   const submitPost = async () => {
     if (!name || !role) {
       setProfile(true);
@@ -247,6 +252,7 @@ const CreateBlog = () => {
               margin: "20px 0px",
             }}
             container
+            spacing={1}
           >
             <Grid item xs={12} md={6}>
               <Typography
@@ -258,9 +264,10 @@ const CreateBlog = () => {
               <TextField
                 placeholder="Enter your blog title"
                 onChange={(e) => setTitle(e.target.value)}
-                sx={{ minWidth: { xs: "350px", sm: "500px", md: "600px" } }}
+                // sx={{ minWidth: { xs: "350px", sm: "500px", md: "600px" } }}
                 variant="standard"
                 required
+                fullWidth
                 value={title}
               />
             </Grid>
@@ -273,7 +280,6 @@ const CreateBlog = () => {
               </Typography>
               <Select
                 value={category}
-                label={category}
                 onChange={(e) => setCategory(e.target.value)}
                 fullWidth
                 size="small"
@@ -283,11 +289,9 @@ const CreateBlog = () => {
                   Select Category
                 </MenuItem>
                 {catoreries.map((option) => (
-                  <>
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  </>
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
                 ))}
               </Select>
             </Grid>
@@ -313,7 +317,7 @@ const CreateBlog = () => {
                   required
                   size="large"
                 >
-                  Add Thumbnail <span style={{ color: "red" }}> *</span>
+                  Thumbnail <span style={{ color: "red" }}> *</span>
                   <Input
                     accept="image/*"
                     multiple
@@ -401,7 +405,7 @@ const CreateBlog = () => {
           </Grid>
 
           {/* EDITOR BOX*/}
-          {blogImage !== "" && (
+          {(blogImage !== "" || imageLoading) && (
             <Box
               sx={{
                 display: "flex",
@@ -431,14 +435,21 @@ const CreateBlog = () => {
                   </IconButton>
                 </Tooltip>
               </Stack>
-              <img
-                src={blogImage}
-                alt="thumbnail"
-                style={{
-                  width: "100%",
-                  height: "80%",
-                }}
-              />
+              {imageLoading ? (
+                <Skeleton
+                  variant="rectangular"
+                  sx={{ position: "relative", width: "100%", height: "100%" }}
+                />
+              ) : (
+                <img
+                  src={blogImage}
+                  alt="thumbnail"
+                  style={{
+                    width: "100%",
+                    height: "80%",
+                  }}
+                />
+              )}
             </Box>
           )}
           <Box

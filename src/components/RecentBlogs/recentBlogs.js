@@ -21,20 +21,27 @@ const RecentBlogs = () => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
-  const top5LikedBlogs = [...recentBlogsList]
-    .filter((blog) => {
-      const blogDate = new Date(blog.date);
-      return (
-        blogDate.getMonth() === currentMonth &&
-        blogDate.getFullYear() === currentYear
-      );
-    })
-    .sort((a, b) => b.likes.length - a.likes.length)
-    .slice(0, 5);
+  const [topBlogs, setTopBlogs] = useState([]);
 
   useEffect(() => {
-    top5LikedBlogs.length > 0 ? setLoading(false) : setLoading(true);
-  }, [top5LikedBlogs]);
+    setLoading(true);
+    const blogs = blogObj.blogs;
+    if (blogs.length > 0) {
+      setTopBlogs(
+        [...recentBlogsList]
+          .filter((blog) => {
+            const blogDate = new Date(blog.date);
+            return (
+              blogDate.getMonth() === currentMonth &&
+              blogDate.getFullYear() === currentYear
+            );
+          })
+          .sort((a, b) => b.likes.length - a.likes.length)
+          .slice(0, 5)
+      );
+      setLoading(false);
+    }
+  }, [blogObj]);
 
   const renderLoadingView = () => {
     return (
@@ -79,7 +86,7 @@ const RecentBlogs = () => {
 
   return (
     <Box sx={{ mt: "24px" }}>
-      {top5LikedBlogs.length > 0 ? (
+      {topBlogs.length > 0 ? (
         <>
           <Typography variant="h6" fontWeight={600}>
             Most liked blogs of {monthName}
@@ -93,7 +100,7 @@ const RecentBlogs = () => {
               scrollbarWidth: "thin",
             }}
           >
-            {top5LikedBlogs?.map(
+            {topBlogs?.map(
               ({ blogImage, description, title, username, _id }) => {
                 return (
                   <Box key={_id}>
@@ -153,7 +160,7 @@ const RecentBlogs = () => {
           </List>
         </>
       ) : (
-        top5LikedBlogs.length === 0 &&
+        topBlogs.length === 0 &&
         !loading && <Typography>No blogs this month!</Typography>
       )}
       {loading && renderLoadingView()}
