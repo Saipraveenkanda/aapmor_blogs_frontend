@@ -16,3 +16,4 @@ export const uploadThumbnailUrl = `${host}/post/blogthumb`;
 export const deleteBlogUrl = `${host}/blogs`;
 export const postWinnerUrl = `${host}/api/winners`;
 export const getWinnerUrl = `${host}/api/winners/current`;
+export const blogSummary = `${host}/summarize`;

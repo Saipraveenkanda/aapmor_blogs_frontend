@@ -16,6 +16,7 @@ import {
   deleteBlogUrl,
   postWinnerUrl,
   getWinnerUrl,
+  blogSummary,
 } from "../Url/configUrls";
 import axios from "axios";
 const host = process.env.REACT_APP_API_URL;
@@ -242,6 +243,19 @@ export const getWinnerOfTheMonth = async () => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  };
+  const response = await axios(config);
+  return response;
+};
+export const getSummaryOfBlog = async (data) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "post",
+    url: blogSummary,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
   };
   const response = await axios(config);
   return response;

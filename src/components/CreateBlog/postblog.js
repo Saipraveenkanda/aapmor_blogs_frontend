@@ -17,6 +17,7 @@ import {
 import { useState, React, useEffect } from "react";
 import {
   createBlogApi,
+  getSummaryOfBlog,
   publishBlogApi,
   updateBlogApi,
   uploadThumbnail,
@@ -25,6 +26,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import "./loader.css";
 import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
@@ -34,6 +36,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
+import SmartButtonOutlinedIcon from "@mui/icons-material/SmartButtonOutlined";
 import { useRef } from "react";
 import ImageResize from "quill-image-resize-module-react";
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
@@ -89,6 +92,7 @@ const CreateBlog = () => {
   const [profile, setProfile] = useState(false);
   const [scrollPos, setScrollPos] = useState(0);
   const [imageLoading, setImageLoading] = useState(false);
+  const [summaryLoading, setSummaryLoading] = useState(false);
   const name = Cookies.get("username");
   const role = Cookies.get("userrole");
   const navigate = useNavigate();
@@ -227,6 +231,20 @@ const CreateBlog = () => {
     "Travel",
   ];
 
+  const handleSummarize = async () => {
+    setSummaryLoading(true);
+    const payload = {
+      text: editorHtml,
+    };
+    const response = await getSummaryOfBlog(payload);
+    console.log(response, "SUMMARY RESPONSE");
+    if (response) {
+      setDescription(response.data.summary);
+      setSummaryLoading(false);
+    }
+    setSummaryLoading(false);
+  };
+
   return (
     <>
       <Header />
@@ -338,14 +356,53 @@ const CreateBlog = () => {
             >
               Blog Description<span style={{ color: "red" }}>*</span>
             </Typography>
-            <TextField
-              variant="standard"
-              placeholder="Enter few lines about your blog"
-              fullWidth
-              required
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <Stack direction={"row"} spacing={2} alignItems={"flex-end"}>
+              <TextField
+                disabled={summaryLoading}
+                variant="outlined"
+                placeholder="Enter few lines about your blog"
+                fullWidth
+                multiline
+                rows={3}
+                required
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <Button
+                onClick={handleSummarize}
+                title="Summarize your blog"
+                variant="outlined"
+                disabled={summaryLoading}
+                sx={{
+                  textTransform: "none",
+                  border: "1px solid #016A70",
+                  borderLeft: summaryLoading && "none",
+                  color: "#016A70",
+                  "&:hover": {
+                    color: "#ffffff",
+                    backgroundColor: "#016A7080",
+                    border: "1px solid #016A70",
+                  },
+                }}
+                endIcon={
+                  <SmartButtonOutlinedIcon
+                    fontSize="large"
+                    sx={{ width: "30px", height: "30px" }}
+                  />
+                }
+              >
+                {summaryLoading ? (
+                  <Box sx={{ width: "100px" }}>
+                    <div class="dots"></div>
+                  </Box>
+                ) : (
+                  <Typography sx={{ display: "flex", alignItems: "center" }}>
+                    {/* <SmartButtonOutlinedIcon fontSize="large" /> */}
+                    Summarize
+                  </Typography>
+                )}
+              </Button>
+            </Stack>
           </Grid>
           <Grid
             sx={{
@@ -524,3 +581,7 @@ const CreateBlog = () => {
   );
 };
 export default CreateBlog;
+
+const loader = () => {
+  return <></>;
+};
