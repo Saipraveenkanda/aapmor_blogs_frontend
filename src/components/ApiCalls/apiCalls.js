@@ -81,9 +81,10 @@ export const updateBlogApi = async (id, updatedData) => {
   const response = await axios(options);
   return response;
 };
-export const getBlogsApi = async (category) => {
+export const getBlogsApi = async () => {
   const response = await axios.get(
-    `${host}/blogs/filter/?category=${category}`
+    // `${host}/blogs/filter/?category=${category}`
+    `${host}/blogs`
   );
   return response;
 };
