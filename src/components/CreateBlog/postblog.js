@@ -95,6 +95,7 @@ const CreateBlog = () => {
   const [summaryLoading, setSummaryLoading] = useState(false);
   const name = Cookies.get("username");
   const role = Cookies.get("userrole");
+  const [plainText, setPlainText] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -139,6 +140,10 @@ const CreateBlog = () => {
 
     const scrollPos = quill.root.scrollTop;
     setEditorHtml(html);
+
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    setPlainText(tempDiv.innerText);
 
     setTimeout(() => {
       if (quill) {
@@ -234,8 +239,10 @@ const CreateBlog = () => {
   const handleSummarize = async () => {
     setSummaryLoading(true);
     const payload = {
-      text: editorHtml,
+      text: plainText,
     };
+    console.log(plainText, "PLAIN TEXT");
+
     const response = await getSummaryOfBlog(payload);
     console.log(response, "SUMMARY RESPONSE");
     if (response) {
