@@ -27,6 +27,8 @@ import noBlogsImage from "../../assets/noblogs.png";
 import { useNavigate } from "react-router-dom";
 import writeIcon from "../../assets/pencil-simple-line.svg";
 import WinnerAnnouncement from "../BlogWinner";
+import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
+import HelloAnimation from "../../helpers/HelloAnimation";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -47,6 +49,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
+  console.log(isEnabled, timeLeft, "TIME LEFT");
 
   useEffect(() => {
     const updateButtonState = () => {
@@ -72,7 +75,9 @@ const Home = () => {
         const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
 
-        setTimeLeft(`Writing blogs enables in ${days}d ${hours}h ${minutes}m`);
+        setTimeLeft(
+          `Analyzing entries... Writing unlocks in ${days}d ${hours}h ${minutes}m`
+        );
       }
     };
 
@@ -272,16 +277,25 @@ const Home = () => {
             width={"100%"}
             justifyContent={"space-between"}
           >
-            <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
-              Hello! Welcome {userName}
+            <Typography
+              variant="h6"
+              fontWeight={"bold"}
+              textAlign={"left"}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <HelloAnimation username={userName} />
             </Typography>
-            {!isEnabled && (
+            {/* {isEnabled && (
               <Alert variant="outlined" severity="warning">
                 <span style={{ fontSize: "12px", color: "red" }}>
                   {timeLeft}
                 </span>
               </Alert>
-            )}
+            )} */}
           </Stack>
 
           {updatedBlogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
@@ -384,42 +398,47 @@ const Home = () => {
         </Box>
       </Backdrop>
 
-      {token && (
-        <Fab
-          variant="extended"
-          // color="inherit"
-          // disabled
-          size="medium"
-          onClick={() => navigate("/createblog")}
-          sx={{
-            backgroundColor: "#016A70",
-            boxShadow: "2px 2px 4px 0px grey ",
-            borderRadius: 2,
-            position: "fixed",
-            bottom: 60,
-            right: 30,
-            width: "180px",
-            height: "52px",
-            textTransform: "none",
-            fontSize: "16px",
-            border: "4px solid #fff",
-            "&:hover": {
-              border: "4px solid #016A70",
-              boxShadow: "1px 0px 4px 0px #ffffff inset",
+      {token &&
+        (!isEnabled ? (
+          <Box sx={{ position: "fixed", bottom: -10, right: 10 }}>
+            <AnalyzeAnimation timeLeft={timeLeft} />
+          </Box>
+        ) : (
+          <Fab
+            variant="extended"
+            // color="inherit"
+            disabled={!isEnabled}
+            size="medium"
+            onClick={() => navigate("/createblog")}
+            sx={{
               backgroundColor: "#016A70",
-            },
-            color: "#ffffff",
-          }}
-        >
-          {/* <CreateIcon sx={{ mr: 1 }} /> */}
-          <img
-            src={writeIcon}
-            alt="write_icon"
-            style={{ height: "30px", paddingRight: "8px" }}
-          />
-          Write
-        </Fab>
-      )}
+              boxShadow: "2px 2px 4px 0px grey ",
+              borderRadius: 2,
+              position: "fixed",
+              bottom: 60,
+              right: 30,
+              width: "180px",
+              height: "52px",
+              textTransform: "none",
+              fontSize: "16px",
+              border: "4px solid #fff",
+              "&:hover": {
+                border: "4px solid #016A70",
+                boxShadow: "1px 0px 4px 0px #ffffff inset",
+                backgroundColor: "#016A70",
+              },
+              color: "#ffffff",
+            }}
+          >
+            {/* <CreateIcon sx={{ mr: 1 }} /> */}
+            <img
+              src={writeIcon}
+              alt="write_icon"
+              style={{ height: "30px", paddingRight: "8px" }}
+            />
+            Write
+          </Fab>
+        ))}
       {showAnnouncement && !winnerDetails?.message && (
         <WinnerAnnouncement
           isOpen={showAnnouncement}

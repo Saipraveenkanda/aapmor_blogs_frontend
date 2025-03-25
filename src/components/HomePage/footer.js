@@ -105,9 +105,7 @@ const Footer = () => {
           </Typography>
         </Grid> */}
         <Grid item>
-          <Typography>
-            © {new Date().getFullYear()} Aapmor Technologies Inc.
-          </Typography>
+          <Typography>© {new Date().getFullYear()} Aapmor Inc.</Typography>
         </Grid>
       </Grid>
     </Paper>

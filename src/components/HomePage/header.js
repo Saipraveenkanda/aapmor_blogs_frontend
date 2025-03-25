@@ -23,7 +23,7 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 // import "./SearchBar.css";
 
-const Header = ({ setSearchInput }) => {
+const Header = ({ setSearchInput = () => {} }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
   const open = Boolean(anchorEl);

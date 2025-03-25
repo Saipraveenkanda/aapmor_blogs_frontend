@@ -33,7 +33,8 @@ const RecentBlogs = () => {
             const blogDate = new Date(blog.date);
             return (
               blogDate.getMonth() === currentMonth &&
-              blogDate.getFullYear() === currentYear
+              blogDate.getFullYear() === currentYear &&
+              blog.likes.length > 0
             );
           })
           .sort((a, b) => b.likes.length - a.likes.length)

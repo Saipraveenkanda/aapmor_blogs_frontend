@@ -48,7 +48,7 @@ const Blog = (blogDetails) => {
           display: { xs: "none", sm: "flex" },
           flexDirection: "row",
           justifyContent: "flex-start",
-          height: "25vh",
+          minHeight: "25vh",
           width: "100%",
           borderRadius: 2,
           backdropFilter: "blur(12px)",
@@ -147,10 +147,15 @@ const Blog = (blogDetails) => {
               </Box>
               {/* TITLE DESCRIPTION */}
               <Box>
-                <Typography variant="h6" fontWeight={700}>
+                <Typography
+                  variant="h6"
+                  fontWeight={700}
+                  sx={{ lineHeight: 1.1 }}
+                >
                   {title}
                 </Typography>
                 <Typography
+                  title={description}
                   variant="p"
                   color={"CaptionText"}
                   sx={{

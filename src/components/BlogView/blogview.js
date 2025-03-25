@@ -434,6 +434,7 @@ const BlogView = () => {
                 )}
               </>
             )}
+            {/* EDIT ICON */}
             {token !== undefined &&
               userCreatedBlog?.includes(blogDetails?._id) && (
                 <Button
@@ -452,6 +453,7 @@ const BlogView = () => {
                   Edit
                 </Button>
               )}
+            {/* DELETE ICON */}
             {token !== undefined &&
               userCreatedBlog?.includes(blogDetails?._id) && (
                 <IconButton
@@ -472,6 +474,7 @@ const BlogView = () => {
               )}
             {/* AWARD IMAGE */}
             {isBestBlog && <BestBlogRibbon />}
+            {/* WINNER ANNOUNCEMENT BUTTON */}
             {token !== undefined && isAdmin && !isBestBlog && (
               <Button
                 variant="outlined"

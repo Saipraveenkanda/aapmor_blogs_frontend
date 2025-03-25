@@ -41,19 +41,24 @@ import { useRef } from "react";
 import ImageResize from "quill-image-resize-module-react";
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
+const Size = ReactQuill.Quill.import("attributors/style/size");
+Size.whitelist = ["12px", "14px", "16px", "18px", "24px"]; // Custom font sizes
+ReactQuill.Quill.register(Size, true);
+
 const modules = {
   toolbar: [
-    [{ header: "1" }, { header: "2" }, { font: [] }],
-    [{ size: [] }],
+    [{ size: Size.whitelist }], // Numeric font size dropdown
+    ["bold", "italic", "underline", "strike", "blockquote"], // Basic formatting
+    [{ script: "sub" }, { script: "super" }], // Superscript & subscript
     [
       { list: "ordered" },
       { list: "bullet" },
       { indent: "-1" },
       { indent: "+1" },
-    ],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [{ color: [] }, { background: [] }],
-    ["image", "video"],
+    ], // Lists & indentation
+    [{ align: [] }], // Text alignment
+    [{ color: [] }, { background: [] }], // Text & background color
+    ["image", "video"], // Media support
   ],
   clipboard: {
     matchVisual: true,
@@ -220,6 +225,7 @@ const CreateBlog = () => {
   };
 
   const catoreries = [
+    "Technology",
     "Insights",
     "Fitness",
     "Artificial Intelligence",
@@ -231,7 +237,6 @@ const CreateBlog = () => {
     "Fashion",
     "Food & Health",
     "Gaming",
-    "Technology",
     "Arts",
     "Travel",
   ];
@@ -241,10 +246,7 @@ const CreateBlog = () => {
     const payload = {
       text: plainText,
     };
-    console.log(plainText, "PLAIN TEXT");
-
     const response = await getSummaryOfBlog(payload);
-    console.log(response, "SUMMARY RESPONSE");
     if (response) {
       setDescription(response.data.summary);
       setSummaryLoading(false);
@@ -416,7 +418,7 @@ const CreateBlog = () => {
               position: "fixed",
               bottom: "12%",
               right: "3%",
-              zIndex: 2,
+              zIndex: 101,
             }}
           >
             <Fab
@@ -574,8 +576,10 @@ const CreateBlog = () => {
           visibility: hidden;
           transition: opacity 0.2s ease-in-out;
         }
-
-
+        .ql-toolbar .ql-size .ql-picker-label::before, 
+        .ql-toolbar .ql-size .ql-picker-item::before {
+          content: attr(data-value) !important; /* Display actual font size */
+        }
       `}
       </style>
       <ProfilePopup
