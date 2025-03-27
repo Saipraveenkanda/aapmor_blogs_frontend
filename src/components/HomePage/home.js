@@ -81,7 +81,7 @@ const Home = () => {
 
     return () => clearInterval(timer);
   }, []);
-
+  
   useEffect(() => {
     const token = Cookies.get("jwtToken");
     if (token !== undefined) {
@@ -388,7 +388,7 @@ const Home = () => {
         <Fab
           variant="extended"
           // color="inherit"
-          // disabled
+          disabled={!isEnabled}
           size="medium"
           onClick={() => navigate("/createblog")}
           sx={{
