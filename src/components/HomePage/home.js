@@ -20,7 +20,6 @@ import {
 } from "../ApiCalls/apiCalls";
 import { setBlogsData } from "../Slices/blogSlice";
 import Cookies from "js-cookie";
-import RecentBlogs from "../RecentBlogs/recentBlogs";
 import HomeLoading from "../../helpers/homeLoading";
 import ProfilePopup from "./ProfilePopup";
 import noBlogsImage from "../../assets/noblogs.png";
@@ -28,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 import writeIcon from "../../assets/pencil-simple-line.svg";
 import WinnerAnnouncement from "../BlogWinner";
 import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
-import HelloAnimation from "../../helpers/HelloAnimation";
+import AdminDashboard from "../Sidebar/AdminDashboard";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -40,7 +39,6 @@ const Home = () => {
   const blogs = blogObj.blogs;
   const [updatedBlogs, setUpdatedBlogs] = useState(blogs);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [winnerDetails, setWinnerDetails] = useState([]);
   const user = Cookies.get("username");
@@ -49,7 +47,6 @@ const Home = () => {
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
-  console.log(isEnabled, timeLeft, "TIME LEFT");
 
   useEffect(() => {
     const updateButtonState = () => {
@@ -235,7 +232,7 @@ const Home = () => {
     return (
       <Box
         sx={{
-          height: "91vh",
+          height: "calc(100vh - 65px)",
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -287,7 +284,7 @@ const Home = () => {
                 alignItems: "center",
               }}
             >
-              <HelloAnimation username={userName} />
+              {/* <HelloAnimation username={userName} /> */}
             </Typography>
             {/* {isEnabled && (
               <Alert variant="outlined" severity="warning">
@@ -363,9 +360,11 @@ const Home = () => {
       <Grid
         container
         xs={12}
-        sx={{ "@media(min-width:480px)": { pl: "40px", pr: "40px" } }}
+        sx={{
+          "@media(min-width:480px)": { pl: "40px", pr: "40px" },
+        }}
       >
-        <Header setSearchInput={setSearchInput} />
+        <Header setSearchInput={setSearchInput} profile={profile}/>
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
@@ -375,7 +374,8 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            <RecentBlogs />
+            {/* <RecentBlogs /> */}
+            <AdminDashboard username={userName} />
           </Grid>
         </Grid>
       </Grid>
@@ -391,12 +391,6 @@ const Home = () => {
       )}
 
       <BottomNavbar />
-
-      <Backdrop open={showAlert} onClick={() => setShowAlert(false)}>
-        <Box sx={{ display: "fixed", top: "100px", bottom: "100px" }}>
-          <Alert severity="success">{alertMessage}</Alert>
-        </Box>
-      </Backdrop>
 
       {token &&
         (!isEnabled ? (
@@ -415,7 +409,7 @@ const Home = () => {
               boxShadow: "2px 2px 4px 0px grey ",
               borderRadius: 2,
               position: "fixed",
-              bottom: 60,
+              bottom: 30,
               right: 30,
               width: "180px",
               height: "52px",

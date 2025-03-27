@@ -38,6 +38,7 @@ const Blog = (blogDetails) => {
   });
 
   const handleReadMore = () => {
+    localStorage.setItem("lastReadBlog", _id);
     navigate(`/blogs/${_id}`);
   };
   return (

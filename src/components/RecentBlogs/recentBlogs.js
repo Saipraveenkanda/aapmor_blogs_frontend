@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  Paper,
   Skeleton,
   Stack,
   Typography,
@@ -12,10 +13,11 @@ import {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-const RecentBlogs = () => {
-  const blogObj = useSelector((state) => state.blogs);
-  const recentBlogsList = blogObj.blogs;
+const RecentBlogs = ({ blogs }) => {
+  // const blogObj = useSelector((state) => state.blogs);
+  const recentBlogsList = blogs;
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const currentDate = new Date();
@@ -25,7 +27,6 @@ const RecentBlogs = () => {
 
   useEffect(() => {
     setLoading(true);
-    const blogs = blogObj.blogs;
     if (blogs.length > 0) {
       setTopBlogs(
         [...recentBlogsList]
@@ -42,7 +43,7 @@ const RecentBlogs = () => {
       );
       setLoading(false);
     }
-  }, [blogObj]);
+  }, [blogs]);
 
   const renderLoadingView = () => {
     return (
@@ -86,23 +87,28 @@ const RecentBlogs = () => {
   });
 
   return (
-    <Box sx={{ mt: "24px" }}>
+    <Paper sx={{ p: 2, boxSizing: "border-box" }}>
       {topBlogs.length > 0 ? (
         <>
-          <Typography variant="h6" fontWeight={600}>
-            Most liked blogs of {monthName}
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <ThumbUpOutlinedIcon sx={{ color: "#016A70" }} /> Most liked blogs
+            of {monthName}
           </Typography>
           <List
             sx={{
               bgcolor: "background.paper",
               maxWidth: "100%",
               overflowY: "auto",
-              height: "80vh",
+              maxHeight: "65vh",
               scrollbarWidth: "thin",
             }}
           >
             {topBlogs?.map(
-              ({ blogImage, description, title, username, _id }) => {
+              ({ blogImage, description, title, username, _id }, index) => {
                 return (
                   <Box key={_id}>
                     <ListItem
@@ -126,34 +132,41 @@ const RecentBlogs = () => {
                           variant="rounded"
                         />
                       </ListItemAvatar>
-                      <Stack direction={"column"} spacing={0.5}>
+                      <Stack direction={"column"} spacing={0}>
                         <Typography
                           variant="p"
-                          // fontSize={12}
-                          style={{
-                            // minWidth: "200px",
+                          sx={{
+                            // maxWidth: "90%",
                             textOverflow: "ellipsis",
                           }}
                           fontWeight={600}
                         >
-                          {title.slice(0, 26)}...
-                          {/* {title} */}
+                          {title.slice(0, 26)}
                         </Typography>
 
                         <Typography
-                          sx={{ display: "inline", maxWidth: "85%" }}
+                          sx={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2, // Limits text to 2 lines
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "normal", // Ensures wrapping
+                          }}
                           component="span"
                           variant="p"
-                          fontSize={12}
+                          // fontSize={12}
                           color="text.primary"
-                          textOverflow={"ellipsis"}
+                          // textOverflow={"ellipsis"}
                         >
                           <b>{username || "Anonymous"}</b>
-                          {` - ${description.slice(0, 50)}...`}
+                          {` : ${description}`}
                         </Typography>
                       </Stack>
                     </ListItem>
-                    <Divider orientation="horizontal" />
+                    {index !== topBlogs.length - 1 && (
+                      <Divider orientation="horizontal" />
+                    )}
                   </Box>
                 );
               }
@@ -165,7 +178,7 @@ const RecentBlogs = () => {
         !loading && <Typography>No blogs this month!</Typography>
       )}
       {loading && renderLoadingView()}
-    </Box>
+    </Paper>
   );
 };
 

@@ -21,17 +21,31 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
-// import "./SearchBar.css";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined"; // import "./SearchBar.css";
+import { profileCheckingApi } from "../ApiCalls/apiCalls";
 
 const Header = ({ setSearchInput = () => {} }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
+  const [isAdmin, setIsAdmin] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    getUserDetail();
+  }, []);
+  const getUserDetail = async () => {
+    const response = await profileCheckingApi();
+    if (response) {
+      setIsAdmin(
+        response?.data?.res?.admin ? response?.data?.res?.admin : false
+      );
+    }
   };
 
   const navigate = useNavigate();
@@ -164,7 +178,7 @@ const Header = ({ setSearchInput = () => {} }) => {
               color: "grey",
             }}
           >
-            <Button
+            {/* <Button
               variant="text"
               color="inherit"
               disableElevation
@@ -172,9 +186,9 @@ const Header = ({ setSearchInput = () => {} }) => {
               sx={{ textTransform: "none", borderRadius: 4 }}
             >
               Profile
-            </Button>
+            </Button> */}
             {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            <Button
+            {/* <Button
               variant="text"
               color="inherit"
               disableElevation
@@ -182,9 +196,9 @@ const Header = ({ setSearchInput = () => {} }) => {
               sx={{ textTransform: "none", borderRadius: 4 }}
             >
               Saved
-            </Button>
+            </Button> */}
             {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            <Button
+            {/* <Button
               variant="text"
               color="inherit"
               disableElevation
@@ -193,9 +207,18 @@ const Header = ({ setSearchInput = () => {} }) => {
               // disabled
             >
               Your blogs
-            </Button>
+            </Button> */}
             {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
             {/* <Tooltip title="logout"> */}
+            {/* ADMIN ICON */}
+            {isAdmin && (
+              <IconButton onClick={() => navigate("/admin")}>
+                <AdminPanelSettingsOutlinedIcon
+                  sx={{ color: "#016A70" }}
+                  fontSize="medium"
+                />
+              </IconButton>
+            )}
             <Button
               size="small"
               variant="text"

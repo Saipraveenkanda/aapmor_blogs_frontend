@@ -121,7 +121,8 @@ const BlogView = () => {
   }, [comment]);
 
   const handleCommentApi = async () => {
-    if (comment === "") {
+    const trimmedComment = comment.trim();
+    if (trimmedComment === "") {
       setDisableCommentButton(true);
     } else {
       setLoading(true);

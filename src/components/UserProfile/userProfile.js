@@ -174,6 +174,7 @@ const UserProfile = (props) => {
                 onChange={(e) => setDesignation(e.target.value)}
                 value={designation}
                 required
+                disabled
                 label="Designation"
               >
                 <MenuItem value="HR">HR</MenuItem>
@@ -199,6 +200,7 @@ const UserProfile = (props) => {
             <FormControl size="small">
               <InputLabel id="demo-simple-select-label">Gender *</InputLabel>
               <Select
+                disabled
                 value={gender}
                 label="Gender"
                 onChange={(e) => setGender(e.target.value)}
@@ -212,6 +214,7 @@ const UserProfile = (props) => {
             </FormControl>
             {/* Email */}
             <TextField
+              disabled
               helperText="Update your email"
               rows={4}
               label="Email"
@@ -239,7 +242,7 @@ const UserProfile = (props) => {
           </Box>
         </Card>
       </Box>
-      {profile?.admin && (
+      {/* {profile?.admin && (
         <Button
           variant="outlined"
           color="inherit"
@@ -255,7 +258,7 @@ const UserProfile = (props) => {
         >
           Announce Winner
         </Button>
-      )}
+      )} */}
       <BottomNavbar />
     </>
   );

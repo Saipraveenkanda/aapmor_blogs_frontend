@@ -81,8 +81,9 @@ const Login = () => {
     return pattern.test(email);
   };
   const handleEmailChange = (e) => {
+    const mail = e.target.value;
     setEmailError(false);
-    setEmail(e.target.value);
+    setEmail(mail.toLowerCase());
   };
 
   const handleOtpChange = (e) => {

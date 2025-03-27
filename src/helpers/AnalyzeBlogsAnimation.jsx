@@ -3,8 +3,6 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Typography } from "@mui/material";
 
 const AnalyzeAnimation = ({ timeLeft }) => {
-  console.log(timeLeft);
-
   return (
     <div>
       <Typography
