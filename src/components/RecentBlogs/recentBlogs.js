@@ -19,7 +19,7 @@ const RecentBlogs = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentMonth = currentDate.getMonth() - 1; // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
   const [topBlogs, setTopBlogs] = useState([]);
 
@@ -89,7 +89,7 @@ const RecentBlogs = () => {
       {topBlogs.length > 0 ? (
         <>
           <Typography variant="h6" fontWeight={600}>
-            Most liked blogs of {monthName}
+            Most liked blogs {/* of {monthName} */}
           </Typography>
           <List
             sx={{
