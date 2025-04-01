@@ -47,6 +47,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
+  const [profileDetails, setProfileDetails] = useState({});
 
   useEffect(() => {
     const updateButtonState = () => {
@@ -90,11 +91,12 @@ const Home = () => {
       const checkProfileDetails = async () => {
         const response = await profileCheckingApi();
         if (response.status === 202) {
-          clearInterval(intervalId);
+          // clearInterval(intervalId);
           setProfile(true);
         } else if (response.status === 200) {
-          clearInterval(intervalId);
+          // clearInterval(intervalId);
           setProfile(false);
+          setProfileDetails(response.data.res);
           // if (Cookies.get("username") === undefined) {
           Cookies.set("username", response.data.res.name);
           // }
@@ -102,11 +104,11 @@ const Home = () => {
           Cookies.set("userrole", response.data.res.designation);
           // }
         }
-        clearInterval(intervalId);
+        // clearInterval(intervalId);
       };
-      const intervalId = setInterval(() => {
-        checkProfileDetails();
-      }, 5000);
+      // const intervalId = setInterval(() => {
+      checkProfileDetails();
+      // }, 5000);
     } else {
       setProfile(false);
     }
@@ -364,7 +366,7 @@ const Home = () => {
           "@media(min-width:480px)": { pl: "40px", pr: "40px" },
         }}
       >
-        <Header setSearchInput={setSearchInput} profile={profile}/>
+        <Header setSearchInput={setSearchInput} profile={profile} />
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
@@ -375,7 +377,10 @@ const Home = () => {
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
             {/* <RecentBlogs /> */}
-            <AdminDashboard username={userName} />
+            <AdminDashboard
+              username={userName}
+              profileDetails={profileDetails}
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -394,7 +399,7 @@ const Home = () => {
 
       {token &&
         (!isEnabled ? (
-          <Box sx={{ position: "fixed", bottom: -10, right: 10 }}>
+          <Box sx={{ position: "fixed", bottom: -10, right: "120px" }}>
             <AnalyzeAnimation timeLeft={timeLeft} />
           </Box>
         ) : (

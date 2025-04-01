@@ -1,48 +1,93 @@
 import React, { useEffect, useState } from "react";
-import Header from "../HomePage/header";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import BottomNavbar from "../BottomNavigation/bottomNavigation";
-import { getSavedBlogsApi } from "../ApiCalls/apiCalls";
-import Blog from "../Blog/blogCard";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { getSavedBlogsApi, removeSaveBlogApi } from "../ApiCalls/apiCalls";
+import { useNavigate } from "react-router-dom";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import CommentIcon from "@mui/icons-material/Comment";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+
 
 const SavedBlogs = () => {
   const [savedBlogs, setSavedBlogs] = useState([]);
   const [apiStatus, setApiStatus] = useState("INITIAL");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "AAPMOR | Blogs - Saved";
-    const getSavedBlogs = async () => {
-      const response = await getSavedBlogsApi();
-      if (response.status === 200) {
-        setSavedBlogs(response.data);
-        setApiStatus("SUCCESS");
-      } else {
-        setApiStatus("FAILURE");
-      }
-    };
+    document.title = "AAPMOR | Blogs - Profile";
     getSavedBlogs();
   }, []);
 
+  const getSavedBlogs = async () => {
+    const response = await getSavedBlogsApi();
+    if (response.status === 200) {
+      setSavedBlogs(response.data);
+      setApiStatus("SUCCESS");
+    } else {
+      setApiStatus("FAILURE");
+    }
+  };
+
+  const handleBlogUnsave = async (id) => {
+    const response = await removeSaveBlogApi(id);
+    if (response.status === 200) {
+      getSavedBlogs();
+    }
+  };
+
   const renderLoading = () => {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "85vh",
-        }}
-      >
-        <Typography sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          Loading saved blogs <CircularProgress />
-        </Typography>
+      <Box sx={{ width: "100%", mb: 1.5, mt: 2 }}>
+        {[1, 2, 3, 4].map((each, index) => (
+          <div key={index}>
+            <Box
+              key={index}
+              sx={{ display: "flex", flexDirection: "row", gap: 1, mb: 1.5 }}
+            >
+              <Skeleton
+                variant="rectangular"
+                sx={{ width: "84px", height: "72px", borderRadius: "4px" }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  width: "100%",
+                  marginTop: 0,
+                }}
+              >
+                <Skeleton sx={{ width: "100%", height: "24px" }} />
+                <Skeleton sx={{ width: "100%", height: "20px" }} />
+                <Skeleton sx={{ width: "100%", height: "20px" }} />
+              </Box>
+            </Box>
+            {index !== 3 && <Divider orientation="horizontal" sx={{ mb: 1 }} />}
+            {/* <Divider sx={{ mb: 1 }} /> */}
+          </div>
+        ))}
       </Box>
     );
   };
 
   const renderFailureView = () => {
     return (
-      <Box sx={{ display: "grid", placeItems: "center", height: "90vh" }}>
+      <Box sx={{ display: "grid", placeItems: "center", height: "100%" }}>
         <Typography variant="subtitle1" fontWeight={600} fontSize={18}>
           Oops! Something went wrong while trying to fetch the blogs.
           <br />
@@ -52,34 +97,175 @@ const SavedBlogs = () => {
     );
   };
 
-  const renderBlogsView = () => {
+  const renderTimeLine = (likes, comments, date, _id) => {
     return (
-      <Box sx={{ p: 3 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={2}
+        justifyContent="space-between"
+        sx={{
+          width: "100%",
+          padding: "6px 10px",
+          background: "rgba(255, 255, 255, 0.1)", // Light glass effect
+          borderRadius: "8px",
+          backdropFilter: "blur(8px)", // Soft blur effect
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Left Section: Date, Likes, Comments */}
         <Typography
-          variant="h6"
-          fontWeight={700}
-          gutterBottom
-          // textAlign={""}
-        >
-          Your Saved Blogs
-        </Typography>
-        <Box
+          variant="caption"
           sx={{
+            fontSize: "13px",
             display: "flex",
-            flexWrap: "wrap",
-            gap: 2,
-            // p: 2,
             alignItems: "center",
-            justifyContent: "center",
-            width: "70%",
-            "@media(max-width:480px)": { width: "100%" },
+            gap: "12px",
+            color: "#666",
           }}
         >
-          {savedBlogs.map((blogItem) => {
-            return <Blog blogDetails={blogItem} key={blogItem._id} />;
-          })}
-        </Box>
-      </Box>
+          📅 {new Date(date).toLocaleDateString()}
+          <ThumbUpOutlinedIcon
+            fontSize="small"
+            sx={{ color: "#016A70" }}
+          />{" "}
+          {likes?.length}
+          <CommentIcon fontSize="small" sx={{ color: "#016A70" }} />{" "}
+          {comments?.length}
+        </Typography>
+
+        {/* Right Section: Unsave & Read More */}
+        <Stack direction="row" spacing={1}>
+          <IconButton
+            size="small"
+            sx={{ color: "#016A70" }}
+            onClick={() => handleBlogUnsave(_id)}
+          >
+            <BookmarkIcon />
+          </IconButton>
+          <Button
+            size="small"
+            // variant="outlined"
+            sx={{
+              textTransform: "none",
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#016A70",
+              borderRadius: "16px",
+              border: "1px solid #016A70",
+              "&:hover": {
+                border: "1px solid transparent",
+                color: "#016A70",
+                backgroundColor: "transparent",
+              },
+            }}
+            startIcon={<VisibilityIcon fontSize="small" />}
+            onClick={() => navigate(`/blogs/${_id}`)}
+          >
+            Read More
+          </Button>
+        </Stack>
+      </Stack>
+    );
+  };
+
+  const renderBlogsView = () => {
+    return (
+      <List
+        sx={{
+          bgcolor: "background.paper",
+          maxWidth: "100%",
+          overflowY: "auto",
+          maxHeight: "calc(78vh - 32px)",
+          scrollbarWidth: "thin",
+        }}
+      >
+        {savedBlogs?.map(
+          (
+            {
+              blogImage,
+              description,
+              title,
+              username,
+              _id,
+              likes,
+              comments,
+              date,
+            },
+            index
+          ) => {
+            return (
+              <Box key={_id}>
+                <ListItem
+                  key={_id}
+                  disablePadding
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    alignItems: "flex-start",
+                    width: "100%",
+                    mb: 1.5,
+                    mt: 1.5,
+                  }}
+                >
+                  <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                    <ListItemAvatar>
+                      <Avatar
+                        alt="blog image"
+                        src={blogImage}
+                        sx={{ width: 64, height: 64 }}
+                        variant="rounded"
+                      />
+                    </ListItemAvatar>
+                    <Stack direction={"column"} spacing={0}>
+                      {/* <Typography variant="caption">
+                        {new Date(date).toLocaleString()} | {likes?.length}{" "}
+                        likes | {comments?.length} comments
+                      </Typography> */}
+                      <Typography
+                        variant="p"
+                        sx={{
+                          display: "-webkit-box",
+                          WebkitLineClamp: 1,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "normal",
+                        }}
+                        fontWeight={600}
+                      >
+                        {title}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "normal",
+                        }}
+                        component="span"
+                        variant="p"
+                        color="text.primary"
+                      >
+                        <b>{username || "Anonymous"}</b>
+                        {` : ${description}`}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  {renderTimeLine(likes, comments, date, _id)}
+                </ListItem>
+                {index !== savedBlogs.length - 1 && (
+                  <Divider orientation="horizontal" />
+                )}
+              </Box>
+            );
+          }
+        )}
+      </List>
     );
   };
 
@@ -90,7 +276,7 @@ const SavedBlogs = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          height: "85vh",
+          height: "100%",
         }}
       >
         <Typography variant="p" fontWeight={600} fontSize={20}>
@@ -124,9 +310,16 @@ const SavedBlogs = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
+      <Typography
+        variant="h6"
+        // gutterBottom
+        sx={{ fontWeight: "bold", color: "#016A70" }}
+      >
+        Your Saved Blogs
+      </Typography>
       <Box>{renderApiStatus()}</Box>
-      <BottomNavbar />
+      {/* <BottomNavbar /> */}
     </>
   );
 };

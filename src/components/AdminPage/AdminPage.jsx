@@ -71,7 +71,7 @@ const AdminPage = (props) => {
             Admin Dashboard
           </Typography>
           <Grid container spacing={2}>
-            <Grid xs={4} item>
+            <Grid xs={4.5} item>
               <RecentBlogs blogs={blogs} />
             </Grid>
           </Grid>

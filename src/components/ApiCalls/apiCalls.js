@@ -17,6 +17,11 @@ import {
   postWinnerUrl,
   getWinnerUrl,
   blogSummary,
+  profileImageUrl,
+  generateUserBioUrl,
+  getAuthorUrl,
+  likeCommentsUrl,
+  commentReplyUrl,
 } from "../Url/configUrls";
 import axios from "axios";
 const host = process.env.REACT_APP_API_URL;
@@ -99,7 +104,17 @@ export const saveBlogsApi = async (saveDetails) => {
   return response;
 };
 export const profileUpdateApi = async (profileDetails) => {
-  const response = await axios.post(profileUpdateApiUrl, profileDetails);
+  const token = Cookies.get("jwtToken");
+  const options = {
+    method: "post",
+    url: profileUpdateApiUrl,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: JSON.stringify(profileDetails),
+  };
+  const response = await axios(options);
   return response;
 };
 
@@ -215,6 +230,19 @@ export const uploadThumbnail = async (image) => {
   const response = await axios(config);
   return response;
 };
+export const uploadProfileImage = async (image) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "post",
+    url: profileImageUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: image,
+  };
+  const response = await axios(config);
+  return response;
+};
 
 export const postWinnerDetails = async (data) => {
   const token = Cookies.get("jwtToken");
@@ -256,6 +284,64 @@ export const getSummaryOfBlog = async (data) => {
       Authorization: `Bearer ${token}`,
     },
     data: data,
+  };
+  const response = await axios(config);
+  return response;
+};
+
+export const getAutoBioService = async (data) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "post",
+    url: generateUserBioUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+  const response = await axios(config);
+  return response;
+};
+export const getAuthorDetailsService = async (email) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "get",
+    url: `${getAuthorUrl}/${email}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios(config);
+  return response;
+};
+
+export const commentLikeService = async (blogId, commentIndex) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "post",
+    url: `${likeCommentsUrl}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: { blogId, commentIndex },
+  };
+  const response = await axios(config);
+  return response;
+};
+export const commentReplyService = async (
+  blogId,
+  commentIndex,
+  replyText,
+  name
+) => {
+  const token = Cookies.get("jwtToken");
+  const config = {
+    method: "post",
+    url: `${commentReplyUrl}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: { blogId, commentIndex, replyText, name },
   };
   const response = await axios(config);
   return response;

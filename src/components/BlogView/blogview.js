@@ -34,8 +34,11 @@ import "./style.css";
 import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
 import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
 import {
+  commentLikeService,
+  commentReplyService,
   commentsApi,
   deleteBlogApi,
+  getAuthorDetailsService,
   likesApi,
   postWinnerDetails,
   profileCheckingApi,
@@ -52,6 +55,8 @@ import Slide from "@mui/material/Slide";
 import DeletePopup from "./DeletePoup";
 import blogAward from "../../assets/starlogo.png";
 import BestBlogRibbon from "../Blog/BestBlogRibbon";
+import AboutAuthor from "./AboutAuthor";
+import CommentSection from "./CommentSection";
 const host = process.env.REACT_APP_API_URL;
 
 const BlogView = () => {
@@ -74,6 +79,9 @@ const BlogView = () => {
   const [snackMessage, setSnackMessage] = useState("");
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState("");
+  const [authorId, setAuthorId] = useState("");
+  const [authorDetails, setAuthorDetails] = useState("");
+  // const [comments, setComments] = useState([]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -119,6 +127,17 @@ const BlogView = () => {
       setDisableCommentButton(true);
     }
   }, [comment]);
+
+  useEffect(() => {
+    authorId !== "" && getAuthorDetails();
+  }, [authorId]);
+
+  const getAuthorDetails = async () => {
+    const response = await getAuthorDetailsService(authorId);
+    if (response) {
+      setAuthorDetails(response.data);
+    }
+  };
 
   const handleCommentApi = async () => {
     const trimmedComment = comment.trim();
@@ -177,6 +196,7 @@ const BlogView = () => {
       if (response.status === 200) {
         const blogDetails = await response.data;
         setBlogDetails(blogDetails);
+        setAuthorId(blogDetails?.email);
       } else {
         setApiStatus("FAILURE");
       }
@@ -264,50 +284,83 @@ const BlogView = () => {
 
   // RENDER EACH COMMENT
 
+  const handleLike = async (index) => {
+    const response = await commentLikeService(_id, index);
+    console.log(response, "LIKING COMMENT");
+    if (response) {
+      getBlogItem();
+    }
+  };
+
+  const handleReply = async (commentIndex, replyText) => {
+    const response = await commentReplyService(
+      _id,
+      commentIndex,
+      replyText,
+      name
+    );
+    console.log(response, "REPLYING COMMENT");
+    if (response) {
+      // setComments((prevComments) =>
+      //   prevComments.map((c) =>
+      //     c._id === commentId ? { ...c, replies: response.data.replies } : c
+      //   )
+      // );
+      getBlogItem();
+    }
+  };
+
   const renderComments = () => {
     return (
-      <Stack direction={"column"} spacing={0}>
-        {comments.map((eachComment) => {
-          const { comment, name, dateObject } = eachComment;
-          const time = getTimeAgo(dateObject);
-          return (
-            <>
-              <Stack
-                key={eachComment._id}
-                direction={"row"}
-                spacing={2}
-                sx={{
-                  padding: 1,
-                  boxSizing: "border-box",
-                }}
-              >
-                <Avatar>{name[0].toUpperCase()}</Avatar>
-                <Stack direction={"column"} spacing={1}>
-                  <Typography variant="inherit" color={"#000"} fontWeight={600}>
-                    {name}{" "}
-                    <text style={{ color: "grey", fontSize: "10px" }}>
-                      {"\u25CF"}
-                    </text>
-                    <span
-                      style={{
-                        fontWeight: "lighter",
-                        color: "lightslategray",
-                        fontSize: "12px",
-                      }}
-                    >
-                      {" "}
-                      {time}
-                    </span>
-                  </Typography>
+      // <Stack direction={"column"} spacing={0}>
+      //   {comments.map((eachComment) => {
+      //     const { comment, name, dateObject } = eachComment;
+      //     const time = getTimeAgo(dateObject);
+      //     return (
+      //       <>
+      //         <Stack
+      //           key={eachComment._id}
+      //           direction={"row"}
+      //           spacing={2}
+      //           sx={{
+      //             padding: 1,
+      //             boxSizing: "border-box",
+      //           }}
+      //         >
+      //           <Avatar>{name[0].toUpperCase()}</Avatar>
+      //           <Stack direction={"column"} spacing={1}>
+      //             <Typography variant="inherit" color={"#000"} fontWeight={600}>
+      //               {name}{" "}
+      //               <text style={{ color: "grey", fontSize: "10px" }}>
+      //                 {"\u25CF"}
+      //               </text>
+      //               <span
+      //                 style={{
+      //                   fontWeight: "lighter",
+      //                   color: "lightslategray",
+      //                   fontSize: "12px",
+      //                 }}
+      //               >
+      //                 {" "}
+      //                 {time}
+      //               </span>
+      //             </Typography>
 
-                  <Typography variant="body2">{comment}</Typography>
-                </Stack>
-              </Stack>
-              <Divider orientation="horizontal" flexItem />
-            </>
-          );
-        })}
-      </Stack>
+      //             <Typography variant="body2">{comment}</Typography>
+      //           </Stack>
+      //         </Stack>
+      //         <Divider orientation="horizontal" flexItem />
+      //       </>
+      //     );
+      //   })}
+      // </Stack>
+      <CommentSection
+        comments={comments}
+        handleLike={handleLike}
+        handleReply={handleReply}
+        getTimeAgo={getTimeAgo}
+        user={email}
+      />
     );
   };
   //RENDERING NO COMMENTS VIEW
@@ -512,6 +565,9 @@ const BlogView = () => {
               // alignSelf: { md: "center", xs: "flex-start" },
             }}
           ></Box>
+
+          {/* AUTHOR SECTION */}
+          {authorDetails && <AboutAuthor author={authorDetails} />}
 
           <Divider orientation="horizontal" flexItem sx={{ mt: 3 }} />
 

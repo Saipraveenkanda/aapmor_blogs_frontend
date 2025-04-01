@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 
 const RecentBlogs = ({ blogs }) => {
   // const blogObj = useSelector((state) => state.blogs);
@@ -108,59 +109,98 @@ const RecentBlogs = ({ blogs }) => {
             }}
           >
             {topBlogs?.map(
-              ({ blogImage, description, title, username, _id }, index) => {
+              (
+                {
+                  blogImage,
+                  description,
+                  title,
+                  username,
+                  _id,
+                  likes,
+                  comments,
+                },
+                index
+              ) => {
                 return (
                   <Box key={_id}>
                     <ListItem
                       key={_id}
-                      alignItems="flex-start"
                       disablePadding
                       sx={{
                         display: "flex",
                         gap: 1,
+                        alignItems: "center",
+                        width: "100%",
                         cursor: "pointer",
                         mb: 1.5,
                         mt: 1.5,
                       }}
                       onClick={() => navigate(`/blogs/${_id}`)}
                     >
-                      <ListItemAvatar>
-                        <Avatar
-                          alt="blog image"
-                          src={blogImage}
-                          sx={{ width: 64, height: 64 }}
-                          variant="rounded"
-                        />
-                      </ListItemAvatar>
-                      <Stack direction={"column"} spacing={0}>
-                        <Typography
-                          variant="p"
-                          sx={{
-                            // maxWidth: "90%",
-                            textOverflow: "ellipsis",
-                          }}
-                          fontWeight={600}
-                        >
-                          {title.slice(0, 26)}
-                        </Typography>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        spacing={1}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            alt="blog image"
+                            src={blogImage}
+                            sx={{ width: 64, height: 64 }}
+                            variant="rounded"
+                          />
+                        </ListItemAvatar>
+                        <Stack direction={"column"} spacing={0}>
+                          <Typography
+                            variant="p"
+                            sx={{
+                              // maxWidth: "90%",
+                              textOverflow: "ellipsis",
+                            }}
+                            fontWeight={600}
+                          >
+                            {title.slice(0, 26)}
+                          </Typography>
 
+                          <Typography
+                            sx={{
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2, // Limits text to 2 lines
+                              WebkitBoxOrient: "vertical",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "normal", // Ensures wrapping
+                            }}
+                            component="span"
+                            variant="p"
+                            // fontSize={12}
+                            color="text.primary"
+                            // textOverflow={"ellipsis"}
+                          >
+                            <b>{username || "Anonymous"}</b>
+                            {` : ${description}`}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                      <Stack
+                        sx={{
+                          mr: 1,
+                          justifySelf: "flex-end",
+                          alignSelf: "center",
+                        }}
+                      >
                         <Typography
-                          sx={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2, // Limits text to 2 lines
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "normal", // Ensures wrapping
-                          }}
-                          component="span"
-                          variant="p"
-                          // fontSize={12}
-                          color="text.primary"
-                          // textOverflow={"ellipsis"}
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
-                          <b>{username || "Anonymous"}</b>
-                          {` : ${description}`}
+                          <ThumbUpOutlinedIcon />
+                          {likes.length}
+                        </Typography>
+                        <Divider flexItem sx={{ m: "4px 0px" }} />
+                        <Typography
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <ChatOutlinedIcon />
+                          {comments.length}
                         </Typography>
                       </Stack>
                     </ListItem>

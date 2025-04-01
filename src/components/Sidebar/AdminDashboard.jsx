@@ -40,7 +40,7 @@ const GlassCard = styled(Card)({
   borderLeft: "4px solid #016A7090",
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   color: "#016A70",
-  padding: "4px",
+  padding: "8px !important",
   boxSizing: "border-box",
   transition: "transform 0.3s ease-in-out",
   "&:hover": {
@@ -48,7 +48,7 @@ const GlassCard = styled(Card)({
   },
 });
 
-const Dashboard = ({ username }) => {
+const Dashboard = ({ username, profileDetails }) => {
   const navigate = useNavigate();
   const blogObj = useSelector((state) => state.blogs);
   const recentBlogsList = blogObj.blogs;
@@ -90,18 +90,30 @@ const Dashboard = ({ username }) => {
   return (
     <DashboardContainer>
       {/* User Profile */}
-      <GlassCard>
-        <CardContent sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+      <GlassCard sx={{ height: "max-content !important" }}>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 1,
+            padding: "8px !important",
+          }}
+          onClick={() => navigate("/user/profile")}
+        >
           <Avatar
             sx={{
               width: 60,
               height: 60,
               marginBottom: 1,
               border: "2px solid #016A70",
+              backgroundColor: "#016A7050",
+              backdropFilter: "blur(10px)",
             }}
-            src="https://a.storyblok.com/f/191576/2400x1260/fd054dca6a/round_profile_picture_og_image.webp"
-          />
-          <Box onClick={() => navigate("/user/profile")}>
+            src={profileDetails?.profileImage}
+          >
+            {username?.slice(0, 1)}
+          </Avatar>
+          <Box>
             <Typography variant="h6" fontWeight={"bold"}>
               Welcome {username}!
             </Typography>
@@ -121,6 +133,7 @@ const Dashboard = ({ username }) => {
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            padding: "8px !important",
           }}
         >
           <Typography
@@ -141,12 +154,17 @@ const Dashboard = ({ username }) => {
               </Typography>
             </>
           )}
+          {lastReadBlog === undefined && (
+            <Typography variant="caption">
+              No blog read yet. Click any blog to add it here.
+            </Typography>
+          )}
         </CardContent>
       </GlassCard>
 
       {/* Trending Blogs */}
       <GlassCard>
-        <CardContent>
+        <CardContent sx={{ padding: "8px !important" }}>
           <Typography
             variant="h6"
             fontWeight={"bold"}
@@ -164,7 +182,7 @@ const Dashboard = ({ username }) => {
 
       {/* Recent Activity */}
       <GlassCard>
-        <CardContent>
+        <CardContent sx={{ padding: "8px !important" }}>
           <Typography
             variant="h6"
             fontWeight={"bold"}
