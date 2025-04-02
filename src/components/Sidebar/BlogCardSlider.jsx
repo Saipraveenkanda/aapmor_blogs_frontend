@@ -21,7 +21,14 @@ const BlogCardSlider = ({ topBlogs, interval = 3000 }) => {
 
   return (
     <Fade in={visible} timeout={topBlogs.length > 1 ? 500 : 0}>
-      <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: 1,
+          boxSizing: "border-box",
+        }}
+      >
         {topBlogs.length > 0 && (
           <>
             <Avatar

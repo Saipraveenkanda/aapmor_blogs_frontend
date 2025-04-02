@@ -8,7 +8,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  Popover,
   Snackbar,
   Stack,
   TextField,
@@ -20,8 +19,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 // import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandsClapping } from "@fortawesome/free-solid-svg-icons";
 import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
 // import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
@@ -31,14 +28,13 @@ import Footer from "../HomePage/footer";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import "./style.css";
-import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
-import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
 import {
   commentLikeService,
   commentReplyService,
   commentsApi,
   deleteBlogApi,
   getAuthorDetailsService,
+  getBlogViewApi,
   likesApi,
   postWinnerDetails,
   profileCheckingApi,
@@ -53,10 +49,10 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import Slide from "@mui/material/Slide";
 import DeletePopup from "./DeletePoup";
-import blogAward from "../../assets/starlogo.png";
 import BestBlogRibbon from "../Blog/BestBlogRibbon";
 import AboutAuthor from "./AboutAuthor";
 import CommentSection from "./CommentSection";
+import BlogNotFound from "./NoBlogComponent";
 const host = process.env.REACT_APP_API_URL;
 
 const BlogView = () => {
@@ -71,7 +67,6 @@ const BlogView = () => {
   const [loading, setLoading] = useState(false);
   const [disableCommentButton, setDisableCommentButton] = useState(true);
   const [profile, setProfile] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [userCreatedBlog, setUserCreatedBlog] = useState([]);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -82,14 +77,6 @@ const BlogView = () => {
   const [authorId, setAuthorId] = useState("");
   const [authorDetails, setAuthorDetails] = useState("");
   // const [comments, setComments] = useState([]);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-  const open = Boolean(anchorEl);
-  const popoverid = open ? "simple-popover" : undefined;
 
   useEffect(() => {
     getUserDetail();
@@ -190,7 +177,7 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
-    const response = await axios.get(`${host}/blogs/${id}`);
+    const response = await getBlogViewApi(id);
     if (response) {
       setApiStatus("SUCCESS");
       if (response.status === 200) {
@@ -226,7 +213,7 @@ const BlogView = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "85vh",
+          height: "calc(100vh - 156px)",
         }}
       >
         <CircularProgress />
@@ -437,15 +424,16 @@ const BlogView = () => {
         >
           <Box sx={{ display: "flex", gap: 1, pb: 1, alignItems: "center" }}>
             <Avatar
-              sx={{
-                backgroundColor: "#016A7050",
-                width: 30,
-                height: 30,
-                border: `2px solid #016A70`,
+              src={authorDetails?.image}
+              sx={(theme) => ({
+                backgroundColor: "accent.main",
+                width: 40,
+                height: 40,
+                border: `2px solid ${theme.palette.accent.main}`,
                 backdropFilter: "blur(40px)",
-              }}
+              })}
             >
-              <Typography color={"#016A70"}>
+              <Typography color={"text.primary"}>
                 {username ? username?.split("")[0] : "U"}
               </Typography>
             </Avatar>
@@ -459,13 +447,9 @@ const BlogView = () => {
             </Stack>
             <Chip
               label={category}
-              // size="medium"
               sx={{
-                // fontSize: "12px",
                 color: "#ffffff",
-                // padding: 1,
-                backgroundColor: "#016A70",
-                // mb: 2,
+                backgroundColor: "accent.main",
               }}
             />
 
@@ -476,13 +460,13 @@ const BlogView = () => {
                 {saved ? (
                   <Tooltip title="Remove from saved blogs">
                     <IconButton onClick={handleBlogUnsave}>
-                      <BookmarkAddedIcon sx={{ color: "#016A70" }} />
+                      <BookmarkAddedIcon sx={{ color: "accent.main" }} />
                     </IconButton>
                   </Tooltip>
                 ) : (
                   <Tooltip title="Add to saved blogs">
                     <IconButton onClick={handleBlogSave}>
-                      <BookmarkAddOutlinedIcon />
+                      <BookmarkAddOutlinedIcon sx={{ color: "accent.main" }} />
                     </IconButton>
                   </Tooltip>
                 )}
@@ -497,10 +481,10 @@ const BlogView = () => {
                   startIcon={<ModeEditOutlinedIcon fontSize="small" />}
                   sx={{
                     textTransform: "none",
-                    borderColor: "#016A70",
-                    color: "#016A70",
+                    borderColor: "accent.main",
+                    color: "text.primary",
                     fontWeight: "bold",
-                    "&:hover": { borderColor: "#016A70" },
+                    "&:hover": { borderColor: "accent.main" },
                   }}
                   onClick={handleEdit}
                 >
@@ -514,16 +498,14 @@ const BlogView = () => {
                   title="Delete Blog"
                   variant="outlined"
                   size="small"
-                  sx={{
-                    textTransform: "none",
-                    borderColor: "#016A70",
-                    color: "#016A70",
-                    fontWeight: "bold",
-                    "&:hover": { borderColor: "#016A70" },
-                  }}
                   onClick={() => setOpenDeletePopup(true)}
                 >
-                  <DeleteOutlineOutlinedIcon fontSize="medium" />
+                  <DeleteOutlineOutlinedIcon
+                    fontSize="medium"
+                    sx={{
+                      color: "accent.main",
+                    }}
+                  />
                 </IconButton>
               )}
             {/* AWARD IMAGE */}
@@ -575,29 +557,51 @@ const BlogView = () => {
           <Stack direction={"row"} spacing={4} mt={2}>
             {token && (
               <Stack direction={"column"} alignItems={"center"}>
-                <IconButton
-                  onClick={handleLikes}
-                  sx={{ marginTop: 0, padding: 0 }}
-                >
-                  {liked ? (
-                    <ThumbUpAltIcon sx={{ color: "#016A70" }} />
-                  ) : (
-                    <ThumbUpOffAltIcon />
-                  )}
-                </IconButton>
-                <Typography
+                <div class="media-object">
+                  <Button
+                    variant="standard"
+                    disableFocusRipple
+                    disableRipple
+                    onClick={handleLikes}
+                    sx={{
+                      marginTop: 0,
+                      padding: "8px 16px",
+                      gap: 1,
+                      textTransform: "none",
+                      position: "relative",
+                      border: "none",
+                      "&:hover": {
+                        backgroundColor: "unset",
+                      },
+                    }}
+                  >
+                    {liked ? (
+                      <ThumbUpAltIcon sx={{ color: "accent.main" }} />
+                    ) : (
+                      <ThumbUpOffAltIcon />
+                    )}
+                    {liked ? (
+                      <Typography>Liked</Typography>
+                    ) : (
+                      <Typography>Like</Typography>
+                    )}
+                  </Button>
+                </div>
+
+                {/* <Typography
                   sx={{
                     cursor: "pointer",
                   }}
                   onClick={(e) => handleClick(e)}
                 >
                   {likesCount}{" "}
-                </Typography>
+                </Typography> */}
               </Stack>
             )}
-            <Stack direction={"column"} alignItems={"center"} mt={2}>
-              <InsertCommentOutlinedIcon />
-              <Typography>{comments?.length} </Typography>
+            <Divider sx={{ border: "1px solid #ffffff" }} />
+            <Stack direction={"row"} alignItems={"center"} mt={2} spacing={1}>
+              <InsertCommentOutlinedIcon fontSize="small" />
+              <Typography>{comments?.length} Comments </Typography>
             </Stack>
           </Stack>
         </Box>
@@ -608,7 +612,7 @@ const BlogView = () => {
           sx={{
             // paddingLeft: 4,
             // ml: { md: 8, xs: 0 },
-            backgroundColor: "#fff",
+            backgroundColor: "background.default",
             width: { md: "70%", xs: "90%", sm: "90%" },
           }}
         >
@@ -644,16 +648,15 @@ const BlogView = () => {
                       placeholder="Add a comment"
                       sx={{
                         fontSize: "10px",
-                        backgroundColor: "#fff",
-                        paddingLeft: 1,
-                        paddingTop: 1,
+                        backgroundColor: "background.default",
+                        p: 1,
                       }}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       variant="outlined"
                       multiline
-                      rows={1}
-                      maxRows={1}
+                      rows={2}
+                      maxRows={2}
                       fullWidth
                     />
                     <LoadingButton
@@ -691,7 +694,7 @@ const BlogView = () => {
     );
   };
   const renderFailureView = () => {
-    return <Box>Unable to view the blog</Box>;
+    return <BlogNotFound />;
   };
 
   const renderBlogDetails = () => {
@@ -737,50 +740,7 @@ const BlogView = () => {
         setProfile={setProfile}
         handleClose={handleClose}
       />
-      {/* Likes popover */}
-      <Popover
-        id={popoverid}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        <Stack
-          direction={"column"}
-          alignItems={"flex-start"}
-          spacing={1}
-          sx={{
-            borderRadius: 1,
-            border: "0.5px solid #016A70",
-            maxHeight: "200px",
-            overflowY: "auto",
-            scrollbarWidth: "thin",
-          }}
-        >
-          {likes?.length > 0 ? (
-            likes?.map((eachUser) => {
-              return (
-                <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
-                  <PersonOutlineTwoToneIcon sx={{ color: "#016A70" }} />
-                  <Typography variant="p" fontWeight={"500"}>
-                    {eachUser.name}
-                  </Typography>
-                </Stack>
-              );
-            })
-          ) : (
-            <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
-              <SentimentDissatisfiedOutlinedIcon sx={{ color: "#016A70" }} />
-              <Typography variant="p" fontWeight={"500"}>
-                No likes
-              </Typography>
-            </Stack>
-          )}
-        </Stack>
-      </Popover>
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}

@@ -95,8 +95,13 @@ export const getBlogsApi = async () => {
   return response;
 };
 export const getBlogViewApi = async (id) => {
-  const response = await axios.get(`${host}/blogs/${id}`);
-  return response;
+  try {
+    const response = await axios.get(`${host}/blogs/${id}`);
+    return response;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
 };
 
 export const saveBlogsApi = async (saveDetails) => {

@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
-import aapmorlogo from "../../assets/Aapmorlogodark.png";
+import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import loginVector from "../../assets/Login vector.png";
 import LoginAnimation from "../../helpers/LoginAnimation";
-
+import aapmortext from "../../assets/aapmortext.svg";
 //MAIN FUNCTION
 const Login = () => {
   //STATE HOOKS
@@ -185,7 +185,12 @@ const Login = () => {
             // src="https://res.cloudinary.com/ddahy4bbc/image/upload/v1698670236/1697545876900-removebg-preview_d7xrcu.png"
             src={aapmorlogo}
             alt="logoAapmor"
-            style={{ width: "300px" }}
+            style={{ width: "80px", height: "50px" }}
+          />
+          <img
+            src={aapmortext}
+            alt="aapmortext"
+            style={{ fill: "#fff", height: "30px" }}
           />
           <Divider
             orientation="vertical"

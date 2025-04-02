@@ -14,7 +14,9 @@ import BlogCardSlider from "./BlogCardSlider";
 import WhatshotOutlinedIcon from "@mui/icons-material/WhatshotOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
+import InterestsIcon from "@mui/icons-material/Interests";
 import { useNavigate } from "react-router-dom";
+import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
@@ -24,8 +26,8 @@ const DashboardContainer = styled("div")({
   gap: "16px",
   padding: "16px",
   boxSizing: "border-box",
-  //   background: "linear-gradient(to left, #016A70 0.5%, #ffffff)",
-  background: "linear-gradient(to right, #ffffff 80%, #016A7090 95%)",
+  // background: "linear-gradient(to left, #016A70 0.5%, #ffffff)",
+  // background: "linear-gradient(to right, #ffffff 80%, #016A7090 95%)",
   borderRadius: "12px",
   borderTopRightRadius: "0",
   borderBottomRightRadius: "0",
@@ -33,20 +35,22 @@ const DashboardContainer = styled("div")({
   height: "calc(100vh - 64px)",
 });
 
-const GlassCard = styled(Card)({
+const GlassCard = styled(Card)(({ theme }) => ({
+  flexGrow: 1,
   cursor: "pointer",
   backdropFilter: "blur(10px)",
   borderRadius: "12px",
-  borderLeft: "4px solid #016A7090",
+  borderLeft: `2px solid ${theme.palette.accent.main}`,
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  color: "#016A70",
+  color: theme.palette.text.secondary,
   padding: "8px !important",
   boxSizing: "border-box",
   transition: "transform 0.3s ease-in-out",
   "&:hover": {
     transform: "scale(1.05)",
   },
-});
+  background: "linear-gradient(to right, #ffffff 5 0%, #016A7090 25%)",
+}));
 
 const Dashboard = ({ username, profileDetails }) => {
   const navigate = useNavigate();
@@ -54,7 +58,7 @@ const Dashboard = ({ username, profileDetails }) => {
   const recentBlogsList = blogObj.blogs;
   const currentDate = new Date();
   const [loading, setLoading] = useState(true);
-  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentMonth = currentDate.getMonth() - 1; // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
   const [topBlogs, setTopBlogs] = useState([]);
   const [lastReadBlog, setLastReadBlog] = useState({});
@@ -101,14 +105,15 @@ const Dashboard = ({ username, profileDetails }) => {
           onClick={() => navigate("/user/profile")}
         >
           <Avatar
-            sx={{
+            sx={(theme) => ({
               width: 60,
               height: 60,
               marginBottom: 1,
-              border: "2px solid #016A70",
-              backgroundColor: "#016A7050",
+              border: `2px solid ${theme.palette.accent.main}`,
+              backgroundColor: "transparent",
               backdropFilter: "blur(10px)",
-            }}
+              color: "text.primary",
+            })}
             src={profileDetails?.profileImage}
           >
             {username?.slice(0, 1)}
@@ -117,9 +122,7 @@ const Dashboard = ({ username, profileDetails }) => {
             <Typography variant="h6" fontWeight={"bold"}>
               Welcome {username}!
             </Typography>
-            <Typography variant="body2">
-              Profile | Your Blogs | Saved
-            </Typography>
+            <Typography variant="body2">Profile | Saved Blogs</Typography>
           </Box>
         </CardContent>
       </GlassCard>
@@ -142,16 +145,16 @@ const Dashboard = ({ username, profileDetails }) => {
             gutterBottom
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
-            <AutoStoriesOutlinedIcon color="primary" />
-            Last Read Blog
+            <InterestsIcon color="primary" />
+            Based on your interest
           </Typography>
           {loading && <Skeleton variant="rounded" height={46} width={"100%"} />}
           {lastReadBlog && !loading && (
             <>
               <BlogCardSlider topBlogs={[lastReadBlog]} />
-              <Typography variant="caption" sx={{ alignSelf: "flex-end" }}>
+              {/* <Typography variant="caption" sx={{ alignSelf: "flex-end" }}>
                 continue...
-              </Typography>
+              </Typography> */}
             </>
           )}
           {lastReadBlog === undefined && (
@@ -171,11 +174,14 @@ const Dashboard = ({ username, profileDetails }) => {
             gutterBottom
             sx={{ display: "flex", alignItems: "center" }}
           >
-            <WhatshotOutlinedIcon color="error" /> Trending Blogs of {monthName}
+            <WhatshotOutlinedIcon color="error" /> Trending blogs{" "}
+            {/* {monthName} */} for you
           </Typography>
           {loading && <Skeleton variant="rounded" height={40} width={"100%"} />}
-          {topBlogs.length > 0 && (
+          {topBlogs.length > 0 ? (
             <BlogCardSlider topBlogs={topBlogs} interval={3000} />
+          ) : (
+            <Typography variant="p">No trending blogs at the moment</Typography>
           )}
         </CardContent>
       </GlassCard>
@@ -195,6 +201,25 @@ const Dashboard = ({ username, profileDetails }) => {
           <Typography variant="body2">
             John liked "State Management in React"
           </Typography>
+        </CardContent>
+      </GlassCard>
+
+      {/* Write Button */}
+      <GlassCard>
+        <CardContent sx={{ padding: "8px !important", height: "60px" }}>
+          {/* <Box
+            sx={{
+              position: "absolute",
+              overflow: "hidden",
+              bottom: -10,
+              zIndex: 1000,
+              width: "90%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          > */}
+          <AnalyzeAnimation />
+          {/* </Box> */}
         </CardContent>
       </GlassCard>
     </DashboardContainer>

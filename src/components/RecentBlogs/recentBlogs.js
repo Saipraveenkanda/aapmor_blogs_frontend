@@ -9,12 +9,17 @@ import {
   Skeleton,
   Stack,
   Typography,
+  Popover,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
+import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHandsClapping } from "@fortawesome/free-solid-svg-icons";
 
 const RecentBlogs = ({ blogs }) => {
   // const blogObj = useSelector((state) => state.blogs);
@@ -22,9 +27,19 @@ const RecentBlogs = ({ blogs }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0-based index (0 = January, 11 = December)
+  const currentMonth = currentDate.getMonth() - 1; // 0-based index (0 = January, 11 = December)
   const currentYear = currentDate.getFullYear();
   const [topBlogs, setTopBlogs] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [likes, setLikes] = useState([]);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const popoverid = open ? "simple-popover" : undefined;
 
   useEffect(() => {
     setLoading(true);
@@ -88,137 +103,200 @@ const RecentBlogs = ({ blogs }) => {
   });
 
   return (
-    <Paper sx={{ p: 2, boxSizing: "border-box" }}>
-      {topBlogs.length > 0 ? (
-        <>
-          <Typography
-            variant="h6"
-            fontWeight={600}
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <ThumbUpOutlinedIcon sx={{ color: "#016A70" }} /> Most liked blogs
-            of {monthName}
-          </Typography>
-          <List
-            sx={{
-              bgcolor: "background.paper",
-              maxWidth: "100%",
-              overflowY: "auto",
-              maxHeight: "65vh",
-              scrollbarWidth: "thin",
-            }}
-          >
-            {topBlogs?.map(
-              (
-                {
-                  blogImage,
-                  description,
-                  title,
-                  username,
-                  _id,
-                  likes,
-                  comments,
-                },
-                index
-              ) => {
-                return (
-                  <Box key={_id}>
-                    <ListItem
-                      key={_id}
-                      disablePadding
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        alignItems: "center",
-                        width: "100%",
-                        cursor: "pointer",
-                        mb: 1.5,
-                        mt: 1.5,
-                      }}
-                      onClick={() => navigate(`/blogs/${_id}`)}
-                    >
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        spacing={1}
+    <>
+      <Paper sx={{ p: 2, boxSizing: "border-box", borderRadius: 2 }}>
+        {topBlogs.length > 0 ? (
+          <>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
+              <ThumbUpOutlinedIcon sx={{ color: "#016A70" }} /> Most liked blogs
+              of {monthName}
+            </Typography>
+            <List
+              sx={{
+                bgcolor: "background.paper",
+                maxWidth: "100%",
+                overflowY: "auto",
+                maxHeight: "70vh",
+                scrollbarWidth: "thin",
+              }}
+            >
+              {topBlogs?.map(
+                (
+                  {
+                    blogImage,
+                    description,
+                    title,
+                    username,
+                    _id,
+                    likes,
+                    comments,
+                  },
+                  index
+                ) => {
+                  return (
+                    <Box key={_id}>
+                      <ListItem
+                        key={_id}
+                        disablePadding
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          alignItems: "center",
+                          width: "100%",
+                          cursor: "pointer",
+                          mb: 1.5,
+                          mt: 1.5,
+                        }}
+                        onClick={() => navigate(`/blogs/${_id}`)}
                       >
-                        <ListItemAvatar>
-                          <Avatar
-                            alt="blog image"
-                            src={blogImage}
-                            sx={{ width: 64, height: 64 }}
-                            variant="rounded"
-                          />
-                        </ListItemAvatar>
-                        <Stack direction={"column"} spacing={0}>
-                          <Typography
-                            variant="p"
-                            sx={{
-                              // maxWidth: "90%",
-                              textOverflow: "ellipsis",
-                            }}
-                            fontWeight={600}
-                          >
-                            {title.slice(0, 26)}
-                          </Typography>
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          spacing={1}
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              alt="blog image"
+                              src={blogImage}
+                              sx={{ width: 64, height: 64 }}
+                              variant="rounded"
+                            />
+                          </ListItemAvatar>
+                          <Stack direction={"column"} spacing={0}>
+                            <Typography
+                              variant="p"
+                              sx={{
+                                // maxWidth: "90%",
+                                textOverflow: "ellipsis",
+                              }}
+                              fontWeight={600}
+                            >
+                              {title.slice(0, 26)}
+                            </Typography>
 
+                            <Typography
+                              sx={{
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2, // Limits text to 2 lines
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "normal", // Ensures wrapping
+                              }}
+                              component="span"
+                              variant="p"
+                              // fontSize={12}
+                              color="text.primary"
+                              // textOverflow={"ellipsis"}
+                            >
+                              <b>{username || "Anonymous"}</b>
+                              {` : ${description}`}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                        <Stack
+                          sx={{
+                            mr: 1,
+                            justifySelf: "flex-end",
+                            alignSelf: "center",
+                          }}
+                        >
                           <Typography
                             sx={{
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2, // Limits text to 2 lines
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "normal", // Ensures wrapping
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              cursor: "pointer",
+                              "&:hover": {
+                                color: "action.hover",
+                              },
                             }}
-                            component="span"
-                            variant="p"
-                            // fontSize={12}
-                            color="text.primary"
-                            // textOverflow={"ellipsis"}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLikes(likes);
+                              handleClick(e);
+                            }}
                           >
-                            <b>{username || "Anonymous"}</b>
-                            {` : ${description}`}
+                            <ThumbUpOutlinedIcon />
+                            {likes.length}
+                          </Typography>
+                          <Divider flexItem sx={{ m: "4px 0px" }} />
+                          <Typography
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <ChatOutlinedIcon />
+                            {comments.length}
                           </Typography>
                         </Stack>
-                      </Stack>
-                      <Stack
-                        sx={{
-                          mr: 1,
-                          justifySelf: "flex-end",
-                          alignSelf: "center",
-                        }}
-                      >
-                        <Typography
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                        >
-                          <ThumbUpOutlinedIcon />
-                          {likes.length}
-                        </Typography>
-                        <Divider flexItem sx={{ m: "4px 0px" }} />
-                        <Typography
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                        >
-                          <ChatOutlinedIcon />
-                          {comments.length}
-                        </Typography>
-                      </Stack>
-                    </ListItem>
-                    {index !== topBlogs.length - 1 && (
-                      <Divider orientation="horizontal" />
-                    )}
-                  </Box>
-                );
-              }
-            )}
-          </List>
-        </>
-      ) : (
-        topBlogs.length === 0 &&
-        !loading && <Typography>No blogs this month!</Typography>
-      )}
-      {loading && renderLoadingView()}
-    </Paper>
+                      </ListItem>
+                      {index !== topBlogs.length - 1 && (
+                        <Divider orientation="horizontal" />
+                      )}
+                    </Box>
+                  );
+                }
+              )}
+            </List>
+          </>
+        ) : (
+          topBlogs.length === 0 &&
+          !loading && <Typography>No blogs this month!</Typography>
+        )}
+        {loading && renderLoadingView()}
+      </Paper>
+      {/* Likes popover */}
+      <Popover
+        id={popoverid}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        <Stack
+          direction={"column"}
+          alignItems={"flex-start"}
+          spacing={1}
+          sx={{
+            borderRadius: 1,
+            border: "0.5px solid #016A70",
+            maxHeight: "200px",
+            overflowY: "auto",
+            scrollbarWidth: "thin",
+          }}
+        >
+          {likes?.length > 0 ? (
+            likes?.map((eachUser) => {
+              return (
+                <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
+                  <PersonOutlineTwoToneIcon sx={{ color: "#016A70" }} />
+                  <Typography variant="p" fontWeight={"500"}>
+                    {eachUser.name}
+                  </Typography>
+                </Stack>
+              );
+            })
+          ) : (
+            <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
+              <SentimentDissatisfiedOutlinedIcon sx={{ color: "#016A70" }} />
+              <Typography variant="p" fontWeight={"500"}>
+                No likes
+              </Typography>
+            </Stack>
+          )}
+        </Stack>
+      </Popover>
+    </>
   );
 };
 

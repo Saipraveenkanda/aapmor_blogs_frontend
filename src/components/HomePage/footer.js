@@ -10,13 +10,17 @@ const Footer = () => {
       elevation={0}
       bgcolor={"background.default"}
       color={"text.primary"}
-      sx={{
-        position: "relative",
-        bottom: "0px",
-        borderRadius: "none",
-        padding: "0px 24px",
-        background: "linear-gradient( to top, #00000020 , #ffffff10)",
-      }}
+      // sx={{
+      //   position: "relative",
+      //   display: "flex",
+      //   flexDirection: "row",
+      //   bottom: 0,
+      //   left: 0,
+      //   borderRadius: "none",
+      //   padding: "0px 24px",
+      //   background: "linear-gradient( to top, #00000020 , #ffffff10)",
+      //   justifyContent: "stretch",
+      // }}
     >
       <Grid
         container
@@ -25,6 +29,12 @@ const Footer = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          position: "relative",
+          bottom: 0,
+          left: 0,
+          borderRadius: "none",
+          padding: "0px 24px",
+          background: "linear-gradient( to top, #00000020 , #ffffff10)",
         }}
       >
         <Grid item sx={{ display: "flex", alignItems: "center" }}>

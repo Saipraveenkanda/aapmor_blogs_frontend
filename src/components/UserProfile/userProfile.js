@@ -17,6 +17,7 @@ import {
   Snackbar,
   Alert,
   Popover,
+  Divider,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
@@ -185,7 +186,7 @@ const UserProfile = (props) => {
           >
             <Typography
               variant="h6"
-              sx={{ fontWeight: "bold", color: "#016A70" }}
+              sx={{ fontWeight: "bold", color: "text.primary" }}
             >
               Profile Update
             </Typography>
@@ -204,14 +205,14 @@ const UserProfile = (props) => {
                 {/* Small Profile Image */}
                 <Avatar
                   variant="rounded"
-                  src={profileImage}
+                  src={tempImage || profileImage}
                   alt="Profile"
-                  sx={{
+                  sx={(theme) => ({
                     width: 200,
                     height: 200,
                     cursor: "pointer",
-                    border: "2px solid #016A70",
-                  }}
+                    border: `2px solid ${theme.palette.accent.main}`, // Correct way
+                  })}
                   onClick={handleHover}
                   // onMouseLeave={handleClose}
                 />
@@ -251,7 +252,7 @@ const UserProfile = (props) => {
                     <ClearIcon sx={{ color: "#ffffff" }} />
                   </IconButton>
                   <Avatar
-                    src={profileImage}
+                    src={tempImage || profileImage}
                     variant="square"
                     alt="Expanded Profile"
                     sx={{
@@ -276,7 +277,15 @@ const UserProfile = (props) => {
                   htmlFor="uploadImage"
                   fullWidth
                   variant="outlined"
-                  sx={{ textTransform: "none", color: "unset" }}
+                  sx={{
+                    textTransform: "none",
+                    color: "text.primary",
+                    borderColor: "accent.main",
+                    "&:hover": {
+                      borderColor: "accent.main",
+                      backgroundColor: "unset",
+                    },
+                  }}
                   startIcon={<AddPhotoAlternateIcon />}
                 >
                   Select Image
@@ -400,17 +409,17 @@ const UserProfile = (props) => {
 
             <Button
               onClick={updateProfile}
-              disabled={designation && gender && name && email}
+              // disabled={designation && gender && name && email}
               sx={{
                 alignSelf: "flex-start",
                 width: "25%",
                 textTransform: "none",
-                color: "#016A70",
-                borderColor: "#016A70",
+                color: "text.primary",
+                borderColor: "accent.main",
                 fontWeight: "bold",
                 "&:hover": {
-                  border: "1px solid #016A70",
-                  backgroundColor: "#016A70",
+                  border: "1px solid accent.main",
+                  backgroundColor: "accent.main",
                   color: "#ffffff",
                   fontWeight: "bold",
                 },
@@ -429,7 +438,7 @@ const UserProfile = (props) => {
                   Your Bio :
                   <Button
                     startIcon={<EditNoteOutlinedIcon />}
-                    sx={{ textTransform: "none" }}
+                    sx={{ textTransform: "none", ml: 1 }}
                     onClick={() => setEditBio(true)} // Enables editing
                   >
                     Edit
@@ -461,7 +470,7 @@ const UserProfile = (props) => {
                     gutterBottom
                     variant="p"
                     fontWeight={500}
-                    sx={{ color: "#016A70" }}
+                    sx={{ color: "text.primary" }}
                   >
                     <b>{profile?.bio ? "Edit Bio: " : "Add Bio: "}</b>
                     {profile?.bio
@@ -478,7 +487,7 @@ const UserProfile = (props) => {
                   variant="outlined"
                   multiline
                   value={bio}
-                  rows={4}
+                  rows={6}
                   placeholder="Enter here..."
                   defaultValue={profile?.bio}
                   fullWidth
@@ -493,12 +502,12 @@ const UserProfile = (props) => {
                     <Button
                       sx={{
                         textTransform: "none",
-                        color: "#016A70",
-                        borderColor: "#016A70",
+                        color: "text.primary",
+                        borderColor: "accent.main",
                         fontWeight: "bold",
                         "&:hover": {
-                          border: "1px solid #016A70",
-                          backgroundColor: "#016A70",
+                          border: "1px solid accent.main",
+                          backgroundColor: "accent.main",
                           color: "#ffffff",
                           fontWeight: "bold",
                         },
@@ -519,12 +528,12 @@ const UserProfile = (props) => {
                     sx={{
                       width: "25%",
                       textTransform: "none",
-                      color: "#016A70",
-                      borderColor: "#016A70",
+                      color: "text.primary",
+                      borderColor: "accent.main",
                       fontWeight: "bold",
                       "&:hover": {
-                        border: "1px solid #016A70",
-                        backgroundColor: "#016A70",
+                        border: "1px solid accent.main",
+                        backgroundColor: "accent.main",
                         color: "#ffffff",
                         fontWeight: "bold",
                       },
@@ -539,8 +548,10 @@ const UserProfile = (props) => {
           </Grid>
         </Grid>
 
+        <Divider flexItem sx={{ mb: 2 }} />
+
         {/* SAVED BLOGS */}
-        <Grid container xs={8}>
+        <Grid container xs={12}>
           <SavedBlogs />
         </Grid>
       </Box>

@@ -8,10 +8,11 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReplyIcon from "@mui/icons-material/Reply";
 import SendIcon from "@mui/icons-material/Send";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import Cookies from "js-cookie";
 
 const CommentSection = ({
   comments,
@@ -20,6 +21,7 @@ const CommentSection = ({
   user,
   getTimeAgo,
 }) => {
+  const token = Cookies.get("jwtToken");
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
   return (
@@ -67,28 +69,33 @@ const CommentSection = ({
                 </Typography>
 
                 {/* Like & Reply Buttons */}
-                <Stack direction={"row"} spacing={1} alignItems="center">
-                  <IconButton
-                    size="small"
-                    onClick={() => handleLike(index)}
-                    color={hasLiked ? "error" : "default"}
-                  >
-                    {hasLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  </IconButton>
-                  <Typography variant="caption">{likes.length}</Typography>
+                {token !== undefined && (
+                  <Stack direction={"row"} spacing={1} alignItems="center">
+                    <IconButton
+                      size="small"
+                      onClick={() => handleLike(index)}
+                      color={hasLiked ? "accent.main" : "default"}
+                    >
+                      {hasLiked ? (
+                        <ThumbUpAltIcon sx={{ color: "accent.main" }} />
+                      ) : (
+                        <ThumbUpOffAltIcon />
+                      )}
+                    </IconButton>
+                    <Typography variant="caption">{likes.length}</Typography>
 
-                  <Button
-                    size="small"
-                    startIcon={<ReplyIcon />}
-                    onClick={() =>
-                      setReplyingTo(replyingTo === index ? null : index)
-                    }
-                    sx={{ textTransform: "none" }}
-                  >
-                    Reply
-                  </Button>
-                </Stack>
-
+                    <Button
+                      size="small"
+                      startIcon={<ReplyIcon />}
+                      onClick={() =>
+                        setReplyingTo(replyingTo === index ? null : index)
+                      }
+                      sx={{ textTransform: "none" }}
+                    >
+                      Reply
+                    </Button>
+                  </Stack>
+                )}
                 {/* Reply Input Field */}
                 {replyingTo === index && (
                   <Stack direction={"row"} spacing={1} mt={1}>
@@ -119,7 +126,7 @@ const CommentSection = ({
                         setReplyText("");
                       }}
                     >
-                      <SendIcon sx={{ color: "#016A70" }} />
+                      <SendIcon sx={{ color: "accent.main" }} />
                     </IconButton>
                   </Stack>
                 )}

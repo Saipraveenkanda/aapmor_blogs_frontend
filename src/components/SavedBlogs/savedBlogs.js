@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Divider,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -21,7 +22,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-
 
 const SavedBlogs = () => {
   const [savedBlogs, setSavedBlogs] = useState([]);
@@ -107,7 +107,7 @@ const SavedBlogs = () => {
         sx={{
           width: "100%",
           padding: "6px 10px",
-          background: "rgba(255, 255, 255, 0.1)", // Light glass effect
+          // background: "rgba(255, 255, 255, 0.1)", // Light glass effect
           borderRadius: "8px",
           backdropFilter: "blur(8px)", // Soft blur effect
           boxSizing: "border-box",
@@ -125,20 +125,15 @@ const SavedBlogs = () => {
           }}
         >
           📅 {new Date(date).toLocaleDateString()}
-          <ThumbUpOutlinedIcon
-            fontSize="small"
-            sx={{ color: "#016A70" }}
-          />{" "}
-          {likes?.length}
-          <CommentIcon fontSize="small" sx={{ color: "#016A70" }} />{" "}
-          {comments?.length}
+          <ThumbUpOutlinedIcon fontSize="small" /> {likes?.length}
+          <CommentIcon fontSize="small" /> {comments?.length}
         </Typography>
 
         {/* Right Section: Unsave & Read More */}
         <Stack direction="row" spacing={1}>
           <IconButton
             size="small"
-            sx={{ color: "#016A70" }}
+            sx={{ color: "accent.main" }}
             onClick={() => handleBlogUnsave(_id)}
           >
             <BookmarkIcon />
@@ -146,19 +141,18 @@ const SavedBlogs = () => {
           <Button
             size="small"
             // variant="outlined"
-            sx={{
+            sx={(theme) => ({
               textTransform: "none",
               fontSize: "12px",
               fontWeight: "bold",
-              color: "#016A70",
+              color: "text.primary",
               borderRadius: "16px",
-              border: "1px solid #016A70",
+              border: `1px solid ${theme.palette.accent.main}`,
               "&:hover": {
                 border: "1px solid transparent",
-                color: "#016A70",
                 backgroundColor: "transparent",
               },
-            }}
+            })}
             startIcon={<VisibilityIcon fontSize="small" />}
             onClick={() => navigate(`/blogs/${_id}`)}
           >
@@ -171,13 +165,18 @@ const SavedBlogs = () => {
 
   const renderBlogsView = () => {
     return (
-      <List
+      <Grid
+        container
+        spacing={2}
         sx={{
           bgcolor: "background.paper",
           maxWidth: "100%",
           overflowY: "auto",
-          maxHeight: "calc(78vh - 32px)",
+          // maxHeight: "calc(78vh - 32px)",
           scrollbarWidth: "thin",
+          display: "flex",
+          flexWrap: "wrap",
+          mt: 1,
         }}
       >
         {savedBlogs?.map(
@@ -195,7 +194,7 @@ const SavedBlogs = () => {
             index
           ) => {
             return (
-              <Box key={_id}>
+              <Grid item key={_id} xs={6}>
                 <ListItem
                   key={_id}
                   disablePadding
@@ -209,7 +208,7 @@ const SavedBlogs = () => {
                     mt: 1.5,
                   }}
                 >
-                  <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                  <Stack direction={"row"} alignItems={"center"} spacing={2}>
                     <ListItemAvatar>
                       <Avatar
                         alt="blog image"
@@ -249,7 +248,7 @@ const SavedBlogs = () => {
                         }}
                         component="span"
                         variant="p"
-                        color="text.primary"
+                        color="text.secondary"
                       >
                         <b>{username || "Anonymous"}</b>
                         {` : ${description}`}
@@ -261,11 +260,11 @@ const SavedBlogs = () => {
                 {index !== savedBlogs.length - 1 && (
                   <Divider orientation="horizontal" />
                 )}
-              </Box>
+              </Grid>
             );
           }
         )}
-      </List>
+      </Grid>
     );
   };
 
@@ -314,7 +313,7 @@ const SavedBlogs = () => {
       <Typography
         variant="h6"
         // gutterBottom
-        sx={{ fontWeight: "bold", color: "#016A70" }}
+        sx={{ fontWeight: "bold", color: "text.primary" }}
       >
         Your Saved Blogs
       </Typography>

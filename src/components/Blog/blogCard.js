@@ -45,7 +45,7 @@ const Blog = (blogDetails) => {
     <>
       {/* WEB VIEW */}
       <Box
-        sx={{
+        sx={(theme) => ({
           display: { xs: "none", sm: "flex" },
           flexDirection: "row",
           justifyContent: "flex-start",
@@ -56,11 +56,11 @@ const Blog = (blogDetails) => {
           border: "0.5px solid transparent",
           "&:hover": {
             // boxShadow: "0px 0px 2px 0px #016A70",
-            border: "0.5px solid #016A70",
+            border: `0.5px solid ${theme.palette.text.secondary}`,
           },
           cursor: "pointer",
-        }}
-        elevation={0}
+        })}
+        // elevation={0}
         onClick={handleReadMore}
       >
         {/* AWARD RIBBON */}
@@ -134,17 +134,13 @@ const Blog = (blogDetails) => {
                   backgroundColor: "transparent",
                 }}
               >
-                <Typography variant="p" color={""}>
-                  {username || "Anonymous"}
-                </Typography>
+                <Typography variant="p">{username || "Anonymous"}</Typography>
                 <DotOutline size={20} />
-                <Typography variant="p" color={""} sx={{ display: "flow" }}>
+                <Typography variant="p" sx={{ display: "flow" }}>
                   {userrole || "-"}
                 </Typography>
                 <DotOutline size={20} />
-                <Typography variant="p" color={"darkgray"}>
-                  Posted at {formattedDate}
-                </Typography>
+                <Typography variant="p">Posted at {formattedDate}</Typography>
               </Box>
               {/* TITLE DESCRIPTION */}
               <Box>
@@ -158,7 +154,7 @@ const Blog = (blogDetails) => {
                 <Typography
                   title={description}
                   variant="p"
-                  color={"CaptionText"}
+                  // color={"CaptionText"}
                   sx={{
                     display: "-webkit-box",
                     WebkitBoxOrient: "vertical",
@@ -283,7 +279,7 @@ const Blog = (blogDetails) => {
         orientation="horizontal"
         variant="middle"
         flexItem
-        sx={{ borderColor: "#016A7050" }}
+        sx={{ borderColor: "accent.light" }}
       />
     </>
   );

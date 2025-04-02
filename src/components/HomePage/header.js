@@ -13,6 +13,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Stack,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -23,11 +24,17 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined"; // import "./SearchBar.css";
 import { profileCheckingApi } from "../ApiCalls/apiCalls";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import NightsStayIcon from "@mui/icons-material/NightsStay";
+import { setAppTheme } from "../Slices/blogSlice";
+import { useDispatch } from "react-redux";
 
 const Header = ({ setSearchInput = () => {} }) => {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mode, setMode] = useState(true);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,6 +42,10 @@ const Header = ({ setSearchInput = () => {} }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    localStorage.setItem("theme", mode);
+    dispatch(setAppTheme(mode));
+  }, [mode]);
 
   useEffect(() => {
     getUserDetail();
@@ -112,7 +123,7 @@ const Header = ({ setSearchInput = () => {} }) => {
           }}
         >
           <img src={aapmorlogo} alt="logoAapmor" />
-          <img src={aapmortext} alt="aapmortext" />
+          <img src={aapmortext} alt="aapmortext" style={{ fill: "#fff" }} />
           <Divider
             orientation="vertical"
             flexItem
@@ -125,7 +136,7 @@ const Header = ({ setSearchInput = () => {} }) => {
           />
           <Typography
             variant="h6"
-            color={"#016A70"}
+            color={"accent.main"}
             fontFamily={"Playwrite CO Guides, serif"}
             fontWeight={500}
           >
@@ -148,7 +159,7 @@ const Header = ({ setSearchInput = () => {} }) => {
             sx={{
               p: 0.5,
               pl: 2,
-              color: "#016A70",
+              color: "text.secondary",
               boxSizing: "border-box",
               "&::placeholder": {
                 color: "grey",
@@ -163,22 +174,31 @@ const Header = ({ setSearchInput = () => {} }) => {
           />
           <SearchOutlined
             color="action"
-            sx={{ cursor: "pointer", color: "#016A70" }}
+            sx={{ cursor: "pointer", color: "accent.main" }}
           />
         </Box>
 
         {/* WEB NAVIGATION AFTER LOGIN */}
-
-        {token !== undefined ? (
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-              gap: 1,
-              color: "grey",
-            }}
+        <Stack spacing={2} alignItems={"center"} direction={"row"}>
+          <IconButton
+            sx={(theme) => ({
+              border: `1px solid ${theme.palette.accent.main}`,
+            })}
+            onClick={() => setMode(!mode)}
+            title={mode ? "Light Mode" : "Dark Mode"}
           >
-            {/* <Button
+            {mode ? <LightModeIcon /> : <NightsStayIcon />}
+          </IconButton>
+          {token !== undefined ? (
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
+                gap: 1,
+                color: "grey",
+              }}
+            >
+              {/* <Button
               variant="text"
               color="inherit"
               disableElevation
@@ -187,8 +207,8 @@ const Header = ({ setSearchInput = () => {} }) => {
             >
               Profile
             </Button> */}
-            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            {/* <Button
+              {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
+              {/* <Button
               variant="text"
               color="inherit"
               disableElevation
@@ -197,8 +217,8 @@ const Header = ({ setSearchInput = () => {} }) => {
             >
               Saved
             </Button> */}
-            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            {/* <Button
+              {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
+              {/* <Button
               variant="text"
               color="inherit"
               disableElevation
@@ -208,55 +228,57 @@ const Header = ({ setSearchInput = () => {} }) => {
             >
               Your blogs
             </Button> */}
-            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            {/* <Tooltip title="logout"> */}
-            {/* ADMIN ICON */}
-            {isAdmin && (
-              <IconButton onClick={() => navigate("/admin")}>
-                <AdminPanelSettingsOutlinedIcon
-                  sx={{ color: "#016A70" }}
-                  fontSize="medium"
-                />
-              </IconButton>
-            )}
-            <Button
-              size="small"
-              variant="text"
-              color="inherit"
-              disableElevation
-              sx={{
-                borderRadius: 4,
-                border: "0.5px solid #016A70",
-                textTransform: "none",
-                color: "grey",
-              }}
-              onClick={handleLogout}
+              {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
+              {/* <Tooltip title="logout"> */}
+              {/* ADMIN ICON */}
+
+              {isAdmin && (
+                <IconButton onClick={() => navigate("/admin")}>
+                  <AdminPanelSettingsOutlinedIcon
+                    sx={{ color: "accent.main" }}
+                    fontSize="medium"
+                  />
+                </IconButton>
+              )}
+              <Button
+                size="small"
+                variant="text"
+                color="inherit"
+                disableElevation
+                sx={(theme) => ({
+                  borderRadius: 4,
+                  border: `0.5px solid ${theme.palette.accent.main}`,
+                  textTransform: "none",
+                  color: "text.primary",
+                })}
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </Box>
+          ) : (
+            <Tooltip
+              title="Login to access more features"
+              sx={{ display: { xs: "none", md: "block" } }}
             >
-              Logout
-            </Button>
-          </Box>
-        ) : (
-          <Tooltip
-            title="Login to access more features"
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
-            <Button
-              size="small"
-              variant="text"
-              color="inherit"
-              disableElevation
-              sx={{
-                borderRadius: 4,
-                border: "0.5px solid #016A70",
-                textTransform: "none",
-                color: "grey",
-              }}
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </Button>
-          </Tooltip>
-        )}
+              <Button
+                size="small"
+                variant="text"
+                color="inherit"
+                disableElevation
+                sx={(theme) => ({
+                  borderRadius: 4,
+                  border: `0.5px solid ${theme.palette.accent.main}`,
+                  textTransform: "none",
+                  color: "text.primary",
+                })}
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
+            </Tooltip>
+          )}
+        </Stack>
 
         {/* MOBILE MENU ITEM */}
 
