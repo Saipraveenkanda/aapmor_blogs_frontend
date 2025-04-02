@@ -409,7 +409,7 @@ const UserProfile = (props) => {
 
             <Button
               onClick={updateProfile}
-              // disabled={designation && gender && name && email}
+              disabled={designation && gender && name && email}
               sx={{
                 alignSelf: "flex-start",
                 width: "25%",
