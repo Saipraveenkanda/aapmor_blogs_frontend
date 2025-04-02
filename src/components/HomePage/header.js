@@ -23,6 +23,7 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined"; // import "./SearchBar.css";
 import { profileCheckingApi } from "../ApiCalls/apiCalls";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
 const Header = ({ setSearchInput = () => {} }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -212,12 +213,18 @@ const Header = ({ setSearchInput = () => {} }) => {
             {/* <Tooltip title="logout"> */}
             {/* ADMIN ICON */}
             {isAdmin && (
-              <IconButton onClick={() => navigate("/admin")}>
-                <AdminPanelSettingsOutlinedIcon
-                  sx={{ color: "#016A70" }}
-                  fontSize="medium"
-                />
-              </IconButton>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0 }}>
+                <IconButton onClick={() => navigate("/admin")}>
+                  <AdminPanelSettingsOutlinedIcon
+                    sx={{ color: "#016A70" }}
+                    fontSize="medium"
+                  />
+                </IconButton>
+
+                <IconButton onClick={() => window.open("/ppt", "_blank")}>
+                  <AssessmentIcon sx={{ color: "#016A70" }} fontSize="medium" />
+                </IconButton>
+              </Box>
             )}
             <Button
               size="small"

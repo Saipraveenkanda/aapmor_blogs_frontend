@@ -129,6 +129,11 @@ const ProfilePopup = ({ profile, handleClose, setProfile }) => {
                 <MenuItem value="SAP GRC Consultant">
                   SAP GRC Consultant
                 </MenuItem>
+                <MenuItem value="Programming manager">
+                  Programming manager
+                </MenuItem>
+                <MenuItem value="Project manager">Project manager</MenuItem>
+                <MenuItem value="Manager">Manager</MenuItem>
               </Select>
             </FormControl>
             <Typography variant="body2">Gender *</Typography>

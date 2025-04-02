@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute/protectedRoute.js";
 import UserProfile from "./components/UserProfile/userProfile.js";
 import UserBlogs from "./components/UserBlogs/userBlogs.js";
 import AdminPage from "./components/AdminPage/AdminPage.jsx";
+import PPTPage from "./components/trainings/PPTPage.jsx";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route exact path="/user/profile" element={<UserProfile />} />
         <Route exact path="/user/blogs" element={<UserBlogs />} />
         <Route exact path="/admin" element={<AdminPage />} />
+        <Route exact path="/ppt" element={<PPTPage />} />
       </Route>
     </Routes>
   );
