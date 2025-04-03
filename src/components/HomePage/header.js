@@ -179,8 +179,9 @@ const Header = ({ setSearchInput = () => {} }) => {
         </Box>
 
         {/* WEB NAVIGATION AFTER LOGIN */}
-        <Stack spacing={2} alignItems={"center"} direction={"row"}>
+        <Stack spacing={1} alignItems={"center"} direction={"row"}>
           <IconButton
+            size="small"
             sx={(theme) => ({
               border: `1px solid ${theme.palette.accent.main}`,
             })}
@@ -198,45 +199,20 @@ const Header = ({ setSearchInput = () => {} }) => {
                 color: "grey",
               }}
             >
-              {/* <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              onClick={() => navigate("/user/profile")}
-              sx={{ textTransform: "none", borderRadius: 4 }}
-            >
-              Profile
-            </Button> */}
-              {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-              {/* <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              onClick={() => navigate("/user/saved")}
-              sx={{ textTransform: "none", borderRadius: 4 }}
-            >
-              Saved
-            </Button> */}
-              {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-              {/* <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              href="/user/blogs"
-              sx={{ textTransform: "none", borderRadius: 4 }}
-              // disabled
-            >
-              Your blogs
-            </Button> */}
-              {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-              {/* <Tooltip title="logout"> */}
               {/* ADMIN ICON */}
 
               {isAdmin && (
-                <IconButton onClick={() => navigate("/admin")}>
+                <IconButton
+                  title="Admin"
+                  onClick={() => navigate("/admin")}
+                  size="small"
+                  sx={(theme) => ({
+                    border: `1px solid ${theme.palette.accent.main}`,
+                  })}
+                >
                   <AdminPanelSettingsOutlinedIcon
-                    sx={{ color: "accent.main" }}
-                    fontSize="medium"
+                  // sx={{ color: "accent.main" }}
+                  // fontSize="medium"
                   />
                 </IconButton>
               )}
@@ -249,7 +225,7 @@ const Header = ({ setSearchInput = () => {} }) => {
                   borderRadius: 4,
                   border: `0.5px solid ${theme.palette.accent.main}`,
                   textTransform: "none",
-                  color: "text.primary",
+                  color: "text.secondary",
                 })}
                 onClick={handleLogout}
               >

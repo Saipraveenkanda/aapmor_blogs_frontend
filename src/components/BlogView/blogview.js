@@ -53,6 +53,7 @@ import BestBlogRibbon from "../Blog/BestBlogRibbon";
 import AboutAuthor from "./AboutAuthor";
 import CommentSection from "./CommentSection";
 import BlogNotFound from "./NoBlogComponent";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 const host = process.env.REACT_APP_API_URL;
 
 const BlogView = () => {
@@ -77,7 +78,10 @@ const BlogView = () => {
   const [authorId, setAuthorId] = useState("");
   const [authorDetails, setAuthorDetails] = useState("");
   // const [comments, setComments] = useState([]);
-
+  const shareText = encodeURIComponent(
+    `${blogDetails?.title}\nRead more: "https://blogs.aapmor.com/blogs/${blogDetails?._id}`
+  );
+  const whatsappUrl = `https://wa.me/?text=${shareText}`;
   useEffect(() => {
     getUserDetail();
     getBlogItem();
@@ -603,6 +607,26 @@ const BlogView = () => {
               <InsertCommentOutlinedIcon fontSize="small" />
               <Typography>{comments?.length} Comments </Typography>
             </Stack>
+            <Divider sx={{ border: "1px solid #ffffff" }} />
+            <div className="media-object">
+              <Button
+                onClick={() => window.open(whatsappUrl, "_blank")}
+                sx={{
+                  // padding: "10px 15px",
+                  // backgroundColor: "#25D366",
+                  // color: "white",
+                  // border: "none",
+                  // borderRadius: "5px",
+                  // cursor: "pointer",
+                  color: "text.primary",
+                  textTransform: "none",
+                  gap: 1,
+                }}
+              >
+                <WhatsAppIcon sx={{ color: "#25D366 " }} />
+                <Typography>Share</Typography>
+              </Button>
+            </div>
           </Stack>
         </Box>
 
