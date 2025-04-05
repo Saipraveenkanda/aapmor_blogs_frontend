@@ -571,7 +571,7 @@ const BlogView = () => {
           {/* Comments and likes*/}
           <Stack direction={"row"} spacing={4} mt={2}>
             {token && (
-              <Stack direction={"column"} alignItems={"center"}>
+              <Stack direction={"row"} alignItems={"center"} spacing={4}>
                 <div class="media-object">
                   <Button
                     variant="standard"
@@ -602,16 +602,7 @@ const BlogView = () => {
                     )}
                   </Button>
                 </div>
-
-                {/* <Typography
-                  sx={{
-                    cursor: "pointer",
-                  }}
-                  onClick={(e) => handleClick(e)}
-                >
-                  {likesCount}{" "}
-                </Typography> */}
-                <Divider sx={{ border: "1px solid #ffffff" }} />
+                <Divider flexItem sx={{ border: "1px solid #ffffff" }} />
               </Stack>
             )}
             <Stack direction={"row"} alignItems={"center"} mt={2} spacing={1}>
@@ -630,6 +621,9 @@ const BlogView = () => {
                   // border: "none",
                   // borderRadius: "5px",
                   // cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "unset",
+                  },
                   color: "text.primary",
                   textTransform: "none",
                   gap: 1,
