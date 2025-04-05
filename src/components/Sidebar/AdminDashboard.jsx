@@ -207,19 +207,17 @@ const Dashboard = ({ username, profileDetails }) => {
       {/* Write Button */}
       <GlassCard>
         <CardContent sx={{ padding: "8px !important", height: "60px" }}>
-          {/* <Box
+          <Box
             sx={{
-              position: "absolute",
-              overflow: "hidden",
-              bottom: -10,
-              zIndex: 1000,
-              width: "90%",
               display: "flex",
               justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
-          > */}
+          >
+            <Typography fontSize={"24px"}>ANALYSING BLOGS</Typography>
+          </Box>
           <AnalyzeAnimation />
-          {/* </Box> */}
         </CardContent>
       </GlassCard>
     </DashboardContainer>

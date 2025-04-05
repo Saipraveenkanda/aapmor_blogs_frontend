@@ -146,6 +146,7 @@ const RecentBlogs = ({ blogs }) => {
                           display: "flex",
                           gap: 1,
                           alignItems: "center",
+                          justifyContent: "space-between",
                           width: "100%",
                           cursor: "pointer",
                           mb: 1.5,
@@ -269,7 +270,7 @@ const RecentBlogs = ({ blogs }) => {
           spacing={1}
           sx={{
             borderRadius: 1,
-            border: "0.5px solid #016A70",
+            // border: "0.5px solid accent.main",
             maxHeight: "200px",
             overflowY: "auto",
             scrollbarWidth: "thin",
@@ -279,7 +280,7 @@ const RecentBlogs = ({ blogs }) => {
             likes?.map((eachUser) => {
               return (
                 <Stack direction={"row"} spacing={1.5} sx={{ p: 1 }}>
-                  <PersonOutlineTwoToneIcon sx={{ color: "#016A70" }} />
+                  <PersonOutlineTwoToneIcon sx={{ color: "accent.main" }} />
                   <Typography variant="p" fontWeight={"500"}>
                     {eachUser.name}
                   </Typography>

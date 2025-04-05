@@ -22,7 +22,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined"; // import "./SearchBar.css";
+import aapmorLightText from "../../assets/aapmorwhitetext.svg";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import { profileCheckingApi } from "../ApiCalls/apiCalls";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
@@ -34,7 +35,7 @@ const Header = ({ setSearchInput = () => {} }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
   const [isAdmin, setIsAdmin] = useState(false);
-  const [mode, setMode] = useState(true);
+  const [mode, setMode] = useState(JSON.parse(localStorage.getItem("theme")));
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -123,7 +124,16 @@ const Header = ({ setSearchInput = () => {} }) => {
           }}
         >
           <img src={aapmorlogo} alt="logoAapmor" />
-          <img src={aapmortext} alt="aapmortext" style={{ fill: "#fff" }} />
+          {mode && (
+            <img src={aapmortext} alt="aapmortext" style={{ width: "120px" }} />
+          )}
+          {!mode && (
+            <img
+              src={aapmorLightText}
+              alt="aapmortext"
+              style={{ width: "120px" }}
+            />
+          )}
           <Divider
             orientation="vertical"
             flexItem

@@ -46,19 +46,19 @@ const lightTheme = createTheme({
       main: "#ff5252",
     },
     text: {
-      primary: "#121212", // Primary Text Color
-      secondary: "#4f4f4f", // Secondary Text Color
+      primary: "#121212",
+      secondary: "#4f4f4f",
       body: "#ff5252",
     },
     background: {
-      default: "#f4f6f8", // Default Background Color
+      default: "#f4f6f8",
       paper: "#ffffff",
     },
     action: {
-      hover: "#FF8F07", // Action Hover Color
+      hover: "#FF8F07",
     },
     accent: {
-      // main: "#016A70", // Custom color
+      // main: "#016A70",
       main: "#FF8F07",
       light: "#FF8F07",
       dark: "#e65100",
@@ -68,8 +68,10 @@ const lightTheme = createTheme({
 
 const App = () => {
   const mode = useSelector((state) => state.blogs.appTheme);
+  const appTheme = JSON.parse(localStorage.getItem("theme")) || mode;
+
   return (
-    <ThemeProvider theme={mode ? lightTheme : darkTheme}>
+    <ThemeProvider theme={appTheme ? lightTheme : darkTheme}>
       <CssBaseline />
       <Routes>
         <Route exact path="/" element={<Home />} />

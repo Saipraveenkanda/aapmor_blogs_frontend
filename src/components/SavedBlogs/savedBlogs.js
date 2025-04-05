@@ -22,6 +22,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 
 const SavedBlogs = () => {
   const [savedBlogs, setSavedBlogs] = useState([]);
@@ -97,7 +98,7 @@ const SavedBlogs = () => {
     );
   };
 
-  const renderTimeLine = (likes, comments, date, _id) => {
+  const renderTimeLine = (likes, comments, date, _id, username) => {
     return (
       <Stack
         direction="row"
@@ -125,7 +126,7 @@ const SavedBlogs = () => {
           }}
         >
           📅 {new Date(date).toLocaleDateString()}
-          <ThumbUpOutlinedIcon fontSize="small" /> {likes?.length}
+          <Person2OutlinedIcon fontSize="small" /> {username}
           <CommentIcon fontSize="small" /> {comments?.length}
         </Typography>
 
@@ -255,7 +256,7 @@ const SavedBlogs = () => {
                       </Typography>
                     </Stack>
                   </Stack>
-                  {renderTimeLine(likes, comments, date, _id)}
+                  {renderTimeLine(likes, comments, date, _id, username)}
                 </ListItem>
                 {index !== savedBlogs.length - 1 && (
                   <Divider orientation="horizontal" />

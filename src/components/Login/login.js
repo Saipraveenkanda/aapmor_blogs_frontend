@@ -15,6 +15,8 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import loginVector from "../../assets/Login vector.png";
 import LoginAnimation from "../../helpers/LoginAnimation";
 import aapmortext from "../../assets/aapmortext.svg";
+import aapmorlighttext from "../../assets/aapmorwhitetext.svg";
+import { useSelector } from "react-redux";
 //MAIN FUNCTION
 const Login = () => {
   //STATE HOOKS
@@ -29,7 +31,7 @@ const Login = () => {
   const [successMsg, setSuccessMsg] = useState("");
   const [isButtonDisable, setButtonDisable] = useState(true);
   const [isOtpButtonDisable, setOtpButtonDisable] = useState(true);
-
+  const mode = useSelector((state) => state.blogs.appTheme);
   //CHECKING FOR ALREADY REGISTERED USER AND NAVIGATING TO HOME
   const navigate = useNavigate();
 
@@ -72,7 +74,7 @@ const Login = () => {
       navigate("/");
     } else {
       setButtonText("Submit OTP");
-      handleOnSubmitError(data.message);
+      handleOnSubmitError(data?.message);
     }
   };
 
@@ -187,11 +189,25 @@ const Login = () => {
             alt="logoAapmor"
             style={{ width: "80px", height: "50px" }}
           />
-          <img
+          {/* <img
             src={aapmortext}
             alt="aapmortext"
             style={{ fill: "#fff", height: "30px" }}
-          />
+          /> */}
+          {mode && (
+            <img
+              src={aapmortext}
+              alt="aapmortext"
+              style={{ /* width: "140px", */ height: "30px" }}
+            />
+          )}
+          {!mode && (
+            <img
+              src={aapmorlighttext}
+              alt="aapmortext"
+              style={{ /* width: "140px", */ height: "30px" }}
+            />
+          )}
           <Divider
             orientation="vertical"
             flexItem

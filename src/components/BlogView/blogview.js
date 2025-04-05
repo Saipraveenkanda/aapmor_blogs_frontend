@@ -6,27 +6,29 @@ import {
   Chip,
   CircularProgress,
   Divider,
+  Fade,
   Grid,
   IconButton,
+  Paper,
+  Popover,
+  Popper,
   Snackbar,
   Stack,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
-// import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
-// import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import Footer from "../HomePage/footer";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import "./style.css";
 import {
   commentLikeService,
@@ -43,18 +45,17 @@ import {
 } from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
-import { PaperPlaneTilt } from "@phosphor-icons/react";
+import { LinkedinLogo, PaperPlaneTilt } from "@phosphor-icons/react";
 import ProfilePopup from "../HomePage/ProfilePopup";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import Slide from "@mui/material/Slide";
 import DeletePopup from "./DeletePoup";
 import BestBlogRibbon from "../Blog/BestBlogRibbon";
 import AboutAuthor from "./AboutAuthor";
 import CommentSection from "./CommentSection";
 import BlogNotFound from "./NoBlogComponent";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-const host = process.env.REACT_APP_API_URL;
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 
 const BlogView = () => {
   const navigate = useNavigate();
@@ -78,15 +79,24 @@ const BlogView = () => {
   const [authorId, setAuthorId] = useState("");
   const [authorDetails, setAuthorDetails] = useState("");
   // const [comments, setComments] = useState([]);
+  const [openSharePop, setOpenSharePop] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [copied, setCopied] = useState(false);
   const shareText = encodeURIComponent(
     `${blogDetails?.title}\nRead more: "https://blogs.aapmor.com/blogs/${blogDetails?._id}`
   );
   const whatsappUrl = `https://wa.me/?text=${shareText}`;
+  const linkedInUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${shareText}`;
   useEffect(() => {
     getUserDetail();
     getBlogItem();
     // eslint-disable-next-line
   }, []);
+
+  const handleShareButton = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenSharePop(true);
+  };
 
   const getUserDetail = async () => {
     const response = await profileCheckingApi();
@@ -181,18 +191,19 @@ const BlogView = () => {
   };
 
   const getBlogItem = async () => {
-    const response = await getBlogViewApi(id);
-    if (response) {
-      setApiStatus("SUCCESS");
-      if (response.status === 200) {
-        const blogDetails = await response.data;
-        setBlogDetails(blogDetails);
-        setAuthorId(blogDetails?.email);
-      } else {
-        setApiStatus("FAILURE");
+    try {
+      const response = await getBlogViewApi(id);
+      if (response) {
+        setApiStatus("SUCCESS");
+        if (response.status === 200) {
+          const blogDetails = await response.data;
+          setBlogDetails(blogDetails);
+          setAuthorId(blogDetails?.email);
+        } else {
+          setApiStatus("FAILURE");
+        }
       }
-    }
-    if (response.status === 500) {
+    } catch (error) {
       setApiStatus("FAILURE");
     }
   };
@@ -600,9 +611,9 @@ const BlogView = () => {
                 >
                   {likesCount}{" "}
                 </Typography> */}
+                <Divider sx={{ border: "1px solid #ffffff" }} />
               </Stack>
             )}
-            <Divider sx={{ border: "1px solid #ffffff" }} />
             <Stack direction={"row"} alignItems={"center"} mt={2} spacing={1}>
               <InsertCommentOutlinedIcon fontSize="small" />
               <Typography>{comments?.length} Comments </Typography>
@@ -610,7 +621,8 @@ const BlogView = () => {
             <Divider sx={{ border: "1px solid #ffffff" }} />
             <div className="media-object">
               <Button
-                onClick={() => window.open(whatsappUrl, "_blank")}
+                // onClick={() => window.open(whatsappUrl, "_blank")}
+                onClick={(event) => handleShareButton(event)}
                 sx={{
                   // padding: "10px 15px",
                   // backgroundColor: "#25D366",
@@ -623,7 +635,8 @@ const BlogView = () => {
                   gap: 1,
                 }}
               >
-                <WhatsAppIcon sx={{ color: "#25D366 " }} />
+                {/* sx={{ color: "#25D366" }} */}
+                <ShareOutlinedIcon fontSize="small" />
                 <Typography>Share</Typography>
               </Button>
             </div>
@@ -783,6 +796,131 @@ const BlogView = () => {
         open={openDeletePopup}
         setOpen={setOpenDeletePopup}
         handleDelete={handleDelete}
+      />
+      <Popover
+        open={openSharePop}
+        anchorEl={anchorEl}
+        onClose={() => setOpenSharePop(false)}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <Stack
+          direction={"column"}
+          spacing={2}
+          sx={(theme) => ({
+            p: 2,
+            width: "25vw",
+            borderRadius: 1,
+            border: `0.5px solid ${theme.palette.accent.main}`,
+          })}
+        >
+          <Typography
+            sx={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              textAlign: "center",
+              marginBottom: "40px",
+            }}
+          >
+            Share this blog!
+          </Typography>
+          <Typography textAlign={"center"}>
+            Good reads spark better convos.
+            <br /> Share it with your squad!
+          </Typography>
+          <Stack>
+            <Typography variant="body2" fontWeight={"bold"} gutterBottom>
+              Share the link
+            </Typography>
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              sx={{ backgroundColor: "background.default", borderRadius: 2 }}
+            >
+              <TextField
+                fullWidth
+                variant="outlined"
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      border: "none",
+                    },
+                    "&:hover fieldset": {
+                      border: "none",
+                    },
+                    "&.Mui-focused fieldset": {
+                      border: "none",
+                    },
+                  },
+                }}
+                value={window.location.href}
+                aria-readonly
+              />
+              <Button
+                onClick={() =>
+                  navigator.clipboard
+                    .writeText(window.location.href)
+                    .then(() => {
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000); // Hide after 2 sec
+                    })
+                }
+              >
+                <ContentCopyOutlinedIcon />
+              </Button>
+            </Stack>
+          </Stack>
+          <Stack>
+            <Typography variant="body2" fontWeight={"bold"} gutterBottom>
+              Share to
+            </Typography>
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <Stack direction={"column"} alignItems={"center"} spacing={0}>
+                <IconButton
+                  sx={{
+                    backgroundColor: "#25D366",
+                    "&:hover": {
+                      color: "#ffffff",
+                      bgcolor: "#25D366",
+                    },
+                  }}
+                  onClick={() => window.open(whatsappUrl, "_blank")}
+                >
+                  <WhatsAppIcon sx={{ color: "#ffffff" }} />
+                </IconButton>
+                <Typography fontSize={"12px"}>WhatsApp</Typography>
+              </Stack>
+              <Stack direction={"column"} alignItems={"center"} spacing={0}>
+                <IconButton
+                  sx={{
+                    backgroundColor: "#0077B5",
+                    "&:hover": {
+                      color: "#ffffff",
+                      bgcolor: "#0077B5",
+                    },
+                  }}
+                  onClick={() => window.open(linkedInUrl, "_blank")}
+                >
+                  <LinkedinLogo size={24} color="#ffffff" />
+                </IconButton>
+                <Typography fontSize={"12px"}>LinkedIn</Typography>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Stack>
+      </Popover>
+      <Snackbar
+        open={copied}
+        message="Link copied!"
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       />
       <Footer />
     </>

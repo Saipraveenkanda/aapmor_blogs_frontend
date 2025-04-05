@@ -551,7 +551,7 @@ const UserProfile = (props) => {
         <Divider flexItem sx={{ mb: 2 }} />
 
         {/* SAVED BLOGS */}
-        <Grid container xs={12}>
+        <Grid container xs={12} mb={2}>
           <SavedBlogs />
         </Grid>
       </Box>
