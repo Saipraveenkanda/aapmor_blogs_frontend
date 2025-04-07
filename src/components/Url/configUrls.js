@@ -16,7 +16,7 @@ export const apiEndpoints = {
   uploadThumbnailUrl: "/post/blogthumb",
   deleteBlogUrl: "/blogs",
   postWinnerUrl: "/api/winners",
-  getWinnerUrl: "/api/winners/current",
+  getWinnerUrl: "/api/winners",
   blogSummary: "/summarize",
   profileImageUrl: "/upload/profile-image",
   generateUserBioUrl: "/generateBio",
@@ -24,4 +24,5 @@ export const apiEndpoints = {
   likeCommentsUrl: "/comments/like",
   commentReplyUrl: "/comments/reply",
   publishBlogToWebUrl: "/api/publishblogs/aapmor",
+  getTrendingBLogsUrl: "/top-liked-blogs",
 };

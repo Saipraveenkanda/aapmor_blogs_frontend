@@ -6,6 +6,8 @@ const blogSlice = createSlice({
     blogs: [],
     blogViewObj: {},
     appTheme: false,
+    topBlogs: [],
+    winnerBlogs: [],
   },
   reducers: {
     setBlogsData: (state, action) => {
@@ -17,7 +19,19 @@ const blogSlice = createSlice({
     setAppTheme: (state, action) => {
       state.appTheme = action.payload;
     },
+    setTopBlogsData: (state, action) => {
+      state.topBlogs = action.payload;
+    },
+    setWinnerBlogs: (state, action) => {
+      state.winnerBlogs = action.payload;
+    },
   },
 });
-export const { setBlogsData, setBlogViewObj, setAppTheme } = blogSlice.actions;
+export const {
+  setBlogsData,
+  setBlogViewObj,
+  setAppTheme,
+  setTopBlogsData,
+  setWinnerBlogs,
+} = blogSlice.actions;
 export default blogSlice.reducer;

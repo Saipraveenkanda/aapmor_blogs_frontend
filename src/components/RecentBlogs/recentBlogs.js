@@ -1,34 +1,23 @@
 import {
-  Avatar,
-  Box,
-  Divider,
   List,
-  ListItem,
-  ListItemAvatar,
-  Paper,
-  Skeleton,
   Stack,
   Typography,
   Popover,
+  IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Grid,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
 import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
 import PublicIcon from "@mui/icons-material/Public";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import BlogListItemComponent from "./BlogListItemComponent";
 
-const RecentBlogs = ({ blogs, context }) => {
-  // const blogObj = useSelector((state) => state.blogs);
-  const recentBlogsList = blogs;
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() - 1; // 0-based index (0 = January, 11 = December)
-  const currentYear = currentDate.getFullYear();
-  const [topBlogs, setTopBlogs] = useState([]);
+const RecentBlogs = ({ blogs = [], publishedBlogs = [] }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [likes, setLikes] = useState([]);
   const handleClick = (event) => {
@@ -39,231 +28,102 @@ const RecentBlogs = ({ blogs, context }) => {
   };
   const open = Boolean(anchorEl);
   const popoverid = open ? "simple-popover" : undefined;
-
-  useEffect(() => {
-    setLoading(true);
-    if (blogs.length > 0) {
-      setTopBlogs(
-        [...recentBlogsList]
-          .filter((blog) => {
-            const blogDate = new Date(blog.date);
-            return (
-              blogDate.getMonth() === currentMonth &&
-              blogDate.getFullYear() === currentYear &&
-              blog.likes.length > 0
-            );
-          })
-          .sort((a, b) => b.likes.length - a.likes.length)
-          .slice(0, 5)
-      );
-      setLoading(false);
-    }
-  }, [blogs]);
-
-  const renderLoadingView = () => {
-    return (
-      <Box sx={{ width: "100%", mb: 1.5 }}>
-        <Skeleton
-          variant="text"
-          sx={{ fontSize: "32px", width: "70%", mb: 2 }}
-        />
-        {[1, 2, 3, 4, 5].map((each, index) => (
-          <div key={index}>
-            <Box
-              key={index}
-              sx={{ display: "flex", flexDirection: "row", gap: 1, mb: 1.5 }}
-            >
-              <Skeleton
-                variant="rectangular"
-                sx={{ width: "84px", height: "72px", borderRadius: "4px" }}
-              />
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  width: "100%",
-                  marginTop: 0,
-                }}
-              >
-                <Skeleton sx={{ width: "100%", height: "24px" }} />
-                <Skeleton sx={{ width: "100%", height: "20px" }} />
-                <Skeleton sx={{ width: "100%", height: "20px" }} />
-              </Box>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-          </div>
-        ))}
-      </Box>
-    );
-  };
-  const monthName = new Date().toLocaleString("default", {
-    month: "long",
-  });
-
   return (
     <>
-      <Paper sx={{ p: 2, boxSizing: "border-box", borderRadius: 2 }}>
-        {topBlogs.length > 0 ? (
-          <>
-            {context === "recent" ? (
+      {blogs?.length > 0 &&
+        blogs?.map((eachMonth) => (
+          // <Grid item xs={4}>
+          <Accordion sx={{ mb: 2 }} key={eachMonth._id}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
               <Typography
                 variant="h6"
                 fontWeight={600}
                 sx={{ display: "flex", alignItems: "center", gap: 1 }}
               >
                 <ThumbUpOutlinedIcon sx={{ color: "accent.main" }} /> Most liked
-                blogs of {monthName}
-              </Typography>
-            ) : (
-              <Typography
-                variant="h6"
-                fontWeight={600}
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                <PublicIcon sx={{ color: "accent.main" }} /> Blogs Published to
-                Website
-              </Typography>
-            )}
-            <List
-              sx={{
-                bgcolor: "background.paper",
-                maxWidth: "100%",
-                overflowY: "auto",
-                maxHeight: "70vh",
-                scrollbarWidth: "thin",
-              }}
-            >
-              {topBlogs?.map(
-                (
+                blogs of{" "}
+                {new Date(eachMonth?.year, eachMonth?.month - 1).toLocaleString(
+                  "default",
                   {
-                    blogImage,
-                    description,
-                    title,
-                    username,
-                    _id,
-                    likes,
-                    comments,
-                  },
-                  index
-                ) => {
-                  return (
-                    <Box key={_id}>
-                      <ListItem
-                        key={_id}
-                        disablePadding
-                        sx={{
-                          display: "flex",
-                          gap: 1,
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "100%",
-                          cursor: "pointer",
-                          mb: 1.5,
-                          mt: 1.5,
-                        }}
-                        onClick={() => navigate(`/blogs/${_id}`)}
-                      >
-                        <Stack
-                          direction={"row"}
-                          alignItems={"center"}
-                          spacing={1}
-                        >
-                          <ListItemAvatar>
-                            <Avatar
-                              alt="blog image"
-                              src={blogImage}
-                              sx={{ width: 64, height: 64 }}
-                              variant="rounded"
-                            />
-                          </ListItemAvatar>
-                          <Stack direction={"column"} spacing={0}>
-                            <Typography
-                              variant="p"
-                              sx={{
-                                // maxWidth: "90%",
-                                textOverflow: "ellipsis",
-                              }}
-                              fontWeight={600}
-                            >
-                              {title.slice(0, 26)}
-                            </Typography>
-
-                            <Typography
-                              sx={{
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2, // Limits text to 2 lines
-                                WebkitBoxOrient: "vertical",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "normal", // Ensures wrapping
-                              }}
-                              component="span"
-                              variant="p"
-                              // fontSize={12}
-                              color="text.primary"
-                              // textOverflow={"ellipsis"}
-                            >
-                              <b>{username || "Anonymous"}</b>
-                              {` : ${description}`}
-                            </Typography>
-                          </Stack>
-                        </Stack>
-                        <Stack
-                          sx={{
-                            mr: 1,
-                            justifySelf: "flex-end",
-                            alignSelf: "center",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "action.hover",
-                              },
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setLikes(likes);
-                              handleClick(e);
-                            }}
-                          >
-                            <ThumbUpOutlinedIcon />
-                            {likes.length}
-                          </Typography>
-                          <Divider flexItem sx={{ m: "4px 0px" }} />
-                          <Typography
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1,
-                            }}
-                          >
-                            <ChatOutlinedIcon />
-                            {comments.length}
-                          </Typography>
-                        </Stack>
-                      </ListItem>
-                      {index !== topBlogs.length - 1 && (
-                        <Divider orientation="horizontal" />
-                      )}
-                    </Box>
-                  );
-                }
+                    month: "long",
+                    year: "numeric",
+                  }
+                )}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {eachMonth?.topBlogs?.length > 0 ? (
+                <List
+                  sx={{
+                    bgcolor: "background.paper",
+                    maxWidth: "100%",
+                    overflowY: "auto",
+                    maxHeight: "70vh",
+                    scrollbarWidth: "thin",
+                  }}
+                >
+                  {eachMonth?.topBlogs?.map((blog, index) => (
+                    /* BLOG LIST ITEM COMPONENT */
+                    <BlogListItemComponent
+                      length={eachMonth?.topBlogs.length}
+                      blog={blog}
+                      index={index}
+                      handleClick={handleClick}
+                      setLikes={setLikes}
+                    />
+                  ))}
+                </List>
+              ) : (
+                eachMonth?.topBlogs?.length === 0 && (
+                  /* !loading &&  */ <Typography>
+                    No blogs this month!
+                  </Typography>
+                )
               )}
-            </List>
-          </>
-        ) : (
-          topBlogs.length === 0 &&
-          !loading && <Typography>No blogs this month!</Typography>
-        )}
-        {loading && renderLoadingView()}
-      </Paper>
+            </AccordionDetails>
+          </Accordion>
+          // </Grid>
+        ))}
       {/* Likes popover */}
+
+      {publishedBlogs.length > 0 && (
+        <List
+          sx={{
+            bgcolor: "background.paper",
+            maxWidth: "100%",
+            overflowY: "auto",
+            maxHeight: "70vh",
+            scrollbarWidth: "thin",
+            p: 2,
+            pt: 1,
+            boxSizing: "border-box",
+          }}
+        >
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <PublicIcon sx={{ color: "accent.main" }} /> Blogs Published to
+            Website
+          </Typography>
+          {publishedBlogs?.map((blog, index) => (
+            /* BLOG LIST ITEM COMPONENT */
+            <BlogListItemComponent
+              length={publishedBlogs.length}
+              blog={blog}
+              index={index}
+              handleClick={handleClick}
+              setLikes={setLikes}
+            />
+          ))}
+        </List>
+      )}
+
       <Popover
         id={popoverid}
         open={open}
@@ -312,17 +172,3 @@ const RecentBlogs = ({ blogs, context }) => {
 };
 
 export default RecentBlogs;
-
-/* 
-blogImage: "data:image/webp;base64,UklGRtoFAQBXRUJQVlA4WAoAAA
-category: "Entertainment"
-comments: (13) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-date: "2023-11-07T18:30:00.000Z"
-description: "Over the years, I have had many encounters with Japanese websites — be it researching visa requirements, planning trips, or simply ordering something online. And it took me a loooong while to get used to the walls of text, lavish use of bright colors & 10+ different fonts that sites like this one throw in your face"
-html: "<p>Though there are numerous examples of sites wi
-likes: 34
-savedUser: ['praveensaik@aapmor.com']
-title: "Why Japanese Websites Look So Different"
-username: null
-userrole: null
-_id: "654b0002813fb027c425ee66" */

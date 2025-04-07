@@ -562,7 +562,7 @@ const BlogView = () => {
                 disableElevation
                 onClick={handleSubmit}
                 sx={(theme) => ({
-                  borderRadius: 1,
+                  borderRadius: 4,
                   border: `0.5px solid ${theme.palette.accent.main}`,
                   textTransform: "none",
                   color: "text.primary",
@@ -583,7 +583,7 @@ const BlogView = () => {
                 disableElevation
                 onClick={handlePublish}
                 sx={(theme) => ({
-                  borderRadius: 1,
+                  borderRadius: 4,
                   border: `0.5px solid ${theme.palette.accent.main}`,
                   textTransform: "none",
                   color: "text.primary",
@@ -844,6 +844,7 @@ const BlogView = () => {
         setOpen={setOpenDeletePopup}
         handleDelete={handleDelete}
       />
+      {/* SHARE POPUP */}
       <Popover
         open={openSharePop}
         anchorEl={anchorEl}
@@ -856,6 +857,7 @@ const BlogView = () => {
           vertical: "bottom",
           horizontal: "center",
         }}
+        sx={{ borderRadius: 4 }}
       >
         <Stack
           direction={"column"}
@@ -863,23 +865,27 @@ const BlogView = () => {
           sx={(theme) => ({
             p: 2,
             width: "25vw",
-            borderRadius: 1,
-            border: `0.5px solid ${theme.palette.accent.main}`,
+            borderRadius: 2,
+            // border: `0.5px solid ${theme.palette.accent.main}`,
           })}
         >
           <Typography
             sx={{
               fontSize: "24px",
               fontWeight: "bold",
-              textAlign: "center",
+              // textAlign: "center",
               marginBottom: "40px",
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
             }}
           >
+            <ShareOutlinedIcon fontSize="large" sx={{ color: "accent.main" }} />
             Share this blog!
           </Typography>
-          <Typography textAlign={"center"}>
+          <Typography /* textAlign={"center"} */>
             Good reads spark better convos.
-            <br /> Share it with your squad!
+            {/* <br /> */} Share it with your squad!
           </Typography>
           <Stack>
             <Typography variant="body2" fontWeight={"bold"} gutterBottom>

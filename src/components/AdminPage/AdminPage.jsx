@@ -5,26 +5,30 @@ import RecentBlogs from "../RecentBlogs/recentBlogs";
 import {
   getBlogsApi,
   getPublishBlogToWeb,
+  getTrendingBlogs,
+  getWinnerOfTheMonth,
   profileCheckingApi,
 } from "../ApiCalls/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
-import { setBlogsData } from "../Slices/blogSlice";
+import { setTopBlogsData, setWinnerBlogs } from "../Slices/blogSlice";
 import UnauthorizedPage from "./UnauthorizedComponent";
 import { useNavigate } from "react-router-dom";
+import WinnerItem from "./WinnerItem";
 
 const AdminPage = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [publishedBlogs, setPublishedBlogs] = useState([]);
-  const blogObj = useSelector((state) => state.blogs);
-  const blogs = blogObj.blogs;
+  const topBlogs = useSelector((state) => state.blogs.topBlogs);
+  const winnerBlogs = useSelector((state) => state.blogs.winnerBlogs);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  console.log(topBlogs, "TOP BLOGS");
   useEffect(() => {
     getUserDetail();
-    getBlogsData();
+    getTopBlogsData();
     getPublishedBlogs();
+    getWinnerBlogs();
   }, []);
 
   const getUserDetail = async () => {
@@ -46,12 +50,18 @@ const AdminPage = (props) => {
     }
   };
 
-  const getBlogsData = async () => {
-    const response = await getBlogsApi();
+  const getTopBlogsData = async () => {
+    const response = await getTrendingBlogs();
     if (response.status === 200) {
-      dispatch(setBlogsData(response.data));
+      dispatch(setTopBlogsData(response.data));
     } else {
       console.log("Error in fetching blogs");
+    }
+  };
+  const getWinnerBlogs = async () => {
+    const response = await getWinnerOfTheMonth();
+    if (response) {
+      dispatch(setWinnerBlogs(response.data));
     }
   };
 
@@ -79,16 +89,27 @@ const AdminPage = (props) => {
           <CircularProgress />
         </Box>
       ) : isAdmin ? (
-        <Box sx={{ padding: "0px 40px" }}>
-          <Typography variant="h6" fontWeight={"bold"} textAlign={"center"}>
+        <Box sx={{ padding: "10px 40px" }}>
+          <Typography
+            variant="h5"
+            fontWeight={"bold"}
+            // textAlign={"center"}
+            gutterBottom
+          >
             Admin Dashboard
           </Typography>
           <Grid container spacing={2}>
-            <Grid xs={4.5} item>
-              <RecentBlogs blogs={blogs} context="recent" />
+            {/* TOP LIKED BLOGS OF LAST 2 MONTHS */}
+            <Grid xs={6} spacing={2} item sx={{ flexDirection: "column" }}>
+              <RecentBlogs blogs={topBlogs} />
             </Grid>
-            <Grid xs={4.5} item>
-              <RecentBlogs blogs={publishedBlogs} context="published" />
+            {/* PUBLISHED BLOGS */}
+            <Grid xs={6} item spacing={2}>
+              <RecentBlogs publishedBlogs={publishedBlogs} />
+            </Grid>
+            {/* WINNERS OF THE PREVIOUS MONTHS */}
+            <Grid xs={12} item>
+              <WinnerItem winners={winnerBlogs} />
             </Grid>
           </Grid>
         </Box>

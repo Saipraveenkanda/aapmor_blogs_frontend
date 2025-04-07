@@ -352,3 +352,14 @@ export const unpublishBlogToWeb = async (id) => {
     return error;
   }
 };
+export const getTrendingBlogs = async () => {
+  try {
+    return await axiosInstance.get(
+      `${apiEndpoints.getTrendingBLogsUrl}?months=3`
+    );
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};
