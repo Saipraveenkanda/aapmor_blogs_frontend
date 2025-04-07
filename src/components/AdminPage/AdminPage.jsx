@@ -2,7 +2,11 @@ import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
 import RecentBlogs from "../RecentBlogs/recentBlogs";
-import { getBlogsApi, profileCheckingApi } from "../ApiCalls/apiCalls";
+import {
+  getBlogsApi,
+  getPublishBlogToWeb,
+  profileCheckingApi,
+} from "../ApiCalls/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { setBlogsData } from "../Slices/blogSlice";
 import UnauthorizedPage from "./UnauthorizedComponent";
@@ -11,14 +15,16 @@ import { useNavigate } from "react-router-dom";
 const AdminPage = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [publishedBlogs, setPublishedBlogs] = useState([]);
   const blogObj = useSelector((state) => state.blogs);
   const blogs = blogObj.blogs;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    getBlogsData();
     getUserDetail();
+    getBlogsData();
+    getPublishedBlogs();
   }, []);
 
   const getUserDetail = async () => {
@@ -31,6 +37,13 @@ const AdminPage = (props) => {
       setLoading(false);
     }
     setLoading(false);
+  };
+
+  const getPublishedBlogs = async () => {
+    const response = await getPublishBlogToWeb();
+    if (response) {
+      setPublishedBlogs(response.data.data);
+    }
   };
 
   const getBlogsData = async () => {
@@ -72,7 +85,10 @@ const AdminPage = (props) => {
           </Typography>
           <Grid container spacing={2}>
             <Grid xs={4.5} item>
-              <RecentBlogs blogs={blogs} />
+              <RecentBlogs blogs={blogs} context="recent" />
+            </Grid>
+            <Grid xs={4.5} item>
+              <RecentBlogs blogs={publishedBlogs} context="published" />
             </Grid>
           </Grid>
         </Box>

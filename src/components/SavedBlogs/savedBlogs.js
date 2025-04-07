@@ -53,7 +53,7 @@ const SavedBlogs = () => {
 
   const renderLoading = () => {
     return (
-      <Box sx={{ width: "100%", mb: 1.5, mt: 2 }}>
+      <Box sx={{ width: "80vw", mb: 1.5, mt: 2 }}>
         {[1, 2, 3, 4].map((each, index) => (
           <div key={index}>
             <Box

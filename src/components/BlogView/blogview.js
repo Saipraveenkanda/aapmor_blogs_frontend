@@ -40,8 +40,10 @@ import {
   likesApi,
   postWinnerDetails,
   profileCheckingApi,
+  publishBlogToWeb,
   removeSaveBlogApi,
   saveBlogApi,
+  unpublishBlogToWeb,
 } from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
@@ -219,6 +221,7 @@ const BlogView = () => {
     _id,
     savedUsers,
     isBestBlog,
+    publishedToWeb,
   } = blogDetails;
 
   const renderLoading = () => {
@@ -406,6 +409,31 @@ const BlogView = () => {
     }
   };
 
+  const handlePublish = async () => {
+    const payload = {
+      title: blogDetails?.title,
+      description: blogDetails?.description,
+      category: blogDetails?.category,
+      blogImage: blogDetails?.blogImage,
+      username: blogDetails?.username,
+      userrole: blogDetails?.userrole,
+      date: blogDetails?.date,
+      likes: blogDetails?.likes,
+      comments: blogDetails?.comments,
+      email: blogDetails?.email,
+      blogId: blogDetails?._id,
+    };
+    const response = publishedToWeb
+      ? await unpublishBlogToWeb(blogDetails?._id)
+      : await publishBlogToWeb(payload);
+    console.log(payload, response, "PUBLISHING BLOG");
+    if (response.status === 200) {
+      setSnackMessage("Blog published to website");
+      setOpenSnackBar(true);
+      getBlogItem();
+    }
+  };
+
   //RENDERING BLOG VIEW
   const renderBLogView = () => {
     document.title = `Blog: ${title}`;
@@ -528,19 +556,44 @@ const BlogView = () => {
             {/* WINNER ANNOUNCEMENT BUTTON */}
             {token !== undefined && isAdmin && !isBestBlog && (
               <Button
+                size="medium"
                 variant="outlined"
                 color="inherit"
                 disableElevation
                 onClick={handleSubmit}
-                sx={{
+                sx={(theme) => ({
+                  borderRadius: 1,
+                  border: `0.5px solid ${theme.palette.accent.main}`,
                   textTransform: "none",
-                  borderRadius: 4,
-                  position: "fixed",
-                  top: "80px",
+                  color: "text.primary",
+                  position: "absolute",
+                  backgroundColor: "accent.main",
                   right: "40px",
-                }}
+                  fontWeight: "bold",
+                })}
               >
                 Announce Winner
+              </Button>
+            )}
+            {token !== undefined && isAdmin && (
+              <Button
+                size="medium"
+                variant="outlined"
+                color="inherit"
+                disableElevation
+                onClick={handlePublish}
+                sx={(theme) => ({
+                  borderRadius: 1,
+                  border: `0.5px solid ${theme.palette.accent.main}`,
+                  textTransform: "none",
+                  color: "text.primary",
+                  fontWeight: "bold",
+                  position: "absolute",
+                  backgroundColor: "accent.main",
+                  right: "220px",
+                })}
+              >
+                {publishedToWeb ? "Unpublish " : "Publish to website"}
               </Button>
             )}
           </Box>

@@ -18,10 +18,9 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
 import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandsClapping } from "@fortawesome/free-solid-svg-icons";
+import PublicIcon from "@mui/icons-material/Public";
 
-const RecentBlogs = ({ blogs }) => {
+const RecentBlogs = ({ blogs, context }) => {
   // const blogObj = useSelector((state) => state.blogs);
   const recentBlogsList = blogs;
   const [loading, setLoading] = useState(true);
@@ -107,14 +106,25 @@ const RecentBlogs = ({ blogs }) => {
       <Paper sx={{ p: 2, boxSizing: "border-box", borderRadius: 2 }}>
         {topBlogs.length > 0 ? (
           <>
-            <Typography
-              variant="h6"
-              fontWeight={600}
-              sx={{ display: "flex", alignItems: "center", gap: 1 }}
-            >
-              <ThumbUpOutlinedIcon sx={{ color: "#016A70" }} /> Most liked blogs
-              of {monthName}
-            </Typography>
+            {context === "recent" ? (
+              <Typography
+                variant="h6"
+                fontWeight={600}
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
+                <ThumbUpOutlinedIcon sx={{ color: "accent.main" }} /> Most liked
+                blogs of {monthName}
+              </Typography>
+            ) : (
+              <Typography
+                variant="h6"
+                fontWeight={600}
+                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+              >
+                <PublicIcon sx={{ color: "accent.main" }} /> Blogs Published to
+                Website
+              </Typography>
+            )}
             <List
               sx={{
                 bgcolor: "background.paper",

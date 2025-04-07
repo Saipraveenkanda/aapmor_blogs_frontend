@@ -23,4 +23,5 @@ export const apiEndpoints = {
   getAuthorUrl: "/author",
   likeCommentsUrl: "/comments/like",
   commentReplyUrl: "/comments/reply",
+  publishBlogToWebUrl: "/api/publishblogs/aapmor",
 };

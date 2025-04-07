@@ -2,26 +2,13 @@ import { Grid, Paper, Typography } from "@mui/material";
 
 import React from "react";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
+import aapmorlighttext from "../../assets/aapmorwhitetext.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 
 const Footer = () => {
+  const mode = JSON.parse(localStorage.getItem("theme"));
   return (
-    <Paper
-      elevation={0}
-      bgcolor={"background.default"}
-      color={"text.primary"}
-      // sx={{
-      //   position: "relative",
-      //   display: "flex",
-      //   flexDirection: "row",
-      //   bottom: 0,
-      //   left: 0,
-      //   borderRadius: "none",
-      //   padding: "0px 24px",
-      //   background: "linear-gradient( to top, #00000020 , #ffffff10)",
-      //   justifyContent: "stretch",
-      // }}
-    >
+    <Paper elevation={0} bgcolor={"background.default"} color={"text.primary"}>
       <Grid
         container
         spacing={1}
@@ -38,82 +25,18 @@ const Footer = () => {
         }}
       >
         <Grid item sx={{ display: "flex", alignItems: "center" }}>
-          {/* <img
-            src="https://aapmor.com/assets/img/aapmore-logo-.jpg"
-            alt="aapmor-logo"
-            style={{ width: "200px" }}
-          /> */}
           <img src={aapmorlogo} alt="logoAapmor" />
-          <img src={aapmortext} alt="aapmortext" />
-          {/* <Grid item gap={2}>
-            <IconButton
-              component="a"
-              href="https://www.linkedin.com/company/aapmor-technologies/"
-              target="_blank"
-            >
-              <LinkedInIcon
-                sx={{ color: " #0072b1 ", height: "30px", width: "30px" }}
-              />
-            </IconButton>
-          </Grid> */}
+          {mode && (
+            <img src={aapmortext} alt="aapmortext" style={{ width: "120px" }} />
+          )}
+          {!mode && (
+            <img
+              src={aapmorlighttext}
+              alt="aapmortext"
+              style={{ width: "120px" }}
+            />
+          )}
         </Grid>
-        {/* <Grid item p={1} m={1}>
-          <Typography
-            variant="h6"
-            sx={{ fontFamily: "cambria Math", fontWeight: "bold" }}
-          >
-            Solutions
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Full Stack Development
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Testing Automation
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Data Analytics
-          </Typography>
-        </Grid>
-        <Grid item p={1} m={1}>
-          <Typography
-            variant="h6"
-            sx={{ fontFamily: "cambria Math", fontWeight: "bold" }}
-          >
-            Quick Links
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Home
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            About us
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Contact us
-          </Typography>
-        </Grid>
-        <Grid item p={1} m={1}>
-          <Typography
-            variant="h6"
-            sx={{ fontFamily: "cambria Math", fontWeight: "bold" }}
-          >
-            Connect to us
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Phone : +19724138201
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: "cambria Math" }}>
-            Email : info@aapmor.com
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ fontFamily: "cambria Math" }}
-            component={"a"}
-            href="https://www.aapmor.com"
-            target="_blank"
-          >
-            www.aapmor.com
-          </Typography>
-        </Grid> */}
         <Grid item>
           <Typography>© {new Date().getFullYear()} Aapmor Inc.</Typography>
         </Grid>

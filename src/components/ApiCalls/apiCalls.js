@@ -318,3 +318,37 @@ export const commentReplyService = async (
     return error;
   }
 };
+
+/* PUBLISH BLOG TO AAPMOR WEBSITE */
+export const publishBlogToWeb = async (data) => {
+  try {
+    return await axiosInstance.post(apiEndpoints.publishBlogToWebUrl, data);
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};
+/* GET PUBLISHED BLOGS TO AAPMOR WEBSITE */
+export const getPublishBlogToWeb = async (data) => {
+  try {
+    return await axiosInstance.get(apiEndpoints.publishBlogToWebUrl);
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};
+/* UNPUBLISH BLOG TO AAPMOR WEBSITE */
+export const unpublishBlogToWeb = async (id) => {
+  console.log(id, "ID IN FRONT END");
+  try {
+    return await axiosInstance.delete(
+      `${apiEndpoints.publishBlogToWebUrl}/${id}`
+    );
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};

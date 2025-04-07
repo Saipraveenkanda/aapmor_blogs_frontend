@@ -20,7 +20,7 @@ import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
-  right: 0,
+  right: "12px",
   display: "flex",
   flexDirection: "column",
   gap: "16px",
@@ -41,7 +41,7 @@ const GlassCard = styled(Card)(({ theme }) => ({
   backdropFilter: "blur(10px)",
   borderRadius: "12px",
   borderLeft: `2px solid ${theme.palette.accent.main}`,
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  boxShadow: "2px 2px 8px 0px rgba(0, 0, 0, 0.08)",
   color: theme.palette.text.secondary,
   padding: "8px !important",
   boxSizing: "border-box",
