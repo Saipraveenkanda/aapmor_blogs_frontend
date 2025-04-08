@@ -206,7 +206,11 @@ export const removeSaveBlogApi = async (_id) => {
 /* UPLOAD THUMBNAIL */
 export const uploadThumbnail = async (image) => {
   try {
-    return await axiosInstance.post(apiEndpoints.uploadThumbnailUrl, image);
+    return await axiosInstance.post(apiEndpoints.uploadThumbnailUrl, image, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   } catch (error) {
     console.log(error, "ERROR");
     toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //UPLOAD THUMBNAIL ERROR
