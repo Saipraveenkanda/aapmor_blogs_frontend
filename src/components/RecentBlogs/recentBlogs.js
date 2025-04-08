@@ -90,7 +90,7 @@ const RecentBlogs = ({ blogs = [], publishedBlogs = [] }) => {
         ))}
       {/* Likes popover */}
 
-      {publishedBlogs.length > 0 && (
+      {publishedBlogs?.length > 0 && (
         <List
           sx={{
             bgcolor: "background.paper",
