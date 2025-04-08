@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Button,
   Avatar,
   Box,
   Skeleton,
@@ -17,6 +16,7 @@ import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import InterestsIcon from "@mui/icons-material/Interests";
 import { useNavigate } from "react-router-dom";
 import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
+import WriteButton from "../../helpers/WriteButton";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
@@ -26,8 +26,6 @@ const DashboardContainer = styled("div")({
   gap: "16px",
   padding: "16px",
   boxSizing: "border-box",
-  // background: "linear-gradient(to left, #016A70 0.5%, #ffffff)",
-  // background: "linear-gradient(to right, #ffffff 80%, #016A7090 95%)",
   borderRadius: "12px",
   borderTopRightRadius: "0",
   borderBottomRightRadius: "0",
@@ -205,21 +203,15 @@ const Dashboard = ({ username, profileDetails }) => {
       </GlassCard>
 
       {/* Write Button */}
-      <GlassCard>
-        <CardContent sx={{ padding: "8px !important", height: "60px" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
-            <Typography fontSize={"24px"}>ANALYSING BLOGS</Typography>
-          </Box>
-          <AnalyzeAnimation />
-        </CardContent>
-      </GlassCard>
+      {/* <GlassCard> */}
+      {/* <CardContent sx={{ height: "auto" }}> */}
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <WriteButton />
+      </Box>
+      {/* </CardContent> */}
+      {/* </GlassCard> */}
     </DashboardContainer>
   );
 };

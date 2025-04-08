@@ -55,21 +55,21 @@ const WriteButton = (props) => {
           size="medium"
           onClick={() => navigate("/createblog")}
           sx={{
-            backgroundColor: "#016A70",
+            backgroundColor: "accent.main",
             boxShadow: "2px 2px 4px 0px grey ",
             borderRadius: 2,
-            position: "fixed",
-            bottom: 30,
-            right: 30,
+            // position: "fixed",
+            // bottom: 30,
+            // right: 30,
             width: "180px",
             height: "52px",
             textTransform: "none",
             fontSize: "16px",
             border: "4px solid #fff",
             "&:hover": {
-              border: "4px solid #016A70",
+              border: "4px solid text.primary",
               boxShadow: "1px 0px 4px 0px #ffffff inset",
-              backgroundColor: "#016A70",
+              backgroundColor: "accent.main",
             },
             color: "#ffffff",
           }}

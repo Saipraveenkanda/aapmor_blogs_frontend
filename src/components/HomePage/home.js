@@ -50,24 +50,15 @@ const Home = () => {
       const checkProfileDetails = async () => {
         const response = await profileCheckingApi();
         if (response.status === 202) {
-          // clearInterval(intervalId);
           setProfile(true);
         } else if (response.status === 200) {
-          // clearInterval(intervalId);
           setProfile(false);
           setProfileDetails(response.data.res);
-          // if (Cookies.get("username") === undefined) {
           Cookies.set("username", response.data.res.name);
-          // }
-          // if (Cookies.get("userrole") === undefined) {
           Cookies.set("userrole", response.data.res.designation);
-          // }
         }
-        // clearInterval(intervalId);
       };
-      // const intervalId = setInterval(() => {
       checkProfileDetails();
-      // }, 5000);
     } else {
       setProfile(false);
     }
@@ -134,8 +125,6 @@ const Home = () => {
           width: "100%",
         }}
       >
-        {/* <CircularProgress sx={{ color: "#016A70" }} /> */}
-        {/* <img src={loadingHand} alt="loading hand" style={{ height: "200px" }} /> */}
         <HomeLoading />
       </Box>
     );
@@ -244,18 +233,8 @@ const Home = () => {
                 flexDirection: "row",
                 alignItems: "center",
               }}
-            >
-              {/* <HelloAnimation username={userName} /> */}
-            </Typography>
-            {/* {isEnabled && (
-              <Alert variant="outlined" severity="warning">
-                <span style={{ fontSize: "12px", color: "red" }}>
-                  {timeLeft}
-                </span>
-              </Alert>
-            )} */}
+            ></Typography>
           </Stack>
-
           {updatedBlogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
         </Box>
       </Box>
@@ -335,7 +314,6 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            {/* <RecentBlogs /> */}
             <AdminDashboard
               username={userName}
               profileDetails={profileDetails}
@@ -343,9 +321,6 @@ const Home = () => {
           </Grid>
         </Grid>
       </Grid>
-
-      {/* <Footer /> */}
-
       {profile && (
         <ProfilePopup
           profile={profile}
@@ -353,10 +328,7 @@ const Home = () => {
           setProfile={setProfile}
         />
       )}
-
       <BottomNavbar />
-
-
       {showAnnouncement && !winnerDetails?.message && (
         <WinnerAnnouncement
           isOpen={showAnnouncement}
