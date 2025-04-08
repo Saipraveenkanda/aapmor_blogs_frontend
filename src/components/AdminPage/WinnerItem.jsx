@@ -20,17 +20,33 @@ const WinnerItem = ({ winners }) => {
     );
   }
   return (
-    <>
-      <Typography variant="h5" fontWeight={"bold"} gutterBottom>
+    <Box sx={{}}>
+      <Typography
+        sx={{ mt: 2, pl: 2 }}
+        variant="h5"
+        fontWeight={"bold"}
+        gutterBottom
+      >
         Monthly Spotlight: Winning Blogs
       </Typography>
-      <Grid container item spacing={1} sx={{ mt: 1 }}>
+      <Grid
+        xs={12}
+        container
+        spacing={2}
+        sx={{ ml: 2, mt: 1, flexDirection: "column" }}
+      >
         {winners.map((winner) => (
           <Grid
             item
-            xs={6}
+            xs={12}
+            md={6}
             key={winner._id}
-            sx={{ borderRadius: 3, bgcolor: "background.paper" }}
+            sx={{
+              borderRadius: 2,
+              bgcolor: "background.paper",
+              mt: 1,
+              boxSizing: "border-box",
+            }}
           >
             <CardContent>
               <Box display="flex" alignItems="center" gap={1}>
@@ -62,7 +78,7 @@ const WinnerItem = ({ winners }) => {
           </Grid>
         ))}
       </Grid>
-    </>
+    </Box>
   );
 };
 

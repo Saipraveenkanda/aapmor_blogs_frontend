@@ -98,19 +98,23 @@ const AdminPage = (props) => {
           >
             Admin Dashboard
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} flexDirection={"column"}>
             {/* TOP LIKED BLOGS OF LAST 2 MONTHS */}
-            <Grid xs={6} spacing={2} item sx={{ flexDirection: "column" }}>
+            <Grid
+              xs={12}
+              md={6}
+              spacing={2}
+              item
+              sx={{ flexDirection: "column" }}
+            >
               <RecentBlogs blogs={topBlogs} />
             </Grid>
             {/* PUBLISHED BLOGS */}
-            <Grid xs={6} item spacing={2}>
+            <Grid xs={12} md={6} item spacing={2}>
               <RecentBlogs publishedBlogs={publishedBlogs} />
             </Grid>
             {/* WINNERS OF THE PREVIOUS MONTHS */}
-            <Grid xs={12} item>
-              <WinnerItem winners={winnerBlogs} />
-            </Grid>
+            <WinnerItem winners={winnerBlogs} />
           </Grid>
         </Box>
       ) : (
