@@ -168,12 +168,11 @@ const SavedBlogs = () => {
     return (
       <Grid
         container
-        spacing={2}
+        spacing={0}
         sx={{
-          bgcolor: "background.paper",
+          // bgcolor: "background.paper",
           maxWidth: "100%",
           overflowY: "auto",
-          // maxHeight: "calc(78vh - 32px)",
           scrollbarWidth: "thin",
           display: "flex",
           flexWrap: "wrap",
@@ -200,13 +199,18 @@ const SavedBlogs = () => {
                   key={_id}
                   disablePadding
                   sx={{
+                    boxSizing: "border-box",
+                    borderRadius: 2,
+                    backgroundColor: "background.paper",
                     display: "flex",
                     flexDirection: "column",
-                    gap: 1,
+                    // gap: 1,
                     alignItems: "flex-start",
-                    width: "100%",
-                    mb: 1.5,
-                    mt: 1.5,
+                    width: "95%",
+                    // mb: 1.5,
+                    // mt: 1.5,
+                    m: 1,
+                    p: 2,
                   }}
                 >
                   <Stack direction={"row"} alignItems={"center"} spacing={2}>
@@ -258,9 +262,9 @@ const SavedBlogs = () => {
                   </Stack>
                   {renderTimeLine(likes, comments, date, _id, username)}
                 </ListItem>
-                {index !== savedBlogs.length - 1 && (
+                {/* {index !== savedBlogs.length - 1 && (
                   <Divider orientation="horizontal" />
-                )}
+                )} */}
               </Grid>
             );
           }

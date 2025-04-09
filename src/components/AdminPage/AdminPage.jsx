@@ -114,7 +114,17 @@ const AdminPage = (props) => {
               <RecentBlogs publishedBlogs={publishedBlogs} />
             </Grid>
             {/* WINNERS OF THE PREVIOUS MONTHS */}
-            <WinnerItem winners={winnerBlogs} />
+            <Typography
+              sx={{ mt: 2, pl: 2 }}
+              variant="h5"
+              fontWeight={"bold"}
+              gutterBottom
+            >
+              Monthly Spotlight: Winning Blogs
+            </Typography>
+            <Grid xs={12} container item spacing={2} /* sx={{ mt: 1 }} */>
+              <WinnerItem winners={winnerBlogs} />
+            </Grid>
           </Grid>
         </Box>
       ) : (

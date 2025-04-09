@@ -27,6 +27,7 @@ const darkTheme = createTheme({
     background: {
       default: "#121212", // Default Background Color
       paper: "#121212",
+      dark: "#1a1a1a",
     },
     action: {
       hover: "#FF8F07", // Action Hover Color
@@ -53,6 +54,7 @@ const lightTheme = createTheme({
     background: {
       default: "#f4f6f8",
       paper: "#ffffff",
+      dark: "#ffffff",
     },
     action: {
       hover: "#FF8F07",
