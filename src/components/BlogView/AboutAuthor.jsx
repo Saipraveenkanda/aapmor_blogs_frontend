@@ -79,10 +79,14 @@ const AboutAuthor = ({ author }) => {
             <Tooltip title="Published Articles">
               <Button
                 startIcon={<ArticleOutlined />}
+                disabled
                 sx={{
                   textTransform: "none",
                   color: "accent.main",
                   fontWeight: "bold",
+                  "&:disabled": {
+                    color: "accent.main",
+                  },
                 }}
               >
                 {author?.articles} Articles

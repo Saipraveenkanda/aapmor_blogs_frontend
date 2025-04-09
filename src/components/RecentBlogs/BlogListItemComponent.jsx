@@ -20,8 +20,16 @@ const BlogListItemComponent = ({
   length,
 }) => {
   const navigate = useNavigate();
-  const { blogImage, description, title, username, _id, likes, comments } =
-    blog;
+  const {
+    blogImage,
+    description,
+    title,
+    username,
+    blogId,
+    likes,
+    comments,
+    _id,
+  } = blog;
   return (
     <Box key={_id}>
       <ListItem
@@ -37,7 +45,7 @@ const BlogListItemComponent = ({
           mb: 1.5,
           mt: 1.5,
         }}
-        onClick={() => navigate(`/blogs/${_id}`)}
+        onClick={() => navigate(`/blogs/${blogId}`)}
       >
         <Stack direction={"row"} alignItems={"center"} spacing={1}>
           <ListItemAvatar>
