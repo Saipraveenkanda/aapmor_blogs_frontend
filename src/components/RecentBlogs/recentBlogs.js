@@ -55,15 +55,18 @@ const RecentBlogs = ({ blogs = [], publishedBlogs = [] }) => {
                 )}
               </Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails sx={{ borderRadius: 2 }}>
               {eachMonth?.topBlogs?.length > 0 ? (
                 <List
                   sx={{
-                    bgcolor: "background.paper",
+                    bgcolor: "background.default",
                     maxWidth: "100%",
                     overflowY: "auto",
                     maxHeight: "70vh",
                     scrollbarWidth: "thin",
+                    scrollbarWidth: "none",
+                    p: 1,
+                    borderRadius: 2,
                   }}
                 >
                   {eachMonth?.topBlogs?.map((blog, index) => (

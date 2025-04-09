@@ -148,9 +148,11 @@ const SavedBlogs = () => {
               fontWeight: "bold",
               color: "text.primary",
               borderRadius: "16px",
-              border: `1px solid ${theme.palette.accent.main}`,
+              // border: `1px solid ${theme.palette.accent.main}`,
+              border: `none`,
               "&:hover": {
-                border: "1px solid transparent",
+                // border: "1px solid transparent",
+                color: theme.palette.accent.main,
                 backgroundColor: "transparent",
               },
             })}
@@ -201,7 +203,7 @@ const SavedBlogs = () => {
                   sx={{
                     boxSizing: "border-box",
                     borderRadius: 2,
-                    backgroundColor: "background.paper",
+                    backgroundColor: "background.dark",
                     display: "flex",
                     flexDirection: "column",
                     // gap: 1,
