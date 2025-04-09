@@ -38,7 +38,7 @@ const Footer = () => {
           )}
         </Grid>
         <Grid item>
-          <Typography>© {new Date().getFullYear()} Aapmor Inc.</Typography>
+          <Typography>© {new Date().getFullYear()} Aapmor Inc. V2.0</Typography>
         </Grid>
       </Grid>
     </Paper>
