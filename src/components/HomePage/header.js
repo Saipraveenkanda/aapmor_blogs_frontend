@@ -15,8 +15,6 @@ import {
   ListItemIcon,
   Stack,
   Badge,
-  Popper,
-  Paper,
   List,
   ListItem,
   ListItemText,
@@ -37,8 +35,9 @@ import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../Slices/blogSlice";
 import { useDispatch } from "react-redux";
 import { listenToNotifications } from "../../socket";
-import { toast } from "react-toastify";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import { timeAgo } from "../../utilities/timerFunction";
+// import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
 
 const Header = ({ setSearchInput = () => {} }) => {
   const dispatch = useDispatch();
@@ -72,8 +71,7 @@ const Header = ({ setSearchInput = () => {} }) => {
   useEffect(() => {
     getNotificationsData();
     listenToNotifications((data) => {
-      setNotifications((prev) => [data, ...prev]); // add new notification to top
-      toast.info(data.message);
+      setNotifications((prev) => [data, ...prev]);
     });
   }, []);
 
@@ -397,33 +395,44 @@ const Header = ({ setSearchInput = () => {} }) => {
           elevation: 0,
           sx: {
             width: 360,
-            maxHeight: 400,
-            overflowY: "auto",
+            // maxHeight: 400,
+            // overflowY: "auto",
             p: 2,
             borderRadius: 4,
             background:
               "linear-gradient(-135deg, transparent 10%, transparent)",
             boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-            backdropFilter: "blur(8px)",
+            backdropFilter: "blur(30px)",
             WebkitBackdropFilter: "blur(12px)",
             border: "1px solid rgba(255, 255, 255, 0.2)",
             color: "text.primary",
           },
         }}
       >
-        <Typography
-          variant="h6"
-          gutterBottom
+        <Box
           sx={{
-            fontWeight: 700,
-            color: "text.primary",
-            mb: 1,
-            textAlign: "left",
-            letterSpacing: 0.5,
+            position: "sticky",
+            top: 0,
+            zindex: 1,
+            backgroundColor: "transparent",
+            backdropFilter: "blur(50px)",
+            width: "100%",
           }}
         >
-          🔔 Notifications
-        </Typography>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              color: "text.primary",
+              mb: 1,
+              textAlign: "left",
+              letterSpacing: 0.5,
+            }}
+          >
+            🔔 Notifications
+          </Typography>
+        </Box>
 
         {notifications?.length === 0 ? (
           <Typography
@@ -434,9 +443,12 @@ const Header = ({ setSearchInput = () => {} }) => {
             You're all caught up 👌
           </Typography>
         ) : (
-          <List dense>
+          <List
+            dense
+            sx={{ height: "500px", overflowY: "auto", scrollbarWidth: "none" }}
+          >
             {notifications?.map((n, idx) => (
-              <div key={idx}>
+              <Box key={idx}>
                 <ListItem
                   alignItems="flex-start"
                   sx={(theme) => ({
@@ -454,11 +466,15 @@ const Header = ({ setSearchInput = () => {} }) => {
                       background: `${theme.palette.accent.main}20`,
                       backdropFilter: "blur(40px)",
                     },
+                    cursor: "pointer",
                   })}
+                  component="a"
+                  href={`/blogs/${n.blogId}`}
+                  // onClick={() => navigate(`/blogs/${n.blogId}`)}
                 >
                   <ListItemText
                     primary={n.message}
-                    secondary={new Date(n.timestamp).toLocaleString()}
+                    secondary={timeAgo(n.timestamp)}
                     primaryTypographyProps={{
                       fontSize: 14,
                       fontWeight: 500,
@@ -470,7 +486,7 @@ const Header = ({ setSearchInput = () => {} }) => {
                     }}
                   />
                 </ListItem>
-              </div>
+              </Box>
             ))}
           </List>
         )}
