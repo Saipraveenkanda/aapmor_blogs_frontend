@@ -14,6 +14,13 @@ import {
   MenuItem,
   ListItemIcon,
   Stack,
+  Badge,
+  Popper,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  Popover,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -24,11 +31,14 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorLightText from "../../assets/aapmorwhitetext.svg";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import { profileCheckingApi } from "../ApiCalls/apiCalls";
+import { getNotifications, profileCheckingApi } from "../ApiCalls/apiCalls";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../Slices/blogSlice";
 import { useDispatch } from "react-redux";
+import { listenToNotifications } from "../../socket";
+import { toast } from "react-toastify";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 
 const Header = ({ setSearchInput = () => {} }) => {
   const dispatch = useDispatch();
@@ -36,7 +46,14 @@ const Header = ({ setSearchInput = () => {} }) => {
   const [placeholder, setPlaceholder] = useState("Search by User...");
   const [isAdmin, setIsAdmin] = useState(false);
   const [mode, setMode] = useState(JSON.parse(localStorage.getItem("theme")));
+  const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
+  const handleToggle = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
   const open = Boolean(anchorEl);
+  const openNotifications = Boolean(notificationAnchorEl);
+  const id = open ? "notifications-popper" : undefined;
+  const [notifications, setNotifications] = useState([]);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -51,6 +68,21 @@ const Header = ({ setSearchInput = () => {} }) => {
   useEffect(() => {
     getUserDetail();
   }, []);
+
+  useEffect(() => {
+    getNotificationsData();
+    listenToNotifications((data) => {
+      setNotifications((prev) => [data, ...prev]); // add new notification to top
+      toast.info(data.message);
+    });
+  }, []);
+
+  const getNotificationsData = async () => {
+    const response = await getNotifications();
+    if (response) {
+      setNotifications(response?.data?.notifications);
+    }
+  };
   const getUserDetail = async () => {
     const response = await profileCheckingApi();
     if (response) {
@@ -200,6 +232,20 @@ const Header = ({ setSearchInput = () => {} }) => {
           >
             {mode ? <LightModeIcon /> : <NightsStayIcon />}
           </IconButton>
+          {token !== undefined && (
+            <IconButton
+              size="small"
+              sx={(theme) => ({
+                border: `1px solid ${theme.palette.accent.main}`,
+              })}
+              onClick={handleToggle}
+              title={mode ? "Light Mode" : "Dark Mode"}
+            >
+              <Badge badgeContent={notifications?.length} color="primary">
+                <CircleNotificationsIcon />
+              </Badge>
+            </IconButton>
+          )}
           {token !== undefined ? (
             <Box
               sx={{
@@ -334,6 +380,101 @@ const Header = ({ setSearchInput = () => {} }) => {
           </Menu>
         </Box>
       </Toolbar>
+      <Popover
+        id={id}
+        open={openNotifications}
+        anchorEl={notificationAnchorEl}
+        onClose={() => setNotificationAnchorEl(null)}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            width: 360,
+            maxHeight: 400,
+            overflowY: "auto",
+            p: 2,
+            borderRadius: 4,
+            background:
+              "linear-gradient(-135deg, transparent 10%, transparent)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            color: "text.primary",
+          },
+        }}
+      >
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{
+            fontWeight: 700,
+            color: "text.primary",
+            mb: 1,
+            textAlign: "left",
+            letterSpacing: 0.5,
+          }}
+        >
+          🔔 Notifications
+        </Typography>
+
+        {notifications?.length === 0 ? (
+          <Typography
+            variant="body2"
+            // color="#fff"
+            sx={{ textAlign: "center", mt: 2 }}
+          >
+            You're all caught up 👌
+          </Typography>
+        ) : (
+          <List dense>
+            {notifications?.map((n, idx) => (
+              <div key={idx}>
+                <ListItem
+                  alignItems="flex-start"
+                  sx={(theme) => ({
+                    background: "rgba(255, 255, 255, 0.15)",
+                    borderRadius: 3,
+                    border: `0.5px solid ${theme.palette.accent.main}`,
+                    backdropFilter: "blur(4px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    px: 2,
+                    py: 1.5,
+                    mb: 1.5,
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                    transition: "0.3s ease",
+                    "&:hover": {
+                      background: `${theme.palette.accent.main}20`,
+                      backdropFilter: "blur(40px)",
+                    },
+                  })}
+                >
+                  <ListItemText
+                    primary={n.message}
+                    secondary={new Date(n.timestamp).toLocaleString()}
+                    primaryTypographyProps={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: "text.primary",
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: 12,
+                      color: "text.secondary",
+                    }}
+                  />
+                </ListItem>
+              </div>
+            ))}
+          </List>
+        )}
+      </Popover>
     </AppBar>
   );
 };

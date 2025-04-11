@@ -26,6 +26,7 @@ import noBlogsImage from "../../assets/noblogs.png";
 import WinnerAnnouncement from "../BlogWinner";
 import AdminDashboard from "../Sidebar/AdminDashboard";
 import WriteButton from "../../helpers/WriteButton";
+import { registerUser } from "../../socket";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,10 @@ const Home = () => {
           setProfileDetails(response.data.res);
           Cookies.set("username", response.data.res.name);
           Cookies.set("userrole", response.data.res.designation);
+          if (response) {
+            // Register user to socket with their _id
+            registerUser(response.data.res._id);
+          }
         }
       };
       checkProfileDetails();

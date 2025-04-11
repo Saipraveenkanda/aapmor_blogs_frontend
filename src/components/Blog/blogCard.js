@@ -89,6 +89,8 @@ const Blog = (blogDetails) => {
                 p: 1,
                 boxSizing: "border-box",
                 whiteSpace: "nowrap",
+                borderTopLeftRadius: "7px",
+                borderBottomLeftRadius: "7px",
               }}
             >
               {/* <img

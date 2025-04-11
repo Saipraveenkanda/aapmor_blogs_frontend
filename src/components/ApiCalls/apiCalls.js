@@ -367,3 +367,12 @@ export const getTrendingBlogs = async () => {
     return error;
   }
 };
+export const getNotifications = async () => {
+  try {
+    return await axiosInstance.get(apiEndpoints.getNotificationsUrl);
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};

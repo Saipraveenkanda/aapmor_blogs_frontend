@@ -25,4 +25,5 @@ export const apiEndpoints = {
   commentReplyUrl: "/comments/reply",
   publishBlogToWebUrl: "/api/publishblogs/aapmor",
   getTrendingBLogsUrl: "/top-liked-blogs",
+  getNotificationsUrl: "/notifications",
 };
