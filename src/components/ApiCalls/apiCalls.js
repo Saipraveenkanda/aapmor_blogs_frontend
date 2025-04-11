@@ -376,3 +376,14 @@ export const getNotifications = async () => {
     return error;
   }
 };
+export const deleteNotifications = async (userId) => {
+  try {
+    return await axiosInstance.delete(
+      `${apiEndpoints.getNotificationsUrl}/${userId}`
+    );
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};

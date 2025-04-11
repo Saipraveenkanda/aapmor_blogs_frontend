@@ -29,7 +29,11 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorLightText from "../../assets/aapmorwhitetext.svg";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import { getNotifications, profileCheckingApi } from "../ApiCalls/apiCalls";
+import {
+  deleteNotifications,
+  getNotifications,
+  profileCheckingApi,
+} from "../ApiCalls/apiCalls";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../Slices/blogSlice";
@@ -38,6 +42,8 @@ import { listenToNotifications } from "../../socket";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { timeAgo } from "../../utilities/timerFunction";
 // import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
+import { toast } from "react-toastify";
+import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
 
 const Header = ({ setSearchInput = () => {} }) => {
   const dispatch = useDispatch();
@@ -53,6 +59,7 @@ const Header = ({ setSearchInput = () => {} }) => {
   const openNotifications = Boolean(notificationAnchorEl);
   const id = open ? "notifications-popper" : undefined;
   const [notifications, setNotifications] = useState([]);
+  const [userId, setUserId] = useState("");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -87,6 +94,20 @@ const Header = ({ setSearchInput = () => {} }) => {
       setIsAdmin(
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
+      setUserId(response?.data?.res?._id);
+    }
+  };
+
+  const handleClearNotifications = async () => {
+    try {
+      const response = await deleteNotifications(userId);
+      if (response) {
+        setNotifications([]);
+      }
+      toast.success("All notifications cleared!");
+    } catch (err) {
+      console.error("Clear notifications error:", err);
+      toast.error("Failed to clear notifications");
     }
   };
 
@@ -411,6 +432,9 @@ const Header = ({ setSearchInput = () => {} }) => {
       >
         <Box
           sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             position: "sticky",
             top: 0,
             zindex: 1,
@@ -432,6 +456,15 @@ const Header = ({ setSearchInput = () => {} }) => {
           >
             🔔 Notifications
           </Typography>
+          <Button
+            disabled={notifications.length === 0}
+            variant="ghost"
+            startIcon={<DeleteSweepOutlinedIcon size={16} />}
+            onClick={handleClearNotifications}
+            sx={{ textTransform: "none" }}
+          >
+            Clear
+          </Button>
         </Box>
 
         {notifications?.length === 0 ? (
