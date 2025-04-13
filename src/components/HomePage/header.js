@@ -29,14 +29,9 @@ import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorLightText from "../../assets/aapmorwhitetext.svg";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import {
-  deleteNotifications,
-  getNotifications,
-  profileCheckingApi,
-} from "../ApiCalls/apiCalls";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
-import { setAppTheme } from "../Slices/blogSlice";
+import { setAppTheme } from "../../store/slices/blogSlice";
 import { useDispatch } from "react-redux";
 import { listenToNotifications } from "../../socket";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
@@ -44,6 +39,11 @@ import { timeAgo } from "../../utilities/timerFunction";
 // import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
 import { toast } from "react-toastify";
 import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
+import {
+  deleteNotifications,
+  getNotifications,
+} from "../../providers/dashboardProvider";
+import { profileCheckingApi } from "../../providers/userProvider";
 
 const Header = ({ setSearchInput = () => {} }) => {
   const dispatch = useDispatch();
@@ -104,7 +104,7 @@ const Header = ({ setSearchInput = () => {} }) => {
       if (response) {
         setNotifications([]);
       }
-      toast.success("All notifications cleared!");
+      // toast.success("All notifications cleared!");
     } catch (err) {
       console.error("Clear notifications error:", err);
       toast.error("Failed to clear notifications");
@@ -457,7 +457,7 @@ const Header = ({ setSearchInput = () => {} }) => {
             🔔 Notifications
           </Typography>
           <Button
-            disabled={notifications.length === 0}
+            disabled={notifications?.length === 0}
             variant="ghost"
             startIcon={<DeleteSweepOutlinedIcon size={16} />}
             onClick={handleClearNotifications}
@@ -500,17 +500,25 @@ const Header = ({ setSearchInput = () => {} }) => {
                       backdropFilter: "blur(40px)",
                     },
                     cursor: "pointer",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 1,
                   })}
                   component="a"
                   href={`/blogs/${n.blogId}`}
                   // onClick={() => navigate(`/blogs/${n.blogId}`)}
                 >
+                  <Avatar
+                    src={n?.sender?.profileImage}
+                    sx={{ width: 24, height: 24 }}
+                  />
                   <ListItemText
                     primary={n.message}
                     secondary={timeAgo(n.timestamp)}
                     primaryTypographyProps={{
                       fontSize: 14,
                       fontWeight: 500,
+                      marginTop: -1,
                       color: "text.primary",
                     }}
                     secondaryTypographyProps={{

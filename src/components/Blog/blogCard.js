@@ -69,10 +69,7 @@ const Blog = (blogDetails) => {
             <span>Best of {monthName}</span>
           </div>
         )}
-        {/* <Box sx={{ position: "absolute", top: 0, right: -10, zIndex:100 }}>
-          <img src={awardLogo} alt="awardlogo" style={{ width: "80px" }} />
-        </Box> */}
-        <Grid container xs={12} sx={{ zIndex: 10 }}>
+        <Grid container sx={{ zIndex: 10 }}>
           {/* Image Details */}
           <Grid item xs={4}>
             <Box

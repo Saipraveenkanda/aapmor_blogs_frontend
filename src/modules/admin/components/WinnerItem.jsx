@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Box,
-  Stack,
-  Divider,
-  Grid,
-} from "@mui/material";
+import { CardContent, Typography, Button, Box, Grid } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 const WinnerItem = ({ winners }) => {

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import AnalyzeAnimation from "./AnalyzeBlogsAnimation";
+// import AnalyzeAnimation from "./AnalyzeBlogsAnimation";
 import writeIcon from "../assets/pencil-simple-line.svg";
-import { Box, Fab } from "@mui/material";
+import { Fab } from "@mui/material";
 import {
   checkIsWritingEnabled,
   getWritingUnlockTimeLeft,

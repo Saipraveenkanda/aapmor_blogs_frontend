@@ -3,13 +3,11 @@ import {
   Stack,
   Typography,
   Popover,
-  IconButton,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Grid,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import PersonOutlineTwoToneIcon from "@mui/icons-material/PersonOutlineTwoTone";
 import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";

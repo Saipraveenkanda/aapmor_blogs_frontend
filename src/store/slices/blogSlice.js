@@ -34,4 +34,5 @@ export const {
   setTopBlogsData,
   setWinnerBlogs,
 } = blogSlice.actions;
+
 export default blogSlice.reducer;

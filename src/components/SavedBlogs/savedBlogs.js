@@ -13,16 +13,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { getSavedBlogsApi, removeSaveBlogApi } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
+import {
+  getSavedBlogsApi,
+  removeSaveBlogApi,
+} from "../../providers/blogProvider";
 
 const SavedBlogs = () => {
   const [savedBlogs, setSavedBlogs] = useState([]);

@@ -1,19 +1,18 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Header from "../HomePage/header";
-import RecentBlogs from "../RecentBlogs/recentBlogs";
+import { useDispatch, useSelector } from "react-redux";
+import UnauthorizedPage from "../../components/UnauthorizedComponent";
+import { useNavigate } from "react-router-dom";
+import WinnerItem from "../../modules/admin/components/WinnerItem";
 import {
-  getBlogsApi,
   getPublishBlogToWeb,
   getTrendingBlogs,
   getWinnerOfTheMonth,
-  profileCheckingApi,
-} from "../ApiCalls/apiCalls";
-import { useDispatch, useSelector } from "react-redux";
-import { setTopBlogsData, setWinnerBlogs } from "../Slices/blogSlice";
-import UnauthorizedPage from "./UnauthorizedComponent";
-import { useNavigate } from "react-router-dom";
-import WinnerItem from "./WinnerItem";
+} from "../../providers/adminProvider";
+import { profileCheckingApi } from "../../providers/userProvider";
+import Header from "../../components/HomePage/header";
+import { setTopBlogsData, setWinnerBlogs } from "../../store/slices/blogSlice";
+import RecentBlogs from "./components/recentBlogs";
 
 const AdminPage = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);

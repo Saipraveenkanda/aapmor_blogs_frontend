@@ -15,13 +15,6 @@ import {
   Skeleton,
 } from "@mui/material";
 import { useState, React, useEffect } from "react";
-import {
-  createBlogApi,
-  getSummaryOfBlog,
-  publishBlogApi,
-  updateBlogApi,
-  uploadThumbnail,
-} from "../ApiCalls/apiCalls";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../HomePage/header";
 import ReactQuill from "react-quill";
@@ -39,6 +32,13 @@ import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import SmartButtonOutlinedIcon from "@mui/icons-material/SmartButtonOutlined";
 import { useRef } from "react";
 import ImageResize from "quill-image-resize-module-react";
+import {
+  uploadThumbnail,
+  createBlogApi,
+  getSummaryOfBlog,
+  publishBlogApi,
+  updateBlogApi,
+} from "../../providers/blogProvider";
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 const Size = ReactQuill.Quill.import("attributors/style/size");

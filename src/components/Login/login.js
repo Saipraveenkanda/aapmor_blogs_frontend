@@ -9,7 +9,6 @@ import {
   Divider,
   Box,
 } from "@mui/material";
-import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import loginVector from "../../assets/Login vector.png";
@@ -17,6 +16,7 @@ import LoginAnimation from "../../helpers/LoginAnimation";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorlighttext from "../../assets/aapmorwhitetext.svg";
 import { useSelector } from "react-redux";
+import { loginValidation, sendOtpApi } from "../../providers/userProvider";
 //MAIN FUNCTION
 const Login = () => {
   //STATE HOOKS

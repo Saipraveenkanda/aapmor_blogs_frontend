@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 // import navbarChange from "../Slices/DarkLightThemeSlice";
-import blogReducer from "../Slices/blogSlice";
+import blogReducer from "../../store/slices/blogSlice";
 const store = configureStore({
   reducer: {
     // navbar: navbarChange,

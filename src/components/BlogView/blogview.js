@@ -30,21 +30,6 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import "./style.css";
-import {
-  commentLikeService,
-  commentReplyService,
-  commentsApi,
-  deleteBlogApi,
-  getAuthorDetailsService,
-  getBlogViewApi,
-  likesApi,
-  postWinnerDetails,
-  profileCheckingApi,
-  publishBlogToWeb,
-  removeSaveBlogApi,
-  saveBlogApi,
-  unpublishBlogToWeb,
-} from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import { LoadingButton } from "@mui/lab";
 import { LinkedinLogo, PaperPlaneTilt } from "@phosphor-icons/react";
@@ -58,6 +43,23 @@ import CommentSection from "./CommentSection";
 import BlogNotFound from "./NoBlogComponent";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import {
+  commentLikeService,
+  commentReplyService,
+  commentsApi,
+  deleteBlogApi,
+  getAuthorDetailsService,
+  getBlogViewApi,
+  removeSaveBlogApi,
+  saveBlogApi,
+  likesApi,
+} from "../../providers/blogProvider";
+import {
+  unpublishBlogToWeb,
+  publishBlogToWeb,
+  postWinnerDetails,
+} from "../../providers/adminProvider";
+import { profileCheckingApi } from "../../providers/userProvider";
 
 const BlogView = () => {
   const navigate = useNavigate();

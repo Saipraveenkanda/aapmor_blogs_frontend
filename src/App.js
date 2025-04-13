@@ -8,10 +8,10 @@ import SavedBlogs from "./components/SavedBlogs/savedBlogs.js";
 import ProtectedRoute from "./components/ProtectedRoute/protectedRoute.js";
 import UserProfile from "./components/UserProfile/userProfile.js";
 import UserBlogs from "./components/UserBlogs/userBlogs.js";
-import AdminPage from "./components/AdminPage/AdminPage.jsx";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector } from "react-redux";
+import AdminPage from "./modules/admin/AdminPage.jsx";
 
 const darkTheme = createTheme({
   palette: {

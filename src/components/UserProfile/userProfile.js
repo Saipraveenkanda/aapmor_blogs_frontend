@@ -22,13 +22,6 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
-import {
-  getAutoBioService,
-  profileCheckingApi,
-  profileUpdateApi,
-  uploadProfileImage,
-  uploadThumbnail,
-} from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +32,12 @@ import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import ClearIcon from "@mui/icons-material/Clear";
 import AssistantOutlinedIcon from "@mui/icons-material/AssistantOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import {
+  getAutoBioService,
+  profileCheckingApi,
+  profileUpdateApi,
+  uploadProfileImage,
+} from "../../providers/userProvider";
 
 const UserProfile = (props) => {
   const [profile, setProfile] = useState({});

@@ -13,20 +13,17 @@ import {
   Stack,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getBlogsApi,
-  getWinnerOfTheMonth,
-  profileCheckingApi,
-} from "../ApiCalls/apiCalls";
-import { setBlogsData } from "../Slices/blogSlice";
+import { setBlogsData } from "../../store/slices/blogSlice";
 import Cookies from "js-cookie";
 import HomeLoading from "../../helpers/homeLoading";
 import ProfilePopup from "./ProfilePopup";
 import noBlogsImage from "../../assets/noblogs.png";
 import WinnerAnnouncement from "../BlogWinner";
 import AdminDashboard from "../Sidebar/AdminDashboard";
-import WriteButton from "../../helpers/WriteButton";
 import { registerUser } from "../../socket";
+import { getBlogsApi } from "../../providers/blogProvider";
+import { getWinnerOfTheMonth } from "../../providers/adminProvider";
+import { profileCheckingApi } from "../../providers/userProvider";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -304,7 +301,7 @@ const Home = () => {
     <>
       <Grid
         container
-        xs={12}
+        // xs={12}
         sx={{
           "@media(min-width:480px)": { pl: "40px", pr: "40px" },
         }}

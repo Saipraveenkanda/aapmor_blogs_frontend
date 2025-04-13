@@ -12,10 +12,10 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import { profileUpdateApi } from "../ApiCalls/apiCalls";
 import Cookies from "js-cookie";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
+import { profileUpdateApi } from "../../providers/userProvider";
 
 const style = {
   position: "absolute",
