@@ -12,11 +12,12 @@ import { useSelector } from "react-redux";
 import BlogCardSlider from "./BlogCardSlider";
 import WhatshotOutlinedIcon from "@mui/icons-material/WhatshotOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import InterestsIcon from "@mui/icons-material/Interests";
 import { useNavigate } from "react-router-dom";
 import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
+import trophyanimation from "../../helpers/trophyanimation.json";
 import WriteButton from "../../helpers/WriteButton";
+import Lottie from "lottie-react";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
@@ -88,6 +89,10 @@ const Dashboard = ({ username, profileDetails }) => {
   const monthName = new Date().toLocaleString("default", {
     month: "long",
   });
+  const handleCheckWinners = () => {
+    localStorage.setItem("showAnnouncement", true);
+    window.location.reload();
+  };
 
   return (
     <DashboardContainer>
@@ -183,8 +188,7 @@ const Dashboard = ({ username, profileDetails }) => {
           )}
         </CardContent>
       </GlassCard>
-
-      {/* Recent Activity */}
+      {/* RECENT ACTIVITY */}
       <GlassCard>
         <CardContent sx={{ padding: "8px !important" }}>
           <Typography
@@ -196,9 +200,43 @@ const Dashboard = ({ username, profileDetails }) => {
             <ScheduleOutlinedIcon color="warning" />
             Recent Activity
           </Typography>
-          <Typography variant="body2">
-            John liked "State Management in React"
+          <Typography>Activity by all users</Typography>
+        </CardContent>
+      </GlassCard>
+
+      {/* Recent Activity */}
+      <GlassCard>
+        <CardContent
+          sx={{
+            padding: "8px !important",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
+          onClick={handleCheckWinners}
+        >
+          <Typography
+            variant="h6"
+            fontWeight={"bold"}
+            gutterBottom
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            {/* <ScheduleOutlinedIcon color="warning" /> */}
+            Check Winners
           </Typography>
+          <Lottie
+            animationData={trophyanimation}
+            // speed={2}
+            style={{
+              width: 80,
+              height: 80,
+            }}
+            loop
+            autoplay
+            rendererSettings={{
+              preserveAspectRatio: "xMidYMid meet",
+            }}
+          />
         </CardContent>
       </GlassCard>
 
