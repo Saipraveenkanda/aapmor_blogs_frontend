@@ -31,7 +31,7 @@ const WriteButton = (props) => {
       {token && (
         <Fab
           variant="extended"
-          disabled={!isEnabled}
+          // disabled={!isEnabled}
           size="medium"
           onClick={() => navigate("/createblog")}
           sx={{

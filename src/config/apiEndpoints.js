@@ -4,7 +4,7 @@ export const apiEndpoints = {
   registerApiUrl: "/api/register",
   loginApiUrl: "/api/login",
   getAllBlogs: "/blogs",
-  createBlogApiUrl: "/blogs/",
+  createBlogApiUrl: "/blogs",
   saveBlogsApiUrl: "/blogs/savedblogs/",
   profileUpdateApiUrl: "/profile",
   publishBlogApiUrl: "/publishBlog",

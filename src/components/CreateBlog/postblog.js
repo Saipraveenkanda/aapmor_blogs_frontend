@@ -206,21 +206,22 @@ const CreateBlog = () => {
       console.log(response);
       if (response.status === 200) {
         setLoading(false);
-        const data = !isEdit && (await response.json());
-        var blogId = data?.message;
+        const data = !isEdit && response?.data?.message;
+        var blogId = data;
+        const content = {
+          title,
+          description,
+          blogImage,
+          dateObject,
+          blogId,
+          name,
+          role,
+          editorHtml,
+        };
+        !isEdit && (await publishBlogApi(content));
         navigate("/");
       }
-      const content = {
-        title,
-        description,
-        blogImage,
-        dateObject,
-        blogId,
-        name,
-        role,
-        editorHtml,
-      };
-      !isEdit && (await publishBlogApi(content));
+      setLoading(false);
     }
   };
 

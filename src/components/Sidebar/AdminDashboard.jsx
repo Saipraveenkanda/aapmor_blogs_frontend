@@ -204,7 +204,7 @@ const Dashboard = ({ username, profileDetails }) => {
         </CardContent>
       </GlassCard>
 
-      {/* Recent Activity */}
+      {/* Check winners card */}
       <GlassCard>
         <CardContent
           sx={{
