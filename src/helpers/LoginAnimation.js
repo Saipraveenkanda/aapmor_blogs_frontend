@@ -5,7 +5,8 @@ const LoginAnimation = ({ top, left, right, bottom }) => {
   return (
     /* From Uiverse.io by Dennyhml */
     <div
-      className="container"
+      id="loginAnimation"
+      className="login-animation-container"
       style={{
         position: "absolute",
         display: "flex",

@@ -18,6 +18,7 @@ import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
 import trophyanimation from "../../helpers/trophyanimation.json";
 import WriteButton from "../../helpers/WriteButton";
 import Lottie from "lottie-react";
+import { getUserFromToken } from "../../utilities/authUtils";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
@@ -37,21 +38,23 @@ const DashboardContainer = styled("div")({
 const GlassCard = styled(Card)(({ theme }) => ({
   flexGrow: 1,
   cursor: "pointer",
-  backdropFilter: "blur(10px)",
+  elevation: 0,
+  // backdropFilter: "blur(10px)",
   borderRadius: "12px",
-  borderLeft: `2px solid ${theme.palette.accent.main}`,
-  boxShadow: "2px 2px 8px 0px rgba(0, 0, 0, 0.08)",
+  // borderLeft: `2px solid ${theme.palette.accent.main}`,
+  // boxShadow: "2px 2px 8px 0px rgba(0, 0, 0, 0.08)",
   color: theme.palette.text.secondary,
   padding: "8px !important",
   boxSizing: "border-box",
-  transition: "transform 0.3s ease-in-out",
-  "&:hover": {
-    transform: "scale(1.05)",
-  },
-  background: "linear-gradient(to right, #ffffff 5 0%, #016A7090 25%)",
+  // transition: "transform 0.3s ease-in-out",
+  // "&:hover": {
+  //   transform: "scale(1.05)",
+  // },
+  // background: "linear-gradient(to right, #ffffff 5 0%, #016A7090 25%)",
+  backgroundColor: "transparent",
 }));
 
-const Dashboard = ({ username, profileDetails }) => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const blogObj = useSelector((state) => state.blogs);
   const recentBlogsList = blogObj.blogs;
@@ -61,7 +64,7 @@ const Dashboard = ({ username, profileDetails }) => {
   const currentYear = currentDate.getFullYear();
   const [topBlogs, setTopBlogs] = useState([]);
   const [lastReadBlog, setLastReadBlog] = useState({});
-
+  const user = getUserFromToken();
   useEffect(() => {
     setLoading(true);
     const lastReadBlogId = localStorage.getItem("lastReadBlog") || "";
@@ -117,13 +120,13 @@ const Dashboard = ({ username, profileDetails }) => {
               backdropFilter: "blur(10px)",
               color: "text.primary",
             })}
-            src={profileDetails?.profileImage}
+            src={user?.profileImage}
           >
-            {username?.slice(0, 1)}
+            {user?.name?.slice(0, 1)}
           </Avatar>
           <Box>
             <Typography variant="h6" fontWeight={"bold"}>
-              Welcome {username}!
+              Welcome {user?.name}!
             </Typography>
             <Typography variant="body2">Profile | Saved Blogs</Typography>
           </Box>
@@ -243,9 +246,7 @@ const Dashboard = ({ username, profileDetails }) => {
       {/* Write Button */}
       {/* <GlassCard> */}
       {/* <CardContent sx={{ height: "auto" }}> */}
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "" }}>
         <WriteButton />
       </Box>
       {/* </CardContent> */}

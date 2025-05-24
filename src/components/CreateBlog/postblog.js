@@ -39,6 +39,7 @@ import {
   publishBlogApi,
   updateBlogApi,
 } from "../../providers/blogProvider";
+import BlogPreview from "../BlogView/PreviewBlog";
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 const Size = ReactQuill.Quill.import("attributors/style/size");
@@ -469,6 +470,7 @@ const CreateBlog = () => {
                 />
               )}
             </Fab>
+            <BlogPreview htmlContent={editorHtml} />
           </Grid>
 
           {/* EDITOR BOX*/}

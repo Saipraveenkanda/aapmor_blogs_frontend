@@ -123,3 +123,9 @@
   filter: blur(8px);
   transform: rotate(330deg);
 }
+
+@media screen and (max-width: 480px) {
+  .login-animation-container {
+    display: none;
+  }
+}

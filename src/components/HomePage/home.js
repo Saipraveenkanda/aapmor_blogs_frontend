@@ -2,19 +2,9 @@ import React, { useEffect, useState } from "react";
 import Header from "./header";
 import Blog from "../Blog/blogCard";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
-import {
-  Typography,
-  Box,
-  Alert,
-  Backdrop,
-  Grid,
-  Tooltip,
-  Fab,
-  Stack,
-} from "@mui/material";
+import { Typography, Box, Grid, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setBlogsData } from "../../store/slices/blogSlice";
-import Cookies from "js-cookie";
 import HomeLoading from "../../helpers/homeLoading";
 import ProfilePopup from "./ProfilePopup";
 import noBlogsImage from "../../assets/noblogs.png";
@@ -24,11 +14,11 @@ import { registerUser } from "../../socket";
 import { getBlogsApi } from "../../providers/blogProvider";
 import { getWinnerOfTheMonth } from "../../providers/adminProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
+import { token } from "../../utilities/authUtils";
 
 const Home = () => {
   const dispatch = useDispatch();
   const [profile, setProfile] = useState(false);
-  const [category, setCategory] = useState("All");
   const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [apiStatus, setApiStatus] = useState("INITIAL");
   const blogObj = useSelector((state) => state.blogs);
@@ -37,25 +27,22 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [winnerDetails, setWinnerDetails] = useState([]);
-  const user = Cookies.get("username");
-  const userName = user !== undefined ? user : "User";
-
   const [profileDetails, setProfileDetails] = useState({});
+  console.log(profile, "PROFILE");
 
   useEffect(() => {
-    const token = Cookies.get("jwtToken");
-    if (token !== undefined) {
+    document.title = "AAPMOR | Blogs";
+    if (!token) {
       const checkProfileDetails = async () => {
         const response = await profileCheckingApi();
+        console.log(response, "RESP");
         if (response.status === 202) {
+          console.log("Profile not updated, opening profile");
           setProfile(true);
         } else if (response.status === 200) {
           setProfile(false);
           setProfileDetails(response.data.res);
-          Cookies.set("username", response.data.res.name);
-          Cookies.set("userrole", response.data.res.designation);
           if (response) {
-            // Register user to socket with their _id
             registerUser(response.data.res._id);
           }
         }
@@ -93,7 +80,7 @@ const Home = () => {
 
   //GET BLOGS API CALL
   const getBlogsData = async () => {
-    const response = await getBlogsApi(category);
+    const response = await getBlogsApi();
     if (response.status === 200) {
       setApiStatus("SUCCESS");
       dispatch(setBlogsData(response.data));
@@ -110,11 +97,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    document.title = "AAPMOR | Blogs";
     setApiStatus("INITIAL");
     getWinnerDetails();
     getBlogsData();
-  }, [category]);
+  }, []);
 
   const renderLoadingView = () => {
     return (
@@ -306,7 +292,11 @@ const Home = () => {
           "@media(min-width:480px)": { pl: "40px", pr: "40px" },
         }}
       >
-        <Header setSearchInput={setSearchInput} profile={profile} />
+        <Header
+          setSearchInput={setSearchInput}
+          profile={profile}
+          setProfile={setProfile}
+        />
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
@@ -316,10 +306,7 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            <AdminDashboard
-              username={userName}
-              profileDetails={profileDetails}
-            />
+            <AdminDashboard />
           </Grid>
         </Grid>
       </Grid>

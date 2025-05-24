@@ -60,6 +60,7 @@ import {
   postWinnerDetails,
 } from "../../providers/adminProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
+import { getUserFromToken, token } from "../../utilities/authUtils";
 
 const BlogView = () => {
   const navigate = useNavigate();
@@ -112,10 +113,7 @@ const BlogView = () => {
     }
   };
 
-  const token = Cookies.get("jwtToken");
-  const cookiesName = Cookies.get("username");
-  const name = cookiesName !== undefined ? cookiesName : "U";
-  const email = Cookies.get("userEmail");
+  const { name, email } = getUserFromToken();
   const dateObject = new Date();
 
   useEffect(() => {
@@ -183,7 +181,6 @@ const BlogView = () => {
       setLiked(false);
       setLikesCount((prevCount) => prevCount - 1);
     }
-    const name = cookiesName;
     if (!name) {
       setProfile(true);
     } else {

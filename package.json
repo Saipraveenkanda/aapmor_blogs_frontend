@@ -24,6 +24,7 @@
     "framer-motion": "^12.6.2",
     "fs": "^0.0.1-security",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.484.0",
     "path": "^0.12.7",

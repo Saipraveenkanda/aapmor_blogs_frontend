@@ -45,7 +45,7 @@ import {
 } from "../../providers/dashboardProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
 
-const Header = ({ setSearchInput = () => {} }) => {
+const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
@@ -91,6 +91,9 @@ const Header = ({ setSearchInput = () => {} }) => {
   const getUserDetail = async () => {
     const response = await profileCheckingApi();
     if (response) {
+      if (response.status === 202) {
+        setProfile(true);
+      }
       setIsAdmin(
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
@@ -258,7 +261,7 @@ const Header = ({ setSearchInput = () => {} }) => {
                 border: `1px solid ${theme.palette.accent.main}`,
               })}
               onClick={handleToggle}
-              title={mode ? "Light Mode" : "Dark Mode"}
+              title={"Notifications"}
             >
               <Badge badgeContent={notifications?.length} color="primary">
                 <CircleNotificationsIcon />
