@@ -32,7 +32,7 @@ import {
 } from "../../providers/blogProvider";
 import { Catoreries } from "../../utilities/constants";
 import QuillEditor from "./QuillEditor";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BlogPreview from "../BlogView/PreviewBlog";
 import Cookies from "js-cookie";
 
