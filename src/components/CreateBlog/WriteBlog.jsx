@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Fab,
   Grid,
   IconButton,
@@ -21,9 +22,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
+import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import {
   createBlogApi,
   getSummaryOfBlog,
+  publishBlogApi,
   updateBlogApi,
   uploadThumbnail,
 } from "../../providers/blogProvider";
@@ -35,6 +38,7 @@ import Cookies from "js-cookie";
 
 const WriteBlog = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { editBlog, isEdit } = location.state || {};
 
   const name = Cookies.get("username");
@@ -154,14 +158,14 @@ const WriteBlog = () => {
         const data = !isEdit && response?.data?.message;
         var blogId = data;
         const content = {
-          title,
-          description,
-          blogImage,
+          title: formData.title,
+          description: formData.description,
+          blogImage: formData.image,
           dateObject,
           blogId,
           name,
           role,
-          editorHtml,
+          editorHtml: formData.content,
         };
         !isEdit && (await publishBlogApi(content));
         navigate("/");
