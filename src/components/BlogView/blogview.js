@@ -113,8 +113,10 @@ const BlogView = () => {
     }
   };
 
-  console.log(getUserFromToken(), "USER FROM TOKEN");
+  // console.log(getUserFromToken(), "USER FROM TOKEN");
   const { name, email } = getUserFromToken();
+  // const name = Cookies.get("name");
+  // const email = Cookies.get("email");
   const dateObject = new Date();
 
   useEffect(() => {

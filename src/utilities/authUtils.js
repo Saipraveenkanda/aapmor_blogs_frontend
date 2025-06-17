@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 export let token = Cookies.get("jwtToken");
 
 export const getUserFromToken = () => {
-  if (!token) return null;
+  if (!token) return { user: "", email: "" };
   try {
     const decoded = jwtDecode(token);
     return decoded;
