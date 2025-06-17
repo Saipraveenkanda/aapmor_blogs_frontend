@@ -17,4 +17,21 @@ const TOAST_MESSAGES = {
   DEFAULT_ERROR: "Well, that didn’t go as planned. Try again later!",
 };
 
-export { TOAST_MESSAGES };
+const Catoreries = [
+  "Technology",
+  "Insights",
+  "Fitness",
+  "Artificial Intelligence",
+  "Entertainment",
+  "Politics",
+  "International",
+  "News",
+  "Sports",
+  "Fashion",
+  "Food & Health",
+  "Gaming",
+  "Arts",
+  "Travel",
+];
+
+export { TOAST_MESSAGES, Catoreries };

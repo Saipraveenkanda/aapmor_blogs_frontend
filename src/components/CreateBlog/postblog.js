@@ -300,6 +300,7 @@ const CreateBlog = () => {
                 value={title}
               />
             </Grid>
+            {/* category */}
             <Grid item xs={9} md={4} sx={{ paddingRight: "4px" }}>
               <Typography
                 variant="body1"
@@ -324,6 +325,7 @@ const CreateBlog = () => {
                 ))}
               </Select>
             </Grid>
+            {/* thumbnail  */}
             <Grid item xs={2} md={2}>
               <Tooltip title="Insert thumbnail image for your blog">
                 <Button
@@ -360,6 +362,7 @@ const CreateBlog = () => {
               </Tooltip>
             </Grid>
           </Grid>
+          {/* blog description */}
           <Grid>
             <Typography
               variant="body1"
@@ -415,6 +418,7 @@ const CreateBlog = () => {
               </Button>
             </Stack>
           </Grid>
+          {/* floating buttons  */}
           <Grid
             sx={{
               position: "fixed",

@@ -12,6 +12,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector } from "react-redux";
 import AdminPage from "./modules/admin/AdminPage.jsx";
+import WriteBlog from "./components/CreateBlog/WriteBlog.jsx";
 
 const darkTheme = createTheme({
   palette: {
@@ -82,6 +83,7 @@ const App = () => {
         {/* Routes with protected access */}
         <Route exact path="/" element={<ProtectedRoute />}>
           <Route exact path="/createblog" element={<CreateBlog />} />
+          <Route exact path="/writeblog" element={<WriteBlog />} />
           <Route exact path="/user/saved" element={<SavedBlogs />} />
           <Route exact path="/user/profile" element={<UserProfile />} />
           <Route exact path="/user/blogs" element={<UserBlogs />} />

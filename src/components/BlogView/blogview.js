@@ -113,6 +113,7 @@ const BlogView = () => {
     }
   };
 
+  console.log(getUserFromToken(), "USER FROM TOKEN");
   const { name, email } = getUserFromToken();
   const dateObject = new Date();
 
