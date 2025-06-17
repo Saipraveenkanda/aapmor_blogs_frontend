@@ -101,4 +101,4 @@ Have suggestions or issues? Please open an issue or reach out to the internal De
 
 ## 📄 License
 
-MIT License. For internal use only at AAPMOR.
+MIT License. For internal use only at AAPMOR..
