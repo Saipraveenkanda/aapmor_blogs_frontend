@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import "./awardribbon.css";
 
 import React, { useState } from "react";
 // import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -29,35 +30,46 @@ const Blog = (blogDetails) => {
     userrole,
     _id,
     blogImage,
+    isBestBlog,
   } = blogDetails.blogDetails;
   const formattedDate = new Date(date).toDateString();
+  const monthName = new Date(date).toLocaleString("default", {
+    month: "short",
+  });
 
   const handleReadMore = () => {
+    localStorage.setItem("lastReadBlog", _id);
     navigate(`/blogs/${_id}`);
   };
   return (
     <>
       {/* WEB VIEW */}
-      <Card
-        sx={{
+      <Box
+        sx={(theme) => ({
           display: { xs: "none", sm: "flex" },
           flexDirection: "row",
           justifyContent: "flex-start",
-          height: "25vh",
+          minHeight: "25vh",
           width: "100%",
           borderRadius: 2,
           backdropFilter: "blur(12px)",
           border: "0.5px solid transparent",
           "&:hover": {
             // boxShadow: "0px 0px 2px 0px #016A70",
-            border: "0.5px solid #016A70",
+            border: `0.5px solid ${theme.palette.text.secondary}`,
           },
           cursor: "pointer",
-        }}
-        elevation={0}
+        })}
+        // elevation={0}
         onClick={handleReadMore}
       >
-        <Grid container xs={12} sx={{ zIndex: 10 }}>
+        {/* AWARD RIBBON */}
+        {isBestBlog && (
+          <div className="ribbon">
+            <span>Best of {monthName}</span>
+          </div>
+        )}
+        <Grid container sx={{ zIndex: 10 }}>
           {/* Image Details */}
           <Grid item xs={4}>
             <Box
@@ -74,6 +86,8 @@ const Blog = (blogDetails) => {
                 p: 1,
                 boxSizing: "border-box",
                 whiteSpace: "nowrap",
+                borderTopLeftRadius: "7px",
+                borderBottomLeftRadius: "7px",
               }}
             >
               {/* <img
@@ -93,24 +107,6 @@ const Blog = (blogDetails) => {
                   border: "0.5px solid #ffffff",
                 }}
               />
-              {/* <Box
-            sx={{
-              background: "linear-gradient(to top, #000000, #00000002 )",
-              paddingLeft: 1,
-              boxSizing: "border-box",
-            }}
-          >
-            <Typography variant="h6" color={"#ffffff"}>
-              {username || "Anonymous"}
-            </Typography>
-            <Typography
-              variant="caption"
-              color={"#ffffff"}
-              sx={{ display: "flow" }}
-            >
-              {userrole || "-"}
-            </Typography>
-          </Box> */}
             </Box>
           </Grid>
           {/* Description */}
@@ -137,74 +133,44 @@ const Blog = (blogDetails) => {
                   backgroundColor: "transparent",
                 }}
               >
-                <Typography variant="p" color={""}>
-                  {username || "Anonymous"}
-                </Typography>
+                <Typography variant="p">{username || "Anonymous"}</Typography>
                 <DotOutline size={20} />
-                <Typography variant="p" color={""} sx={{ display: "flow" }}>
+                <Typography variant="p" sx={{ display: "flow" }}>
                   {userrole || "-"}
                 </Typography>
                 <DotOutline size={20} />
-                <Typography variant="p" color={"darkgray"}>
-                  Posted at {formattedDate}
-                </Typography>
+                <Typography variant="p">Posted at {formattedDate}</Typography>
               </Box>
               {/* TITLE DESCRIPTION */}
               <Box>
-                <Typography variant="h6" fontWeight={700}>
+                <Typography
+                  variant="h6"
+                  fontWeight={700}
+                  sx={{ lineHeight: 1.1 }}
+                >
                   {title}
                 </Typography>
                 <Typography
+                  title={description}
                   variant="p"
-                  color={"CaptionText"}
+                  // color={"CaptionText"}
                   sx={{
-                    textOverflow: "ellipsis",
-                    // overflow: "hidden",
-                    // maxHeight:"100%",
-                    // whiteSpace: "nowrap",
-                    // width: "100%",
                     display: "-webkit-box",
-                    "-webkitBoxOrient": "vertical",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 3,
                     overflow: "hidden",
-                    "-webkitLineClamp": 5 /* Number of lines to display */,
+                    textOverflow: "ellipsis",
+                    maxHeight: "100%",
+                    lineHeight: "1.5em",
                   }}
                 >
                   {description}
                 </Typography>
               </Box>
-              {/* <Divider
-            variant="middle"
-            sx={{ justifySelf: "flex-end" }}
-            flexItem
-            orientation="horizontal"
-          /> */}
-              {/* Readmore button */}
-              {/* <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              height: "max-content",
-              padding: "0px 10px",
-              // alignSelf: "flex-end",
-              cursor: "pointer",
-              "&:hover": {
-                color: "#e65100",
-              },
-              // justifySelf: "flex-end",
-              // alignSelf: "flex-end",
-            }}
-            onClick={handleReadMore}
-          >
-            <Typography variant="body2">Read more</Typography>
-            <IconButton>
-              <ArrowForwardIcon />
-            </IconButton>
-          </Box> */}
             </Box>
           </Grid>
         </Grid>
-      </Card>
+      </Box>
 
       {/* MOBILE VIEW */}
 
@@ -312,7 +278,7 @@ const Blog = (blogDetails) => {
         orientation="horizontal"
         variant="middle"
         flexItem
-        sx={{ borderColor: "#016A7050" }}
+        sx={{ borderColor: "accent.light" }}
       />
     </>
   );

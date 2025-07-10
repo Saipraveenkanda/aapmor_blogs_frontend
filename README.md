@@ -1,70 +1,104 @@
-# Getting Started with Create React App
+# 📝 AAPMOR Blogs
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AAPMOR Blogs is an internal blogging platform designed for employees to share insights, knowledge, and departmental updates. The platform promotes a collaborative and knowledge-driven culture with a focus on user experience, personalization, and AI-powered enhancements.
 
-## Available Scripts
+## 🚀 Live Links
 
-In the project directory, you can run:
+- 🔗 [Production](https://blogs.aapmor.com/)
+- 🌐 [Development](https://aapmor-blogs.vercel.app/)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📌 Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### ✅ Previous Version Highlights
 
-### `npm test`
+- 🧾 Simple blog listing with thumbnails, title, and author info
+- ❤️ Like blogs and 🗨️ comment on them
+- 📄 Detailed blog view on click
+- 📂 View and manage saved blogs
+- 👤 Edit profile (name, department, etc.)
+- 📊 Top liked blogs panel
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+### 🌟 New Version Updates
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### 🖌️ UI & UX
+- Revamped design with **Dark/Light themes**
+- Cleaned up top liked blogs section to ensure fair content visibility
+- Custom illustrations and accent colors for better engagement
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### 📚 Blog Experience
+- **Author details section** with image, bio, contact link, and stats
+- Blog sharing to **WhatsApp**, **LinkedIn**, or via link
+- Updated comment system:
+  - Nested replies
+  - Like a comment
+  - Reply to replies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### 🔮 AI Integration
+- ✨ **AI-powered summary generation** for blogs
+- 🤖 Auto-generate profile bios based on user data using **GroqCloud**
 
-### `npm run eject`
+#### 👥 Profile Enhancements
+- Upload profile image
+- Edit or auto-generate bio
+- View saved blogs
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### 🛠 Admin Features
+- Admin badge in header (visible only to admins)
+- Admin-only view of blog like counts
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### 🧠 Smart Suggestions (Beta)
+- Right-side dashboard showing:
+  - Recommended blogs based on user interest
+  - Trending blogs
+  - Recent user activity (likes, comments, etc.)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## ⚙️ Tech Stack
 
-## Learn More
+| Frontend | Backend | Database | Styling | AI | Deployment |
+|----------|---------|----------|---------|----|------------|
+| React    | Node.js | MongoDB  | Material UI | GroqCloud | Azure (Prod), Vercel (Dev) |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- ✉️ **Nodemailer** for OTPs and blog publishing notifications
+- 🖼 **Vercel Blob** for image uploads (moving to Azure Blob Storage)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 🧪 Development & Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Run Locally
 
-### Analyzing the Bundle Size
+```bash
+# Clone repo
+git clone https://github.com/your-org/aapmor-blogs.git
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Install dependencies
+cd aapmor-blogs
+npm install
 
-### Making a Progressive Web App
+# Start development server
+npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Build for Production
 
-### Advanced Configuration
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 📬 Feedback
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Have suggestions or issues? Please open an issue or reach out to the internal Dev team.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📄 License
+
+MIT License. For internal use only at AAPMOR..

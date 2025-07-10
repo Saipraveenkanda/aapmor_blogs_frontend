@@ -9,14 +9,20 @@ import {
   Divider,
   Box,
 } from "@mui/material";
-import { sendOtpApi, loginValidation } from "../ApiCalls/apiCalls";
 import { useNavigate } from "react-router-dom";
-import aapmorlogo from "../../assets/Aapmorlogodark.png";
+import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import loginVector from "../../assets/Login vector.png";
 import LoginAnimation from "../../helpers/LoginAnimation";
+import aapmortext from "../../assets/aapmortext.svg";
+import aapmorlighttext from "../../assets/aapmorwhitetext.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { loginValidation, sendOtpApi } from "../../providers/userProvider";
+import { jwtDecode } from "jwt-decode";
+import { setCredentials } from "../../store/slices/authSlice";
 
 //MAIN FUNCTION
 const Login = () => {
+  const dispatch = useDispatch();
   //STATE HOOKS
   const [buttonText, setButtonText] = useState("Get OTP");
   const [email, setEmail] = useState("");
@@ -29,7 +35,7 @@ const Login = () => {
   const [successMsg, setSuccessMsg] = useState("");
   const [isButtonDisable, setButtonDisable] = useState(true);
   const [isOtpButtonDisable, setOtpButtonDisable] = useState(true);
-
+  const mode = useSelector((state) => state.blogs.appTheme);
   //CHECKING FOR ALREADY REGISTERED USER AND NAVIGATING TO HOME
   const navigate = useNavigate();
 
@@ -38,7 +44,7 @@ const Login = () => {
     if (token !== undefined) {
       navigate("/");
     }
-  });
+  }, []);
 
   const handleOnSubmitError = (message) => {
     setShowErrMsg(true);
@@ -67,12 +73,15 @@ const Login = () => {
     if (response.status === 200) {
       setButtonText("Success");
       const jwtToken = data.jwt_token;
-      Cookies.set("jwtToken", jwtToken, { expires: 10 });
-      Cookies.set("userEmail", data.email, { expires: 10 });
-      navigate("/");
+      if (jwtToken) {
+        const decoded = jwtDecode(jwtToken);
+        Cookies.set("jwtToken", jwtToken, { expires: 10 });
+        dispatch(setCredentials({ jwtToken, user: decoded }));
+        navigate("/");
+      }
     } else {
       setButtonText("Submit OTP");
-      handleOnSubmitError(data.message);
+      handleOnSubmitError(data?.message);
     }
   };
 
@@ -81,8 +90,9 @@ const Login = () => {
     return pattern.test(email);
   };
   const handleEmailChange = (e) => {
+    const mail = e.target.value;
     setEmailError(false);
-    setEmail(e.target.value);
+    setEmail(mail.toLowerCase());
   };
 
   const handleOtpChange = (e) => {
@@ -142,15 +152,14 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: { xs: "100vh", md: "100vh" },
+        height: "100vh",
+        width: "100vw",
         boxSizing: "border-box",
       }}
     >
-      <Box>
-        <LoginAnimation />
-      </Box>
+      {/* <Box>{<LoginAnimation />}</Box> */}
       <Box
-        sx={{
+        sx={(theme) => ({
           position: "relative",
           borderRadius: "16px",
           display: "flex",
@@ -159,48 +168,79 @@ const Login = () => {
           alignItems: "center",
           padding: "20px",
           gap: 3,
-          width: "fit-content",
-          border: "6px double #016A70",
+          // width: "fit-content",
+          width: { xs: "80%", md: "50%" },
+          borderTop: `6px double ${theme.palette.accent.main}`,
+          borderLeft: `6px double ${theme.palette.accent.main}`,
           backdropFilter: "blur(10px)",
-        }}
+          boxShadow: "6px 6px 16px 0px #bfbfbf",
+        })}
       >
-        <img
+        {/* <img
           src={loginVector}
           alt={"login vector logo"}
           style={{
-            height: "90%",
+            display: { xs: "none", md: "block" },
+            height: "60%",
             position: "absolute",
-            left: "-150px",
+            left: { md: "-150px", xs: "-40px" },
             marginBottom: "-60px",
           }}
-        />
+        /> */}
         <Stack
-          direction={"row"}
+          direction={{ md: "row", xs: "column" }}
           spacing={2}
           alignItems="center"
           justifyContent={"center"}
         >
-          <img
-            // src="https://res.cloudinary.com/ddahy4bbc/image/upload/v1698670236/1697545876900-removebg-preview_d7xrcu.png"
-            src={aapmorlogo}
-            alt="logoAapmor"
-            style={{ width: "300px" }}
-          />
+          <Stack direction={"row"} alignItems={"center"}>
+            <img
+              src={aapmorlogo}
+              alt="logoAapmor"
+              style={{ width: "80px", height: "50px" }}
+            />
+
+            {/* {mode && (
+              <img
+                src={aapmorlighttext}
+                alt="aapmortext"
+                style={{
+                  height: { xs: "20px", md: "60px" },
+                  width: { xs: "40%", md: "60%" },
+                }}
+              />
+            )} */}
+            {!mode && (
+              <img
+                src={aapmortext}
+                alt="aapmortext"
+                style={
+                  {
+                    // height: { xs: "20px", md: "80px" },
+                    // width: { xs: "50px", md: "100px" },
+                  }
+                }
+              />
+            )}
+          </Stack>
           <Divider
-            orientation="vertical"
+            orientation={"vertical"}
             flexItem
             sx={{
               borderRightWidth: 4,
-              borderColor: "#016A70",
+              display: { xs: "none", md: "block" },
+              borderColor: "accent.main",
               height: "80px",
               alignSelf: "center",
               borderRadius: "50%",
+              width: "10px",
             }}
           />
           <Typography
-            color={"#016A70"}
+            color="accent.main"
             fontWeight={500}
-            variant="h4"
+            fontSize={{ xs: "32px", md: "40px" }}
+            // variant={{ xs: "h3", md: "h4" }}
             fontFamily={"Playwrite CO Guides, serif"}
           >
             Blogs
@@ -238,7 +278,7 @@ const Login = () => {
             sx={{
               height: "52px",
               width: { xs: "90%", lg: "60%" },
-              marginBottom: { xs: "30px", lg: "24px" },
+              marginBottom: { xs: "30px", lg: "8px" },
               animation: emailError ? "shake 0.3s" : "",
               "@keyframes shake": {
                 "0%": { marginLeft: "0rem" },
@@ -272,15 +312,16 @@ const Login = () => {
             data-testid="email input"
             variant="contained"
             disabled={isButtonDisable}
-            sx={{
+            sx={(theme) => ({
               width: { xs: "90%", lg: "60%" },
               height: "52px",
               fontWeight: 500,
-              backgroundColor: "#016A70",
+              backgroundColor: `${theme.palette.accent.main}`,
               "&:hover": {
-                backgroundColor: "#016A70",
+                backgroundColor: `${theme.palette.accent.main}`,
               },
-            }}
+              mb: 2,
+            })}
           >
             {buttonText}
           </Button>
@@ -289,15 +330,15 @@ const Login = () => {
         {showOtpView && (
           <Button
             variant="contained"
-            sx={{
+            sx={(theme) => ({
               width: { xs: "90%", lg: "60%" },
               height: "48px",
               marginBottom: { xs: "30px", lg: "0px" },
-              backgroundColor: "#016A70",
+              backgroundColor: `${theme.palette.accent.main}`,
               "&:hover": {
                 backgroundColor: "#016A70",
               },
-            }}
+            })}
             onClick={handleOtpEntered}
             disabled={isOtpButtonDisable}
           >

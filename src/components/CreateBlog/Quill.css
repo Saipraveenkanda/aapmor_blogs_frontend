@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Aref+Ruqaa&family=Mirza&family=Roboto&display=swap");
+
+.ql-font-mirza {
+  font-family: "Mirza", cursive !important;
+}
+
+.ql-font-roboto {
+  font-family: "Roboto", sans-serif !important;
+}
+
+.ql-font-aref-ruqaa {
+  font-family: "Aref Ruqaa", serif !important;
+}
+
+.ql-font-sans-serif {
+  font-family: sans-serif !important;
+}
+
+/* 🔹 Fix: Ensure the font picker items display correctly */
+.ql-toolbar .ql-font .ql-picker-label::before,
+.ql-toolbar .ql-font .ql-picker-item::before {
+  font-family: inherit !important;
+  content: attr(data-value) !important;
+  text-transform: capitalize; /* Makes the text look better */
+}
+
+/* 🔹 Apply the selected font inside the editor */
+.ql-editor {
+  font-family: sans-serif; /* Default to sans-serif */
+}
+
+/* 🔹 Fix: Ensure the selected font applies inside the editor */
+/* .ql-editor .ql-font-mirza {
+  font-family: "Mirza", cursive !important;
+}
+.ql-editor .ql-font-roboto {
+  font-family: "Roboto", sans-serif !important;
+}
+.ql-editor .ql-font-aref-ruqaa {
+  font-family: "Aref Ruqaa", serif !important;
+}
+.ql-editor .ql-font-sans-serif {
+  font-family: sans-serif !important;
+} */
+.ql-editor {
+  min-height: 180px;
+}
+.ql-toolbar {
+  position: sticky;
+  top: 64px;
+  background: white; /* Required to avoid overlap transparency */
+  z-index: 10; /* Ensure it's above editor content */
+  border-bottom: 1px solid #ccc;
+}
+
+.ql-toolbar button,
+.ql-toolbar .ql-picker-label {
+  font-size: 18px !important; /* Increase toolbar icon size */
+  position: relative; /* Make sure tooltips are positioned relative to buttons */
+}
+
+.ql-toolbar button:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  top: -35px; /* Move tooltip above button */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+}
+
+.ql-toolbar button::after {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+}

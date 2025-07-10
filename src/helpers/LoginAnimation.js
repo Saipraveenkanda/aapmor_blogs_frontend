@@ -5,48 +5,49 @@ const LoginAnimation = ({ top, left, right, bottom }) => {
   return (
     /* From Uiverse.io by Dennyhml */
     <div
-      class="container"
+      id="loginAnimation"
+      className="login-animation-container"
       style={{
         position: "absolute",
         display: "flex",
       }}
     >
-      <div class="bubble">
+      <div className="bubble">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <div class="bubble">
+      <div className="bubble">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <div class="bubble">
+      <div className="bubble">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <div class="bubble">
+      <div className="bubble">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <div class="bubble">
+      <div className="bubble">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <div class="bubble">
+      <div className="bubble">
         <span></span>
         <span></span>
         <span></span>

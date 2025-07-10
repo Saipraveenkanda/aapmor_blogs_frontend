@@ -13,6 +13,12 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Stack,
+  Badge,
+  List,
+  ListItem,
+  ListItemText,
+  Popover,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -21,17 +27,91 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
-// import "./SearchBar.css";
+import aapmorLightText from "../../assets/aapmorwhitetext.svg";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import NightsStayIcon from "@mui/icons-material/NightsStay";
+import { setAppTheme } from "../../store/slices/blogSlice";
+import { useDispatch } from "react-redux";
+import { listenToNotifications } from "../../socket";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import { timeAgo } from "../../utilities/timerFunction";
+// import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
+import { toast } from "react-toastify";
+import DeleteSweepOutlinedIcon from "@mui/icons-material/DeleteSweepOutlined";
+import {
+  deleteNotifications,
+  getNotifications,
+} from "../../providers/dashboardProvider";
+import { profileCheckingApi } from "../../providers/userProvider";
 
-const Header = ({ setSearchInput }) => {
+const Header = ({ setSearchInput = () => {}, setProfile }) => {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [mode, setMode] = useState(JSON.parse(localStorage.getItem("theme")));
+  const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
+  const handleToggle = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
   const open = Boolean(anchorEl);
+  const openNotifications = Boolean(notificationAnchorEl);
+  const id = open ? "notifications-popper" : undefined;
+  const [notifications, setNotifications] = useState([]);
+  const [userId, setUserId] = useState("");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  useEffect(() => {
+    localStorage.setItem("theme", mode);
+    dispatch(setAppTheme(mode));
+  }, [mode]);
+
+  useEffect(() => {
+    getUserDetail();
+  }, []);
+
+  useEffect(() => {
+    getNotificationsData();
+    listenToNotifications((data) => {
+      setNotifications((prev) => [data, ...prev]);
+    });
+  }, []);
+
+  const getNotificationsData = async () => {
+    const response = await getNotifications();
+    if (response) {
+      setNotifications(response?.data?.notifications);
+    }
+  };
+  const getUserDetail = async () => {
+    const response = await profileCheckingApi();
+    if (response) {
+      if (response.status === 202) {
+        setProfile(true);
+      }
+      setIsAdmin(
+        response?.data?.res?.admin ? response?.data?.res?.admin : false
+      );
+      setUserId(response?.data?.res?._id);
+    }
+  };
+
+  const handleClearNotifications = async () => {
+    try {
+      const response = await deleteNotifications(userId);
+      if (response) {
+        setNotifications([]);
+      }
+      // toast.success("All notifications cleared!");
+    } catch (err) {
+      console.error("Clear notifications error:", err);
+      toast.error("Failed to clear notifications");
+    }
   };
 
   const navigate = useNavigate();
@@ -98,7 +178,16 @@ const Header = ({ setSearchInput }) => {
           }}
         >
           <img src={aapmorlogo} alt="logoAapmor" />
-          <img src={aapmortext} alt="aapmortext" />
+          {mode && (
+            <img src={aapmortext} alt="aapmortext" style={{ width: "120px" }} />
+          )}
+          {!mode && (
+            <img
+              src={aapmorLightText}
+              alt="aapmortext"
+              style={{ width: "120px" }}
+            />
+          )}
           <Divider
             orientation="vertical"
             flexItem
@@ -111,7 +200,7 @@ const Header = ({ setSearchInput }) => {
           />
           <Typography
             variant="h6"
-            color={"#016A70"}
+            color={"accent.main"}
             fontFamily={"Playwrite CO Guides, serif"}
             fontWeight={500}
           >
@@ -134,7 +223,7 @@ const Header = ({ setSearchInput }) => {
             sx={{
               p: 0.5,
               pl: 2,
-              color: "#016A70",
+              color: "text.secondary",
               boxSizing: "border-box",
               "&::placeholder": {
                 color: "grey",
@@ -149,91 +238,101 @@ const Header = ({ setSearchInput }) => {
           />
           <SearchOutlined
             color="action"
-            sx={{ cursor: "pointer", color: "#016A70" }}
+            sx={{ cursor: "pointer", color: "accent.main" }}
           />
         </Box>
 
         {/* WEB NAVIGATION AFTER LOGIN */}
+        <Stack spacing={1} alignItems={"center"} direction={"row"}>
+          <IconButton
+            size="small"
+            sx={(theme) => ({
+              border: `1px solid ${theme.palette.accent.main}`,
+            })}
+            onClick={() => setMode(!mode)}
+            title={mode ? "Light Mode" : "Dark Mode"}
+          >
+            {mode ? <LightModeIcon /> : <NightsStayIcon />}
+          </IconButton>
+          {token !== undefined && (
+            <IconButton
+              size="small"
+              sx={(theme) => ({
+                border: `1px solid ${theme.palette.accent.main}`,
+              })}
+              onClick={handleToggle}
+              title={"Notifications"}
+            >
+              <Badge badgeContent={notifications?.length} color="primary">
+                <CircleNotificationsIcon />
+              </Badge>
+            </IconButton>
+          )}
+          {token !== undefined ? (
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
+                gap: 1,
+                color: "grey",
+              }}
+            >
+              {/* ADMIN ICON */}
 
-        {token !== undefined ? (
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-              gap: 1,
-              color: "grey",
-            }}
-          >
-            <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              onClick={() => navigate("/user/profile")}
-              sx={{ textTransform: "none", borderRadius: 4 }}
+              {isAdmin && (
+                <IconButton
+                  title="Admin"
+                  onClick={() => navigate("/admin")}
+                  size="small"
+                  sx={(theme) => ({
+                    border: `1px solid ${theme.palette.accent.main}`,
+                  })}
+                >
+                  <AdminPanelSettingsOutlinedIcon
+                  // sx={{ color: "accent.main" }}
+                  // fontSize="medium"
+                  />
+                </IconButton>
+              )}
+              <Button
+                size="small"
+                variant="text"
+                color="inherit"
+                disableElevation
+                sx={(theme) => ({
+                  borderRadius: 4,
+                  border: `0.5px solid ${theme.palette.accent.main}`,
+                  textTransform: "none",
+                  color: "text.secondary",
+                })}
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </Box>
+          ) : (
+            <Tooltip
+              title="Login to access more features"
+              sx={{ display: { xs: "none", md: "block" } }}
             >
-              Profile
-            </Button>
-            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              onClick={() => navigate("/user/saved")}
-              sx={{ textTransform: "none", borderRadius: 4 }}
-            >
-              Saved
-            </Button>
-            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            <Button
-              variant="text"
-              color="inherit"
-              disableElevation
-              href="/user/blogs"
-              sx={{ textTransform: "none", borderRadius: 4 }}
-              // disabled
-            >
-              Your blogs
-            </Button>
-            {/* <Divider orientation="vertical" flexItem color="#fff" /> */}
-            {/* <Tooltip title="logout"> */}
-            <Button
-              size="small"
-              variant="text"
-              color="inherit"
-              disableElevation
-              sx={{
-                borderRadius: 4,
-                border: "0.5px solid #016A70",
-                textTransform: "none",
-                color: "grey",
-              }}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          </Box>
-        ) : (
-          <Tooltip
-            title="Login to access more features"
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
-            <Button
-              size="small"
-              variant="text"
-              color="inherit"
-              disableElevation
-              sx={{
-                borderRadius: 4,
-                border: "0.5px solid #016A70",
-                textTransform: "none",
-                color: "grey",
-              }}
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </Button>
-          </Tooltip>
-        )}
+              <Button
+                size="small"
+                variant="text"
+                color="inherit"
+                disableElevation
+                sx={(theme) => ({
+                  borderRadius: 4,
+                  border: `0.5px solid ${theme.palette.accent.main}`,
+                  textTransform: "none",
+                  color: "text.primary",
+                })}
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
+            </Tooltip>
+          )}
+        </Stack>
 
         {/* MOBILE MENU ITEM */}
 
@@ -303,6 +402,139 @@ const Header = ({ setSearchInput }) => {
           </Menu>
         </Box>
       </Toolbar>
+      <Popover
+        id={id}
+        open={openNotifications}
+        anchorEl={notificationAnchorEl}
+        onClose={() => setNotificationAnchorEl(null)}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            width: 360,
+            // maxHeight: 400,
+            // overflowY: "auto",
+            p: 2,
+            borderRadius: 4,
+            background:
+              "linear-gradient(-135deg, transparent 10%, transparent)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+            backdropFilter: "blur(30px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            color: "text.primary",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            position: "sticky",
+            top: 0,
+            zindex: 1,
+            backgroundColor: "transparent",
+            backdropFilter: "blur(50px)",
+            width: "100%",
+          }}
+        >
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              color: "text.primary",
+              mb: 1,
+              textAlign: "left",
+              letterSpacing: 0.5,
+            }}
+          >
+            🔔 Notifications
+          </Typography>
+          <Button
+            disabled={notifications?.length === 0}
+            variant="ghost"
+            startIcon={<DeleteSweepOutlinedIcon size={16} />}
+            onClick={handleClearNotifications}
+            sx={{ textTransform: "none" }}
+          >
+            Clear
+          </Button>
+        </Box>
+
+        {notifications?.length === 0 ? (
+          <Typography
+            variant="body2"
+            // color="#fff"
+            sx={{ textAlign: "center", mt: 2 }}
+          >
+            You're all caught up 👌
+          </Typography>
+        ) : (
+          <List
+            dense
+            sx={{ height: "500px", overflowY: "auto", scrollbarWidth: "none" }}
+          >
+            {notifications?.map((n, idx) => (
+              <Box key={idx}>
+                <ListItem
+                  alignItems="flex-start"
+                  sx={(theme) => ({
+                    background: "rgba(255, 255, 255, 0.15)",
+                    borderRadius: 3,
+                    border: `0.5px solid ${theme.palette.accent.main}`,
+                    backdropFilter: "blur(4px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    px: 2,
+                    py: 1.5,
+                    mb: 1.5,
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                    transition: "0.3s ease",
+                    "&:hover": {
+                      background: `${theme.palette.accent.main}20`,
+                      backdropFilter: "blur(40px)",
+                    },
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 1,
+                  })}
+                  component="a"
+                  href={`/blogs/${n.blogId}`}
+                  // onClick={() => navigate(`/blogs/${n.blogId}`)}
+                >
+                  <Avatar
+                    src={n?.sender?.profileImage}
+                    sx={{ width: 24, height: 24 }}
+                  />
+                  <ListItemText
+                    primary={n.message}
+                    secondary={timeAgo(n.timestamp)}
+                    primaryTypographyProps={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      marginTop: -1,
+                      color: "text.primary",
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: 12,
+                      color: "text.secondary",
+                    }}
+                  />
+                </ListItem>
+              </Box>
+            ))}
+          </List>
+        )}
+      </Popover>
     </AppBar>
   );
 };

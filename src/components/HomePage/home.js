@@ -2,73 +2,71 @@ import React, { useEffect, useState } from "react";
 import Header from "./header";
 import Blog from "../Blog/blogCard";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
-import {
-  Typography,
-  Box,
-  Alert,
-  Backdrop,
-  Grid,
-  Tooltip,
-  Fab,
-  Stack,
-} from "@mui/material";
+import { Typography, Box, Grid, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogsApi, profileCheckingApi } from "../ApiCalls/apiCalls";
-import { setBlogsData } from "../Slices/blogSlice";
-import Cookies from "js-cookie";
-import RecentBlogs from "../RecentBlogs/recentBlogs";
+import { setBlogsData } from "../../store/slices/blogSlice";
 import HomeLoading from "../../helpers/homeLoading";
 import ProfilePopup from "./ProfilePopup";
 import noBlogsImage from "../../assets/noblogs.png";
-import { useNavigate } from "react-router-dom";
-import writeIcon from "../../assets/pencil-simple-line.svg";
+import WinnerAnnouncement from "../BlogWinner";
+import AdminDashboard from "../Sidebar/AdminDashboard";
+import { registerUser } from "../../socket";
+import { getBlogsApi } from "../../providers/blogProvider";
+import { getWinnerOfTheMonth } from "../../providers/adminProvider";
+import { profileCheckingApi } from "../../providers/userProvider";
+import { token } from "../../utilities/authUtils";
 
 const Home = () => {
   const dispatch = useDispatch();
   const [profile, setProfile] = useState(false);
-  const [category, setCategory] = useState("All");
+  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [apiStatus, setApiStatus] = useState("INITIAL");
   const blogObj = useSelector((state) => state.blogs);
   const blogs = blogObj.blogs;
   const [updatedBlogs, setUpdatedBlogs] = useState(blogs);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const user = Cookies.get("username");
-  const userName = user !== undefined ? user : "User";
-  const token = Cookies.get("jwtToken");
-  const navigate = useNavigate();
+  const [winnerDetails, setWinnerDetails] = useState([]);
+  const [profileDetails, setProfileDetails] = useState({});
+  console.log(profile, "PROFILE");
 
   useEffect(() => {
-    const token = Cookies.get("jwtToken");
-    if (token !== undefined) {
+    document.title = "AAPMOR | Blogs";
+    if (!token) {
       const checkProfileDetails = async () => {
-        console.log("now checking profile status");
         const response = await profileCheckingApi();
-        console.log(response);
+        console.log(response, "RESP");
         if (response.status === 202) {
-          clearInterval(intervalId);
+          console.log("Profile not updated, opening profile");
           setProfile(true);
         } else if (response.status === 200) {
-          clearInterval(intervalId);
           setProfile(false);
-          // if (Cookies.get("username") === undefined) {
-          Cookies.set("username", response.data.res.name);
-          // }
-          // if (Cookies.get("userrole") === undefined) {
-          Cookies.set("userrole", response.data.res.designation);
-          // }
+          setProfileDetails(response.data.res);
+          if (response) {
+            registerUser(response.data.res._id);
+          }
         }
-        clearInterval(intervalId);
       };
-      const intervalId = setInterval(() => {
-        console.log("waiting 5 sec for checking profile");
-        checkProfileDetails();
-      }, 5000);
+      checkProfileDetails();
     } else {
       setProfile(false);
     }
   }, []);
+
+  useEffect(() => {
+    const showFirstTime = localStorage.getItem("showAnnouncement");
+    if (
+      (showFirstTime === null || showFirstTime === "true") &&
+      apiStatus === "SUCCESS"
+    ) {
+      setShowAnnouncement(true);
+    }
+  }, [apiStatus]);
+
+  const handleAnnouncementClose = () => {
+    setShowAnnouncement(false);
+    localStorage.setItem("showAnnouncement", "false");
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -82,7 +80,7 @@ const Home = () => {
 
   //GET BLOGS API CALL
   const getBlogsData = async () => {
-    const response = await getBlogsApi(category);
+    const response = await getBlogsApi();
     if (response.status === 200) {
       setApiStatus("SUCCESS");
       dispatch(setBlogsData(response.data));
@@ -91,11 +89,18 @@ const Home = () => {
     }
   };
 
+  const getWinnerDetails = async () => {
+    const response = await getWinnerOfTheMonth();
+    if (response) {
+      setWinnerDetails(response?.data);
+    }
+  };
+
   useEffect(() => {
-    document.title = "AAPMOR | Blogs";
     setApiStatus("INITIAL");
+    getWinnerDetails();
     getBlogsData();
-  }, [category]);
+  }, []);
 
   const renderLoadingView = () => {
     return (
@@ -108,8 +113,6 @@ const Home = () => {
           width: "100%",
         }}
       >
-        {/* <CircularProgress sx={{ color: "#016A70" }} /> */}
-        {/* <img src={loadingHand} alt="loading hand" style={{ height: "200px" }} /> */}
         <HomeLoading />
       </Box>
     );
@@ -167,7 +170,7 @@ const Home = () => {
     return (
       <Box
         sx={{
-          height: "91vh",
+          height: "calc(100vh - 65px)",
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -209,16 +212,17 @@ const Home = () => {
             width={"100%"}
             justifyContent={"space-between"}
           >
-            <Typography variant="h6" fontWeight={"bold"} textAlign={"left"}>
-              Hello! Welcome {userName}
-            </Typography>
-            <Alert variant="outlined" severity="warning">
-              <span style={{ fontSize: "12px", color: "red" }}>
-                Posting blogs will be enabled from 10th March 2025
-              </span>
-            </Alert>
+            <Typography
+              variant="h6"
+              fontWeight={"bold"}
+              textAlign={"left"}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            ></Typography>
           </Stack>
-
           {updatedBlogs.length > 0 ? renderBlogsView() : renderNoBlogsView()}
         </Box>
       </Box>
@@ -279,22 +283,20 @@ const Home = () => {
     setUpdatedBlogs(filteredBlogs);
   }, [searchInput]);
 
-  console.log(profile, "show profile");
   return (
     <>
       <Grid
         container
-        xs={12}
-        sx={{ "@media(min-width:480px)": { pl: "40px", pr: "40px" } }}
+        // xs={12}
+        sx={{
+          "@media(min-width:480px)": { pl: "40px", pr: "40px" },
+        }}
       >
-        <Header setSearchInput={setSearchInput} />
-        {/* <Grid
-          item
-          xs={2}
-          sx={{ "@media(max-width:480px)": { display: "none" } }}
-        >
-          <SideBar setCategory={setCategory} category={category} />
-        </Grid> */}
+        <Header
+          setSearchInput={setSearchInput}
+          profile={profile}
+          setProfile={setProfile}
+        />
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}
@@ -304,13 +306,10 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            <RecentBlogs />
+            <AdminDashboard />
           </Grid>
         </Grid>
       </Grid>
-
-      {/* <Footer /> */}
-
       {profile && (
         <ProfilePopup
           profile={profile}
@@ -318,52 +317,13 @@ const Home = () => {
           setProfile={setProfile}
         />
       )}
-
       <BottomNavbar />
-
-      <Backdrop open={showAlert} onClick={() => setShowAlert(false)}>
-        <Box sx={{ display: "fixed", top: "100px", bottom: "100px" }}>
-          <Alert severity="success">{alertMessage}</Alert>
-        </Box>
-      </Backdrop>
-
-      {token && (
-        <Tooltip title="Create new blog " arrow placement="left" sx={{ mt: 1 }}>
-          <Fab
-            variant="extended"
-            // color="inherit"
-            disabled
-            size="medium"
-            onClick={() => navigate("/createblog")}
-            sx={{
-              backgroundColor: "#016A70",
-              boxShadow: "2px 2px 4px 0px grey ",
-              borderRadius: 2,
-              position: "fixed",
-              bottom: 60,
-              right: 30,
-              width: "180px",
-              height: "52px",
-              textTransform: "none",
-              fontSize: "16px",
-              border: "4px solid #fff",
-              "&:hover": {
-                border: "4px solid #016A70",
-                boxShadow: "1px 0px 4px 0px #ffffff inset",
-                backgroundColor: "#016A70",
-              },
-              color: "#ffffff",
-            }}
-          >
-            {/* <CreateIcon sx={{ mr: 1 }} /> */}
-            <img
-              src={writeIcon}
-              alt="write_icon"
-              style={{ height: "30px", paddingRight: "8px" }}
-            />
-            Write
-          </Fab>
-        </Tooltip>
+      {showAnnouncement && !winnerDetails?.message && (
+        <WinnerAnnouncement
+          isOpen={showAnnouncement}
+          onClose={handleAnnouncementClose}
+          winnerDetails={winnerDetails}
+        />
       )}
     </>
   );
