@@ -87,6 +87,8 @@ const BlogView = () => {
   const [openSharePop, setOpenSharePop] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [copied, setCopied] = useState(false);
+  const [isWinnerAnnounced, setIsWinnerAnnounced] = useState(false);
+
   const shareText = encodeURIComponent(
     `${blogDetails?.title}\nRead more: "https://blogs.aapmor.com/blogs/${blogDetails?._id}`
   );
@@ -380,6 +382,7 @@ const BlogView = () => {
   };
 
   const handleSubmit = async () => {
+
     const previousMonth = new Intl.DateTimeFormat("en-US", {
       month: "long",
     }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
@@ -392,17 +395,25 @@ const BlogView = () => {
       blogId: _id,
     };
     try {
-      const response = await postWinnerDetails(formData);
-      if (response?.response?.data?.error) {
-        setSnackMessage(response?.response?.data?.error);
+      if (!isWinnerAnnounced) {
+        const response = await postWinnerDetails(formData);
+        if (response?.response?.data?.error) {
+          setSnackMessage(response?.response?.data?.error);
+          setOpenSnackBar(true);
+          return;
+        }
+        if (response.status === 201) {
+
+          setSnackMessage("Winner has been set successfully!");
+          setOpenSnackBar(true);
+          setIsWinnerAnnounced(true);
+          setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
+        }
+      } else {
+        setIsWinnerAnnounced(false);
+        setSnackMessage("Winner status reverted!");
         setOpenSnackBar(true);
-      }
-      if (!response.status === 201) {
-        throw new Error("Failed to save winner");
-      } else if (response.status === 201) {
-        setSnackMessage("Winner has been set successfully!");
-        setOpenSnackBar(true);
-        getBlogItem();
+        setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
       }
     } catch (error) {
       alert("Error: " + error.message);
@@ -410,6 +421,15 @@ const BlogView = () => {
       setOpenSnackBar(true);
     }
   };
+
+  useEffect(() => {
+    if (blogDetails && blogDetails.isBestBlog) {
+      setIsWinnerAnnounced(true);
+    } else {
+      setIsWinnerAnnounced(false);
+    }
+  }, [blogDetails]);
+
 
   const handlePublish = async () => {
     const payload = {
@@ -556,7 +576,7 @@ const BlogView = () => {
             {/* AWARD IMAGE */}
             {isBestBlog && <BestBlogRibbon />}
             {/* WINNER ANNOUNCEMENT BUTTON */}
-            {token !== undefined && isAdmin && !isBestBlog && (
+            {token !== undefined && isAdmin && (
               <Button
                 size="medium"
                 variant="outlined"
@@ -574,7 +594,7 @@ const BlogView = () => {
                   fontWeight: "bold",
                 })}
               >
-                Announce Winner
+                {isWinnerAnnounced ? "Revert Winner" : "Announce Winner"}
               </Button>
             )}
             {token !== undefined && isAdmin && (

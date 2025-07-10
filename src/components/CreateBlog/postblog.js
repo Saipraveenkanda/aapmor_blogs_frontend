@@ -40,6 +40,7 @@ import {
   updateBlogApi,
 } from "../../providers/blogProvider";
 import BlogPreview from "../BlogView/PreviewBlog";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 const Size = ReactQuill.Quill.import("attributors/style/size");
@@ -256,7 +257,7 @@ const CreateBlog = () => {
     setSummaryLoading(false);
   };
 
-  return (
+   return (
     <>
       <Header />
       <Box
@@ -286,8 +287,11 @@ const CreateBlog = () => {
             <Grid item xs={12} md={6}>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: "bold", color: "grey" }}
+                sx={{ fontWeight: "bold", color: "grey",ml:-5 }}
               >
+                <IconButton>
+                  <ArrowBackIosIcon onClick={()=>navigate('/')}/>
+                </IconButton>
                 TITLE<span style={{ color: "red" }}>*</span>
               </Typography>
               <TextField

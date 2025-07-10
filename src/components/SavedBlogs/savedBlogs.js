@@ -284,7 +284,7 @@ const SavedBlogs = () => {
           height: "100%",
         }}
       >
-        <Typography variant="p" fontWeight={600} fontSize={20}>
+        <Typography variant="p" fontWeight={600} fontSize={20} sx={{marginLeft:1}}>
           Sorry, you haven't saved any blogs, try saving some blogs and refresh
           the page
         </Typography>
@@ -321,7 +321,7 @@ const SavedBlogs = () => {
         // gutterBottom
         sx={{ fontWeight: "bold", color: "text.primary" }}
       >
-        Your Saved Blogs
+        Your Saved Blogs :
       </Typography>
       <Box>{renderApiStatus()}</Box>
       {/* <BottomNavbar /> */}

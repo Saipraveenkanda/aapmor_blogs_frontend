@@ -45,7 +45,7 @@ const CommentSection = ({
           >
             {/* Main Comment */}
             <Stack direction={"row"} spacing={2}>
-              <Avatar>{name[0].toUpperCase()}</Avatar>
+              <Avatar>{name?.[0]?.toUpperCase()}</Avatar>
               <Stack direction={"column"} spacing={1} flex={1}>
                 <Typography variant="inherit" fontWeight={600}>
                   {name}{" "}

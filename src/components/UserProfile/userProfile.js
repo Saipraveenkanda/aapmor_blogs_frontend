@@ -38,6 +38,7 @@ import {
   profileUpdateApi,
   uploadProfileImage,
 } from "../../providers/userProvider";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const UserProfile = (props) => {
   const [profile, setProfile] = useState({});
@@ -202,7 +203,9 @@ const UserProfile = (props) => {
               <Typography
                 variant="h6"
                 sx={{ fontWeight: "bold", color: "text.primary" }}
-              >
+              ><IconButton>
+                  <ArrowBackIosIcon onClick={() => navigate('/')} />
+                </IconButton>
                 Profile Update
               </Typography>
 
@@ -229,7 +232,7 @@ const UserProfile = (props) => {
                       border: `2px solid ${theme.palette.accent.main}`, // Correct way
                     })}
                     onClick={handleHover}
-                    // onMouseLeave={handleClose}
+                  // onMouseLeave={handleClose}
                   />
 
                   {/* Expanded Image on Hover */}

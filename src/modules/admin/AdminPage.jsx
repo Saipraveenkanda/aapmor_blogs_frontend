@@ -13,6 +13,8 @@ import { profileCheckingApi } from "../../providers/userProvider";
 import Header from "../../components/HomePage/header";
 import { setTopBlogsData, setWinnerBlogs } from "../../store/slices/blogSlice";
 import RecentBlogs from "./components/recentBlogs";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import IconButton from '@mui/material/IconButton';
 
 const AdminPage = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -72,6 +74,10 @@ const AdminPage = (props) => {
       }, 2000);
   }, [isAdmin]);
 
+  //back navigation
+  const handleBack=()=>{
+ navigate(-1)
+  }
   return (
     <Box>
       <Header />
@@ -95,6 +101,9 @@ const AdminPage = (props) => {
             // textAlign={"center"}
             gutterBottom
           >
+            <IconButton onClick={handleBack}>
+              <ArrowBackIosIcon/>
+            </IconButton>
             Admin Dashboard
           </Typography>
           <Grid container spacing={2} flexDirection={"column"}>

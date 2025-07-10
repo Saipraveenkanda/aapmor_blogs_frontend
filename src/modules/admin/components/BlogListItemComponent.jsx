@@ -28,6 +28,7 @@ const BlogListItemComponent = ({
     likes,
     comments,
     _id,
+    blogId
   } = blog;
   return (
     <Box key={_id}>
@@ -44,7 +45,7 @@ const BlogListItemComponent = ({
           mb: 1.5,
           mt: 1.5,
         }}
-        onClick={() => navigate(`/blogs/${_id}`)}
+        onClick={() => navigate(`/blogs/${blogId}`)}
       >
         <Stack direction={"row"} alignItems={"center"} spacing={1}>
           <ListItemAvatar>
