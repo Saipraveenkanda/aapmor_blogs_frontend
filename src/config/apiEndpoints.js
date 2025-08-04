@@ -27,4 +27,6 @@ export const apiEndpoints = {
   getTrendingBLogsUrl: "/top-liked-blogs",
   getNotificationsUrl: "/notifications",
   refreshToken: "/auth/refresh-token",
+  filterBlogsApiUrl: "/blogs/filter",
+
 };
