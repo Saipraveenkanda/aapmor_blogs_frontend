@@ -53,10 +53,10 @@ const Blog = (blogDetails) => {
           width: "100%",
           borderRadius: 2,
           backdropFilter: "blur(12px)",
-          border: "0.5px solid transparent",
+          // border: "0.5px solid transparent",
           "&:hover": {
             // boxShadow: "0px 0px 2px 0px #016A70",
-            border: `0.5px solid ${theme.palette.text.secondary}`,
+            // border: `0.5px solid ${theme.palette.text.secondary}`,
           },
           cursor: "pointer",
         })}
@@ -95,7 +95,7 @@ const Blog = (blogDetails) => {
                 alt={"blog-image"}
                 style={{ width: "60%" }}
               /> */}
-              <Chip
+              {/* <Chip
                 label={category}
                 size="medium"
                 sx={{
@@ -106,7 +106,7 @@ const Blog = (blogDetails) => {
                   color: "#ffffff",
                   border: "0.5px solid #ffffff",
                 }}
-              />
+              /> */}
             </Box>
           </Grid>
           {/* Description */}
@@ -178,7 +178,7 @@ const Blog = (blogDetails) => {
         sx={{
           height: "160px",
           borderRadius: 2,
-          border: "1px dotted #00000050",
+          // border: "1px dotted #00000050",
           display: { xs: "flex", sm: "none" },
           flexDirection: "row",
           alignItems: "center",
@@ -221,7 +221,7 @@ const Blog = (blogDetails) => {
             >
               Posted: {formattedDate}
             </Typography>
-            <Chip
+            {/* <Chip
               label={category}
               size="small"
               sx={{
@@ -232,7 +232,7 @@ const Blog = (blogDetails) => {
                 fontSize: "10px",
                 color: "#ffffff",
               }}
-            />
+            /> */}
           </Stack>
 
           <Typography variant="body2" fontWeight={700}>
@@ -278,7 +278,12 @@ const Blog = (blogDetails) => {
         orientation="horizontal"
         variant="middle"
         flexItem
-        sx={{ borderColor: "accent.light" }}
+        // sx={{ borderColor: "accent.light" }}
+       sx={{ border:"1px solid ",
+        borderImage:"linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #4E4E4E 48.08%, rgba(0, 0, 0, 0) 100%)",
+        borderImageSlice:1
+       }}
+
       />
     </>
   );

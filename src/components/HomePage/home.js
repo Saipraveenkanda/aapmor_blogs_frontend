@@ -11,10 +11,13 @@ import noBlogsImage from "../../assets/noblogs.png";
 import WinnerAnnouncement from "../BlogWinner";
 import AdminDashboard from "../Sidebar/AdminDashboard";
 import { registerUser } from "../../socket";
-import { getBlogsApi } from "../../providers/blogProvider";
+import { getBlogsApi, getBlogsByCategoryApi } from "../../providers/blogProvider";
 import { getWinnerOfTheMonth } from "../../providers/adminProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
 import { token } from "../../utilities/authUtils";
+import WinnerTicker from "../WinnerTicker"; 
+import CategoryTabs from "../Sidebar/CategoryTabs";
+import useTheme from "@mui/material/styles/useTheme";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -26,9 +29,12 @@ const Home = () => {
   const [updatedBlogs, setUpdatedBlogs] = useState(blogs);
   const [showAlert, setShowAlert] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [category, setCategory] = useState("All");
   const [winnerDetails, setWinnerDetails] = useState([]);
   const [profileDetails, setProfileDetails] = useState({});
   console.log(profile, "PROFILE");
+  const theme = useTheme();
+  const mode=theme.palette.mode;
 
   useEffect(() => {
     document.title = "AAPMOR | Blogs";
@@ -72,15 +78,28 @@ const Home = () => {
     setTimeout(() => {
       setShowAlert(false);
     }, 2000);
-  }, [showAlert]);
+  }, [showAlert])
 
   useEffect(() => {
     setUpdatedBlogs(blogs);
   }, [blogs]);
 
   //GET BLOGS API CALL
-  const getBlogsData = async () => {
-    const response = await getBlogsApi();
+  // const getBlogsData = async () => {
+  //   const response = await getBlogsByCategoryApi(category);
+  //   if (response.status === 200) {
+  //     setApiStatus("SUCCESS");
+  //     dispatch(setBlogsData(response.data));
+  //   } else {
+  //     setApiStatus("FAILURE");
+  //   }
+  // };
+
+
+  useEffect(() => {
+  const fetchBlogsByCategory = async () => {
+    setApiStatus("INITIAL");
+    const response = await getBlogsByCategoryApi(category);
     if (response.status === 200) {
       setApiStatus("SUCCESS");
       dispatch(setBlogsData(response.data));
@@ -88,6 +107,18 @@ const Home = () => {
       setApiStatus("FAILURE");
     }
   };
+
+  // Only fetch if category is defined
+  if (category) {
+    fetchBlogsByCategory();
+  }
+}, [category]);
+
+
+//   useEffect(() => {
+//   setApiStatus("INITIAL");
+//   getBlogsData();
+// }, [category]);
 
   const getWinnerDetails = async () => {
     const response = await getWinnerOfTheMonth();
@@ -99,7 +130,7 @@ const Home = () => {
   useEffect(() => {
     setApiStatus("INITIAL");
     getWinnerDetails();
-    getBlogsData();
+    // getBlogsData();
   }, []);
 
   const renderLoadingView = () => {
@@ -122,6 +153,8 @@ const Home = () => {
     updatedBlogs.map((blogItem) => {
       return <Blog blogDetails={blogItem} key={blogItem._id} />;
     });
+
+    
 
   const renderNoBlogsView = () => {
     return (
@@ -203,6 +236,7 @@ const Home = () => {
             padding: "24px",
             boxSizing: "border-box",
             backdropFilter: "blur(10px)",
+            marginTop: "65px",
           }}
           gap={{ xs: 2, md: 4 }}
         >
@@ -297,6 +331,9 @@ const Home = () => {
           profile={profile}
           setProfile={setProfile}
         />
+        <CategoryTabs category={category} setCategory={setCategory} />
+
+        <WinnerTicker winnerDetails={winnerDetails} mode={mode} />
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             {renderBlogsApi()}

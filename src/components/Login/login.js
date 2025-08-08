@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
-import loginVector from "../../assets/Login vector.png";
+// import loginVector from "../../assets/Login vector.png";
 import LoginAnimation from "../../helpers/LoginAnimation";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorlighttext from "../../assets/aapmorwhitetext.svg";
@@ -144,7 +144,6 @@ const Login = () => {
     setSuccessMsg("");
   };
 
-  //RETURN
   return (
     <Box
       className="login-container"
@@ -152,11 +151,40 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
-        width: "100vw",
+        minHeight: "100vh",
+        width: "100",
         boxSizing: "border-box",
+        background:" rgba(43, 43, 43, 1)",
+        overflow: "hidden",
+        position:"relative",
       }}
     >
+      <Box
+    sx={{
+      position: "absolute",
+      top: "0px",
+      right: "0px",
+      width: "400px",
+      height: "400px",
+      background: "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
+      filter: "blur(10px)",
+      zIndex: 0,
+    }}
+  />
+
+  <Box
+    sx={{
+      position: "absolute",
+      bottom: "0px",
+      left: "0px",
+      width: "400px",
+      height: "400px",
+      background: "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
+      filter: "blur(10px)",
+      zIndex: 0,
+    }}
+  />
+     
       {/* <Box>{<LoginAnimation />}</Box> */}
       <Box
         sx={(theme) => ({
@@ -170,10 +198,10 @@ const Login = () => {
           gap: 3,
           // width: "fit-content",
           width: { xs: "80%", md: "50%" },
-          borderTop: `6px double ${theme.palette.accent.main}`,
-          borderLeft: `6px double ${theme.palette.accent.main}`,
-          backdropFilter: "blur(10px)",
-          boxShadow: "6px 6px 16px 0px #bfbfbf",
+          // borderTop: `6px double ${theme.palette.accent.main}`,
+          // borderLeft: `6px double ${theme.palette.accent.main}`,
+          // backdropFilter: "blur(10px)",
+          // boxShadow: "6px 6px 16px 0px #bfbfbf",
         })}
       >
         {/* <img
@@ -189,7 +217,7 @@ const Login = () => {
         /> */}
         <Stack
           direction={{ md: "row", xs: "column" }}
-          spacing={2}
+          spacing={1}
           alignItems="center"
           justifyContent={"center"}
         >
@@ -212,12 +240,14 @@ const Login = () => {
             )} */}
             {!mode && (
               <img
-                src={aapmortext}
+                src={aapmorlighttext}
                 alt="aapmortext"
                 style={
                   {
                     // height: { xs: "20px", md: "80px" },
                     // width: { xs: "50px", md: "100px" },
+                    width:'150px',
+                
                   }
                 }
               />
@@ -229,24 +259,24 @@ const Login = () => {
             sx={{
               borderRightWidth: 4,
               display: { xs: "none", md: "block" },
-              borderColor: "accent.main",
-              height: "80px",
+              borderColor: "1px solid #767676",
+              height: "60px",
               alignSelf: "center",
-              borderRadius: "50%",
+              // borderRadius: "50%",
               width: "10px",
             }}
           />
           <Typography
-            color="accent.main"
-            fontWeight={500}
-            fontSize={{ xs: "32px", md: "40px" }}
+            color="white"
+            fontWeight={250}
+            fontSize={{ xs: "25px", md: "40px" }}
             // variant={{ xs: "h3", md: "h4" }}
-            fontFamily={"Playwrite CO Guides, serif"}
+            fontFamily={"san-serif"}
           >
             Blogs
           </Typography>
         </Stack>
-        <Typography
+        {/* <Typography
           // mt={-3}
           variant="p"
           textAlign={"center"}
@@ -259,20 +289,23 @@ const Login = () => {
         >
           Explore, engage, and be inspired. Dive into a world of captivating
           content. Let's get started!
-        </Typography>
+        </Typography> */}
         <Typography variant="h5" gutterBottom fontFamily={"Source sans pro"}>
-          Login / Signup
+          Login to Continue
         </Typography>
         {/* email Input */}
+        <Typography sx={{mt:0,display:'flex',justifyContent:'center'}}>Email*
+          </Typography>
         {showEmailView && (
+          
           <TextField
             variant="outlined"
             required
-            label="Email"
+            label=""
             id="email"
             error={emailError}
             helperText={emailError === true && "Invalid email id"}
-            placeholder="Enter Aapmor email id"
+            placeholder="Enter your email"
             onChange={handleEmailChange}
             value={email}
             sx={{
@@ -280,6 +313,8 @@ const Login = () => {
               width: { xs: "90%", lg: "60%" },
               marginBottom: { xs: "30px", lg: "8px" },
               animation: emailError ? "shake 0.3s" : "",
+              "& .MuiOutlinedInput-root": {
+                borderRadius:'12px'},
               "@keyframes shake": {
                 "0%": { marginLeft: "0rem" },
                 "25%": { marginLeft: "0.5rem" },
@@ -290,6 +325,7 @@ const Login = () => {
               },
             }}
           />
+          
         )}
         {showOtpView && (
           <TextField
@@ -311,12 +347,14 @@ const Login = () => {
             onClick={onSubmitEmail}
             data-testid="email input"
             variant="contained"
-            disabled={isButtonDisable}
+            // disabled={isButtonDisable}
             sx={(theme) => ({
-              width: { xs: "90%", lg: "60%" },
-              height: "52px",
+              width: { xs: "60%", sm: "40%" },
+              height: "44px",
               fontWeight: 500,
-              backgroundColor: `${theme.palette.accent.main}`,
+              backgroundColor: '#ffffff',
+              color:'#000000',
+              borderRadius:'20px',
               "&:hover": {
                 backgroundColor: `${theme.palette.accent.main}`,
               },
@@ -331,12 +369,13 @@ const Login = () => {
           <Button
             variant="contained"
             sx={(theme) => ({
-              width: { xs: "90%", lg: "60%" },
+              width: { xs: "50%", lg: "10%" },
               height: "48px",
               marginBottom: { xs: "30px", lg: "0px" },
               backgroundColor: `${theme.palette.accent.main}`,
               "&:hover": {
                 backgroundColor: "#016A70",
+                
               },
             })}
             onClick={handleOtpEntered}
