@@ -184,3 +184,24 @@
     transform: translate(100px, 100px) rotate(112deg);
   }
 }
+@keyframes blinkIcon {
+  0%,
+  100% {
+    opacity: 1; /* fully visible */
+  }
+  12.5%,
+  37.5%,
+  62.5%,
+  87.5% {
+    opacity: 0.25; /* faded */
+  }
+  25%,
+  50%,
+  75% {
+    opacity: 1;
+  }
+}
+
+.blink {
+  animation: blinkIcon 2s ease-out infinite; /* duration + infinite loop */
+}
