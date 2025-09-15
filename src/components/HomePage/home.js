@@ -11,11 +11,14 @@ import noBlogsImage from "../../assets/noblogs.png";
 import WinnerAnnouncement from "../BlogWinner";
 import AdminDashboard from "../Sidebar/AdminDashboard";
 import { registerUser } from "../../socket";
-import { getBlogsApi, getBlogsByCategoryApi } from "../../providers/blogProvider";
+import {
+  getBlogsApi,
+  getBlogsByCategoryApi,
+} from "../../providers/blogProvider";
 import { getWinnerOfTheMonth } from "../../providers/adminProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
 import { token } from "../../utilities/authUtils";
-import WinnerTicker from "../WinnerTicker"; 
+import WinnerTicker from "../WinnerTicker";
 import CategoryTabs from "../Sidebar/CategoryTabs";
 import useTheme from "@mui/material/styles/useTheme";
 
@@ -34,7 +37,7 @@ const Home = () => {
   const [profileDetails, setProfileDetails] = useState({});
   console.log(profile, "PROFILE");
   const theme = useTheme();
-  const mode=theme.palette.mode;
+  const mode = theme.palette.mode;
 
   useEffect(() => {
     document.title = "AAPMOR | Blogs";
@@ -78,7 +81,7 @@ const Home = () => {
     setTimeout(() => {
       setShowAlert(false);
     }, 2000);
-  }, [showAlert])
+  }, [showAlert]);
 
   useEffect(() => {
     setUpdatedBlogs(blogs);
@@ -95,35 +98,37 @@ const Home = () => {
   //   }
   // };
 
-
   useEffect(() => {
-  const fetchBlogsByCategory = async () => {
-    setApiStatus("INITIAL");
-    const response = await getBlogsByCategoryApi(category);
-    if (response.status === 200) {
-      setApiStatus("SUCCESS");
-      dispatch(setBlogsData(response.data));
-    } else {
-      setApiStatus("FAILURE");
+    const fetchBlogsByCategory = async () => {
+      setApiStatus("INITIAL");
+      const response = await getBlogsByCategoryApi(category);
+      if (response.status === 200) {
+        setApiStatus("SUCCESS");
+        dispatch(setBlogsData(response.data));
+      } else {
+        setApiStatus("FAILURE");
+      }
+    };
+
+    // Only fetch if category is defined
+    if (category) {
+      fetchBlogsByCategory();
     }
-  };
+  }, [category]);
 
-  // Only fetch if category is defined
-  if (category) {
-    fetchBlogsByCategory();
-  }
-}, [category]);
-
-
-//   useEffect(() => {
-//   setApiStatus("INITIAL");
-//   getBlogsData();
-// }, [category]);
+  //   useEffect(() => {
+  //   setApiStatus("INITIAL");
+  //   getBlogsData();
+  // }, [category]);
 
   const getWinnerDetails = async () => {
     const response = await getWinnerOfTheMonth();
-    if (response) {
+    console.log(response, "RESP");
+
+    if (response && !response?.data?.message) {
       setWinnerDetails(response?.data);
+    } else {
+      setWinnerDetails([]);
     }
   };
 
@@ -140,7 +145,7 @@ const Home = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "90vh",
+          height: "calc(100vh - 156px)",
           width: "100%",
         }}
       >
@@ -153,8 +158,6 @@ const Home = () => {
     updatedBlogs.map((blogItem) => {
       return <Blog blogDetails={blogItem} key={blogItem._id} />;
     });
-
-    
 
   const renderNoBlogsView = () => {
     return (
@@ -203,7 +206,7 @@ const Home = () => {
     return (
       <Box
         sx={{
-          height: "calc(100vh - 65px)",
+          height: "calc(100vh - 156px)",
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -234,9 +237,10 @@ const Home = () => {
             width: "100%",
             minHeight: "91vh",
             padding: "24px",
+            paddingTop: 0,
             boxSizing: "border-box",
             backdropFilter: "blur(10px)",
-            marginTop: "65px",
+            // marginTop: "65px",
           }}
           gap={{ xs: 2, md: 4 }}
         >
@@ -331,11 +335,12 @@ const Home = () => {
           profile={profile}
           setProfile={setProfile}
         />
-        <CategoryTabs category={category} setCategory={setCategory} />
-
+        {/* {winnerDetails?.length > 0 && ( */}
         <WinnerTicker winnerDetails={winnerDetails} mode={mode} />
+        {/*  )} */}
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
+            <CategoryTabs category={category} setCategory={setCategory} />
             {renderBlogsApi()}
           </Grid>
           <Grid

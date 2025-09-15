@@ -154,43 +154,48 @@ const Category = ({ category, setCategory, label }) => {
         value={label}
         variant={category === label ? "contained" : "outlined"}
         onClick={(e) => setCategory(label)}
-       sx={{
-  border: `1px solid ${isSelected ? "#016A70" : isDarkMode ? "#444" : "#ccc"}`,
-  height: "30px",
-  width: "100%",
-  borderRadius: 2,
-  textTransform: "none",
-  backgroundColor: isSelected
-    ? "#016A70"
-    : isDarkMode
-    ? "rgba(255,255,255,0.05)"
-    : "#f5f5f5",
-  color: isSelected
-    ? "#fff"
-    : isDarkMode
-    ? "#e0e0e0"
-    : "#333",
-  fontWeight: isSelected ? "bold" : "",
-  p: "6px",
-  background: isSelected
-    ? "#016A70"
-    : isDarkMode
-    ? "linear-gradient(343.58deg, rgba(30, 30, 30, 0.2) -21.05%, rgba(60, 60, 60, 0.5) 24.15%, #292929 77.91%)"
-    : "linear-gradient(343.58deg, rgba(240, 240, 240, 0.5) -21.05%, rgba(230, 230, 230, 0.5) 24.15%, #f2f2f2 77.91%)",
-  mr: 0.5,
-  borderImage: isDarkMode
-    ? "linear-gradient(180deg, #363636 0%, rgba(50, 50, 50, 0.5) 100%)"
-    : "linear-gradient(180deg, #ccc 0%, rgba(200, 200, 200, 0.5) 100%)",
-  "&:hover": {
-    borderColor: "#016A70",
-    backgroundColor: isSelected
-      ? "#015B61"
-      : isDarkMode
-      ? "#3a3a3a"
-      : "#eaeaea",
-  },
-}}
-
+        sx={{
+          border: `1px solid ${
+            isSelected ? "#F1F1F1" : isDarkMode ? "#444" : "#ccc"
+          }`,
+          height: "30px",
+          width: "100%",
+          borderRadius: 2,
+          textTransform: "none",
+          // backgroundColor: isSelected
+          //   ? "#F1F1F1"
+          //   : isDarkMode
+          //   ? "#F1F1F1"
+          //   : "#f5f5f5",
+          color: isSelected ? "#222121" : isDarkMode ? "#e0e0e0" : "#333333",
+          fontWeight: isSelected ? "bold" : "",
+          p: "6px",
+          // background: isSelected
+          //   ? "#F1F1F1"
+          //   : isDarkMode
+          //   ? "linear-gradient(343.58deg, rgba(30, 30, 30, 0.2) -21.05%, rgba(60, 60, 60, 0.5) 24.15%, #292929 77.91%)"
+          //   : "linear-gradient(343.58deg, rgba(240, 240, 240, 0.5) -21.05%, rgba(230, 230, 230, 0.5) 24.15%, #f2f2f2 77.91%)",
+          mr: 0.5,
+          background: isSelected
+            ? isDarkMode
+              ? "#F1F1F1"
+              : ""
+            : isDarkMode
+            ? "linear-gradient(322.49deg, #121212 -10.4%, #1e1e1e80 32.3%, #292929 83.09%)"
+            : "linear-gradient(343.58deg, #f0f0f080 -21.05%, #e6e6e680 24.15%, #f2f2f2 77.91%)",
+          // borderImage: isDarkMode
+          //   ? "linear-gradient(180deg, #363636 0%, rgba(50, 50, 50, 0.5) 100%)"
+          //   : "linear-gradient(180deg, #ccc 0%, rgba(200, 200, 200, 0.5) 100%)",
+          "&:hover": {
+            borderColor: "#F1F1F1",
+            backgroundColor: isSelected
+              ? "#363636"
+              : isDarkMode
+              ? "#3a3a3a"
+              : "#eaeaea",
+            color: isSelected ? "#222121" : isDarkMode ? "#e0e0e0" : "#333333",
+          },
+        }}
       >
         {label}
       </Button>

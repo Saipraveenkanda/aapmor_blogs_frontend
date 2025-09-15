@@ -15,7 +15,12 @@ export const registerUser = (userId) => {
 // Listen for notifications
 export const listenToNotifications = (callback) => {
   socket.on("notification", callback);
-  socket.on("recent-activity", callback);
+  // socket.on("recent-activity", callback);
+};
+
+// Get Recent Activity
+export const getRecentActivity = (data) => {
+  socket.on("recent-activity", data);
 };
 
 export default socket;

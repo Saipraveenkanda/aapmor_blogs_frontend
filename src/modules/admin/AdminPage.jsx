@@ -130,7 +130,7 @@ const AdminPage = (props) => {
             >
               Monthly Spotlight: Winning Blogs
             </Typography>
-            <Grid xs={12} container item spacing={2} /* sx={{ mt: 1 }} */>
+            <Grid xs={12} container item spacing={2}>
               <WinnerItem winners={winnerBlogs} />
             </Grid>
           </Grid>

@@ -62,7 +62,7 @@ export const getBlogViewApi = async (id) => {
     return response;
   } catch (error) {
     console.log(error, "ERROR");
-    toast.error(TOAST_MESSAGES.FAILURE_BLOG); //GET BLOG ERROR
+    // toast.error(TOAST_MESSAGES.FAILURE_BLOG); //GET BLOG ERROR
     return error;
   }
 };
@@ -222,12 +222,12 @@ export const commentReplyService = async (
   }
 };
 
-
-
 /* GET BLOGS BY CATEGORY */
 export const getBlogsByCategoryApi = async (category = "All") => {
   try {
-    const response = await axios.get(`${apiEndpoints.filterBlogsApiUrl}?category=${category}`);
+    const response = await axios.get(
+      `${apiEndpoints.filterBlogsApiUrl}?category=${category}`
+    );
     return response;
   } catch (error) {
     console.log(error, "ERROR");
@@ -235,4 +235,3 @@ export const getBlogsByCategoryApi = async (category = "All") => {
     return error;
   }
 };
-

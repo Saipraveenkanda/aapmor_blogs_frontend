@@ -6,6 +6,7 @@ import {
   Avatar,
   Box,
   Skeleton,
+  Stack,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
@@ -20,40 +21,38 @@ import WriteButton from "../../helpers/WriteButton";
 // import Lottie from "lottie-react";
 import { getUserFromToken } from "../../utilities/authUtils";
 import aiImage from "../../assets/aiImage.jpg";
-  import { Divider } from "@mui/material";
+import { Divider } from "@mui/material";
+import { getNotifications, getRecentActivity } from "../../socket";
+import activityimage from "../../assets/noactivity.png";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
-  right: "12px",
+  right: "40px",
   display: "flex",
   flexDirection: "column",
   gap: "16px",
   padding: "16px",
+  paddingTop: "0px",
   boxSizing: "border-box",
   borderRadius: "12px",
   borderTopRightRadius: "0",
   borderBottomRightRadius: "0",
   maxHeight: "calc(100vh - 64px)",
-  height: "calc(100vh - 64px)",
+  // height: "calc(100vh - 64px)",
   width: "370px",
+  height: "auto",
+  maxHeight: "80%",
+  mt: 0,
 });
 
 const GlassCard = styled(Card)(({ theme }) => ({
   flexGrow: 1,
-  cursor: "pointer",
   elevation: 0,
-  // backdropFilter: "blur(10px)",
+  boxShadow: "none",
   borderRadius: "12px",
-  // borderLeft: `2px solid ${theme.palette.accent.main}`,
-  // boxShadow: "2px 2px 8px 0px rgba(0, 0, 0, 0.08)",
- background: "rgba(43, 43, 43, 1)",
+  background: "rgba(43, 43, 43, 1)",
   padding: "8px !important",
   boxSizing: "border-box",
-  // transition: "transform 0.3s ease-in-out",
-  // "&:hover": {
-  //   transform: "scale(1.05)",
-  // },
-  // background: "linear-gradient(to right, #ffffff 5 0%, #016A7090 25%)",
   backgroundColor: "transparent",
 }));
 
@@ -68,8 +67,11 @@ const Dashboard = () => {
   const [topBlogs, setTopBlogs] = useState([]);
   const [lastReadBlog, setLastReadBlog] = useState({});
   const user = getUserFromToken();
-  const [winners, setWinners] = useState([]); 
+  const [winners, setWinners] = useState([]);
   const [showWinners, setShowWinners] = useState(false);
+  const [activity, setActivity] = useState([]);
+  console.log(activity, "ACTIVITY");
+
   useEffect(() => {
     setLoading(true);
     const lastReadBlogId = localStorage.getItem("lastReadBlog") || "";
@@ -94,11 +96,31 @@ const Dashboard = () => {
     setLastReadBlog(lastReadBlog);
   }, [blogObj]);
 
+  function timeAgo(dateInput) {
+    const now = new Date();
+    const date = new Date(dateInput);
+    const seconds = Math.floor((now - date) / 1000);
+
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hr${hours > 1 ? "s" : ""} ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 5) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months} month${months > 1 ? "s" : ""} ago`;
+    const years = Math.floor(days / 365);
+    return `${years} year${years > 1 ? "s" : ""} ago`;
+  }
+
   const monthName = new Date().toLocaleString("default", {
     month: "long",
   });
 
- useEffect(() => {
+  useEffect(() => {
     const fetchWinners = async () => {
       try {
         const res = await fetch(`${process.env.REACT_APP_API_URL}/api/winners`);
@@ -110,10 +132,10 @@ const Dashboard = () => {
     };
     fetchWinners();
     const showFlag = localStorage.getItem("showAnnouncement");
-  if (showFlag === "true") {
-    setShowWinners(true);
-    localStorage.removeItem("showAnnouncement");
-  }
+    if (showFlag === "true") {
+      setShowWinners(true);
+      localStorage.removeItem("showAnnouncement");
+    }
   }, []);
 
   const handleCheckWinners = () => {
@@ -123,202 +145,142 @@ const Dashboard = () => {
 
   const [currentWinnerIndex, setCurrentWinnerIndex] = useState(0);
 
-// Cycle through winners every 4 seconds
-useEffect(() => {
-  if (!winners || winners.length <= 1) return;
+  // Cycle through winners every 4 seconds
+  useEffect(() => {
+    if (!winners || winners.length <= 1) return;
 
-  const interval = setInterval(() => {
-    setCurrentWinnerIndex((prevIndex) => (prevIndex + 1) % winners.length);
-  }, 4000); 
+    const interval = setInterval(() => {
+      setCurrentWinnerIndex((prevIndex) => (prevIndex + 1) % winners.length);
+    }, 4000);
 
-  return () => clearInterval(interval); 
-}, [winners]);
+    return () => clearInterval(interval);
+  }, [winners]);
+
+  /* Recent Activity in Admin Page from Web socket */
+  useEffect(() => {
+    getRecentActivity((data) => {
+      setActivity((prev) => [data, ...prev]);
+    });
+  }, []);
 
   return (
     <>
-    <DashboardContainer sx={{mt:3}}>
-  {/* User Profile */}
-  {/* <GlassCard sx={{ height: "max-content !important" }}>
-    <CardContent
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        gap: 1,
-        padding: "8px !important",
-      }}
-      onClick={() => navigate("/user/profile")}
-    >
-      <Avatar
-        sx={(theme) => ({
-          width: 60,
-          height: 60,
-          marginBottom: 1,
-          border: `2px solid ${theme.palette.accent.main}`,
-          backgroundColor: "transparent",
-          backdropFilter: "blur(10px)",
-          color: "text.primary",
-        })}
-        src={user?.profileImage}
-      >
-        {user?.name?.slice(0, 1)}
-      </Avatar>
-      <Box>
-        <Typography variant="h6" fontWeight={"bold"}>
-          Welcome {user?.name}!
-        </Typography>
-        <Typography variant="body2">Profile | Saved Blogs</Typography>
-      </Box>
-    </CardContent>
-  </GlassCard> */}
+      <DashboardContainer>
+        <GlassCard>
+          <CardContent sx={{ p: 1 }}>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              gutterBottom
+              sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}
+            >
+              Activities
+            </Typography>
+            <Box
+              sx={{
+                maxHeight: "35vh",
+                overflowY: "auto",
+                scrollbarWidth: "none",
+              }}
+            >
+              {activity.length > 0 ? (
+                activity?.map((a, index) => {
+                  return (
+                    <Stack key={index} direction={"column"} spacing={1}>
+                      <Typography key={index}>{a?.message}</Typography>
 
-  {/* --- COMMENTED OUT: Last Read Blog --- */}
-  {/*
-  <GlassCard>
-    <CardContent
-      onClick={() => {
-        navigate(`/blogs/${lastReadBlog._id}`);
-      }}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        padding: "8px !important",
-      }}
-    >
-      <Typography
-        variant="h6"
-        fontWeight={"bold"}
-        gutterBottom
-        sx={{ display: "flex", alignItems: "center", gap: 1 }}
-      >
-        <InterestsIcon color="primary" />
-        Based on your interest
-      </Typography>
-      {loading && <Skeleton variant="rounded" height={46} width={"100%"} />}
-      {lastReadBlog && !loading && (
-        <>
-          <BlogCardSlider topBlogs={[lastReadBlog]} />
-        </>
-      )}
-      {lastReadBlog === undefined && (
-        <Typography variant="caption">
-          No blog read yet. Click any blog to add it here.
-        </Typography>
-      )}
-    </CardContent>
-  </GlassCard>
-  */}
+                      <Typography variant="caption">
+                        {timeAgo(a.timestamp)}
+                      </Typography>
+                    </Stack>
+                  );
+                })
+              ) : (
+                <Stack direction={"column"} alignItems={"center"}>
+                  <img
+                    src={activityimage}
+                    alt="no-activity-image"
+                    style={{ height: "100px" }}
+                  />
+                  <Typography>No recent activity</Typography>
+                </Stack>
+              )}
+            </Box>
+            {!loading && winners.length > 0 && (
+              <>
+                <Divider
+                  sx={{
+                    my: 4,
+                    height: "1px",
+                    backgroundImage:
+                      "linear-gradient(90deg, rgba(0,0,0,0), #4E4E4E, rgba(0,0,0,0))",
+                    backgroundColor: "transparent",
+                    border: "none",
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  gutterBottom
+                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                >
+                  Best blogs of the month
+                </Typography>
 
-  {/* --- COMMENTED OUT: Trending Blogs --- */}
-  {/*
-  <GlassCard>
-    <CardContent sx={{ padding: "8px !important" }}>
-      <Typography
-        variant="h6"
-        fontWeight={"bold"}
-        gutterBottom
-        sx={{ display: "flex", alignItems: "center" }}
-      >
-        <WhatshotOutlinedIcon color="error" /> Trending blogs for you
-      </Typography>
-      {loading && <Skeleton variant="rounded" height={40} width={"100%"} />}
-      {topBlogs.length > 0 ? (
-        <BlogCardSlider topBlogs={topBlogs} interval={3000} />
-      ) : (
-        <Typography variant="p">No trending blogs at the moment</Typography>
-      )}
-    </CardContent>
-  </GlassCard>
-  */}
+                <Box
+                  key={winners[currentWinnerIndex]?._id || currentWinnerIndex}
+                  onClick={() =>
+                    window.open(winners[currentWinnerIndex]?.blogLink, "_blank")
+                  }
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                    // borderRadius: 2,
+                    overflow: "hidden",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+                    "&:hover": { boxShadow: "0 2px 6px rgba(0,0,0,0.2)" },
+                    transition: "all 0.3s ease-in-out",
+                  }}
+                >
+                  <Box sx={{ width: "90%", height: 100, overflow: "hidden" }}>
+                    <img
+                      src={winners[currentWinnerIndex]?.blogImage || aiImage}
+                      alt="Winner"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ p: 1 }}>
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      sx={{
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 2,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {winners[currentWinnerIndex]?.blogTitle}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      by {winners[currentWinnerIndex]?.winnerName}
+                    </Typography>
+                  </Box>
+                </Box>
+              </>
+            )}
+          </CardContent>
+        </GlassCard>
+      </DashboardContainer>
 
-  {/* --- COMMENTED OUT: Recent Activity --- */}
-  
- 
-<GlassCard sx={{ maxHeight: "500px" ,mt:5}}>
-  <CardContent sx={{ padding: "5px" }}>
-    <Typography
-      variant="h6"
-      fontWeight="bold"
-      gutterBottom
-      sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}
-    >
-      Activities
-    </Typography>
-    <Typography mb={2}>John liked “state management in React”</Typography>
-    <Typography mb={2}>Ganesh just posted a new blog - Testing with automation tools</Typography>
-    <Typography mb={2}>Top 10 things to do in 2025 by Joseph is trending</Typography>
-
-    <Divider
-  sx={{
-    my: 4,
-    height: "1px",
-    backgroundImage:
-      "linear-gradient(90deg, rgba(0,0,0,0), #4E4E4E, rgba(0,0,0,0))",
-    backgroundColor: "transparent",
-    border: "none",
-  }}
-/>
-    <Typography
-      variant="h6"
-      fontWeight="bold"
-      gutterBottom
-      sx={{ display: "flex", alignItems: "center", gap: 1 }}
-    >
-       Best blogs of the month
-    </Typography>
-
-   {!loading && winners.length > 0 && (
-  <Box
-    key={winners[currentWinnerIndex]?._id || currentWinnerIndex}
-    onClick={() => window.open(winners[currentWinnerIndex]?.blogLink, "_blank")}
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      cursor: "pointer",
-      // borderRadius: 2,
-      overflow: "hidden",
-      boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-      "&:hover": { boxShadow: "0 2px 6px rgba(0,0,0,0.2)" },
-      transition: "all 0.3s ease-in-out",
-    }}
-  >
-    <Box sx={{ width: "90%", height: 100, overflow: "hidden",}}>
-      <img
-        src={aiImage}
-        alt="Winner"
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          display: "block",
-        }}
-      />
-    </Box>
-    <Box sx={{ p: 1 }}>
-      <Typography
-        variant="body2"
-        fontWeight="bold"
-        sx={{
-          display: "-webkit-box",
-          WebkitBoxOrient: "vertical",
-          WebkitLineClamp: 2,
-          overflow: "hidden",
-        }}
-      >
-        {winners[currentWinnerIndex]?.blogTitle}
-      </Typography>
-      <Typography variant="caption" color="text.secondary">
-        by {winners[currentWinnerIndex]?.winnerName}
-      </Typography>
-    </Box>
-  </Box>
-)}
-  </CardContent>
-</GlassCard>
-</DashboardContainer>
-
-<WriteButton />
-</>
+      <WriteButton />
+    </>
   );
 };
 

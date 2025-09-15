@@ -154,37 +154,39 @@ const Login = () => {
         minHeight: "100vh",
         width: "100",
         boxSizing: "border-box",
-        background:" rgba(43, 43, 43, 1)",
+        background: " rgba(43, 43, 43, 1)",
         overflow: "hidden",
-        position:"relative",
+        position: "relative",
       }}
     >
       <Box
-    sx={{
-      position: "absolute",
-      top: "0px",
-      right: "0px",
-      width: "400px",
-      height: "400px",
-      background: "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
-      filter: "blur(10px)",
-      zIndex: 0,
-    }}
-  />
+        sx={{
+          position: "absolute",
+          top: "0px",
+          right: "0px",
+          width: "400px",
+          height: "400px",
+          background:
+            "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
+          filter: "blur(10px)",
+          zIndex: 0,
+        }}
+      />
 
-  <Box
-    sx={{
-      position: "absolute",
-      bottom: "0px",
-      left: "0px",
-      width: "400px",
-      height: "400px",
-      background: "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
-      filter: "blur(10px)",
-      zIndex: 0,
-    }}
-  />
-     
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: "0px",
+          left: "0px",
+          width: "400px",
+          height: "400px",
+          background:
+            "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
+          filter: "blur(10px)",
+          zIndex: 0,
+        }}
+      />
+
       {/* <Box>{<LoginAnimation />}</Box> */}
       <Box
         sx={(theme) => ({
@@ -242,14 +244,11 @@ const Login = () => {
               <img
                 src={aapmorlighttext}
                 alt="aapmortext"
-                style={
-                  {
-                    // height: { xs: "20px", md: "80px" },
-                    // width: { xs: "50px", md: "100px" },
-                    width:'150px',
-                
-                  }
-                }
+                style={{
+                  // height: { xs: "20px", md: "80px" },
+                  // width: { xs: "50px", md: "100px" },
+                  width: "150px",
+                }}
               />
             )}
           </Stack>
@@ -267,7 +266,7 @@ const Login = () => {
             }}
           />
           <Typography
-            color="white"
+            color="#E8E8E8"
             fontWeight={250}
             fontSize={{ xs: "25px", md: "40px" }}
             // variant={{ xs: "h3", md: "h4" }}
@@ -290,14 +289,22 @@ const Login = () => {
           Explore, engage, and be inspired. Dive into a world of captivating
           content. Let's get started!
         </Typography> */}
-        <Typography variant="h5" gutterBottom fontFamily={"Source sans pro"}>
+        <Typography
+          color="#E8E8E8"
+          variant="h5"
+          gutterBottom
+          fontFamily={"Source sans pro"}
+        >
           Login to Continue
         </Typography>
         {/* email Input */}
-        <Typography sx={{mt:0,display:'flex',justifyContent:'center'}}>Email*
-          </Typography>
+        <Typography
+          color="#E8E8E8"
+          sx={{ mt: 0, display: "flex", justifyContent: "center" }}
+        >
+          Email*
+        </Typography>
         {showEmailView && (
-          
           <TextField
             variant="outlined"
             required
@@ -309,12 +316,14 @@ const Login = () => {
             onChange={handleEmailChange}
             value={email}
             sx={{
+              color: "#E8E8E8",
               height: "52px",
               width: { xs: "90%", lg: "60%" },
               marginBottom: { xs: "30px", lg: "8px" },
               animation: emailError ? "shake 0.3s" : "",
               "& .MuiOutlinedInput-root": {
-                borderRadius:'12px'},
+                borderRadius: "12px",
+              },
               "@keyframes shake": {
                 "0%": { marginLeft: "0rem" },
                 "25%": { marginLeft: "0.5rem" },
@@ -325,7 +334,6 @@ const Login = () => {
               },
             }}
           />
-          
         )}
         {showOtpView && (
           <TextField
@@ -352,9 +360,9 @@ const Login = () => {
               width: { xs: "60%", sm: "40%" },
               height: "44px",
               fontWeight: 500,
-              backgroundColor: '#ffffff',
-              color:'#000000',
-              borderRadius:'20px',
+              backgroundColor: "#ffffff",
+              color: "#000000",
+              borderRadius: "20px",
               "&:hover": {
                 backgroundColor: `${theme.palette.accent.main}`,
               },
@@ -375,7 +383,6 @@ const Login = () => {
               backgroundColor: `${theme.palette.accent.main}`,
               "&:hover": {
                 backgroundColor: "#016A70",
-                
               },
             })}
             onClick={handleOtpEntered}

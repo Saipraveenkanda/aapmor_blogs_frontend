@@ -2,17 +2,21 @@ import React from "react";
 import { CardContent, Typography, Button, Box, Grid } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-const WinnerItem = ({ winners }) => {
-  if (!winners || winners.length === 0) {
+const WinnerItem = ({ winners = [] }) => {
+  console.log(winners, "WINNERS");
+
+  if (!winners || winners.length === 0 || winners.message) {
     return (
-      <Typography variant="body1" color="textSecondary">
-        No winners available.
-      </Typography>
+      <Grid item xs={12} md={6}>
+        <Typography variant="body1" color="textSecondary">
+          No winners available.
+        </Typography>
+      </Grid>
     );
   }
   return (
     // <Box>
-    winners.map((winner) => (
+    winners?.map((winner) => (
       <Grid item xs={12} md={6} key={winner._id}>
         <Box
           sx={{

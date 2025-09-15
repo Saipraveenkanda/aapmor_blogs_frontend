@@ -226,6 +226,7 @@ const BlogView = () => {
     savedUsers,
     isBestBlog,
     publishedToWeb,
+    blogImage,
   } = blogDetails;
 
   const renderLoading = () => {
@@ -382,7 +383,6 @@ const BlogView = () => {
   };
 
   const handleSubmit = async () => {
-
     const previousMonth = new Intl.DateTimeFormat("en-US", {
       month: "long",
     }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
@@ -393,6 +393,7 @@ const BlogView = () => {
       blogLink: window.location.href,
       month: previousMonth,
       blogId: _id,
+      blogImage,
     };
     try {
       if (!isWinnerAnnounced) {
@@ -403,7 +404,6 @@ const BlogView = () => {
           return;
         }
         if (response.status === 201) {
-
           setSnackMessage("Winner has been set successfully!");
           setOpenSnackBar(true);
           setIsWinnerAnnounced(true);
@@ -429,7 +429,6 @@ const BlogView = () => {
       setIsWinnerAnnounced(false);
     }
   }, [blogDetails]);
-
 
   const handlePublish = async () => {
     const payload = {

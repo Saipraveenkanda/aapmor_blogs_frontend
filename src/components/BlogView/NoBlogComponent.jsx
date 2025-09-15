@@ -26,7 +26,7 @@ const BlogNotFound = () => {
         variant="contained"
         color="primary"
         onClick={() => navigate("/")}
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, textTransform: "none" }}
       >
         Go Back Home
       </Button>

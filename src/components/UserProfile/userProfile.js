@@ -38,7 +38,7 @@ import {
   profileUpdateApi,
   uploadProfileImage,
 } from "../../providers/userProvider";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const UserProfile = (props) => {
   const [profile, setProfile] = useState({});
@@ -203,8 +203,9 @@ const UserProfile = (props) => {
               <Typography
                 variant="h6"
                 sx={{ fontWeight: "bold", color: "text.primary" }}
-              ><IconButton>
-                  <ArrowBackIosIcon onClick={() => navigate('/')} />
+              >
+                <IconButton>
+                  <ArrowBackIosIcon onClick={() => navigate("/")} />
                 </IconButton>
                 Profile Update
               </Typography>
@@ -232,7 +233,7 @@ const UserProfile = (props) => {
                       border: `2px solid ${theme.palette.accent.main}`, // Correct way
                     })}
                     onClick={handleHover}
-                  // onMouseLeave={handleClose}
+                    // onMouseLeave={handleClose}
                   />
 
                   {/* Expanded Image on Hover */}
@@ -241,16 +242,18 @@ const UserProfile = (props) => {
                     anchorEl={anchorEl}
                     onClose={handleClose}
                     anchorOrigin={{
-                      vertical: "center",
-                      horizontal: "right",
+                      vertical: "top",
+                      horizontal: "left",
                     }}
                     transformOrigin={{
-                      vertical: "center",
+                      vertical: "top",
                       horizontal: "left",
                     }}
                     disableRestoreFocus
                     PaperProps={{
                       style: {
+                        height: "100%",
+                        width: "100%",
                         padding: "10px",
                         borderRadius: "10px",
                         backgroundColor: "rgba(0, 0, 0, 0.8)",
