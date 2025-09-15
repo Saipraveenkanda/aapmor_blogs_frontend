@@ -11,9 +11,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
-// import loginVector from "../../assets/Login vector.png";
-import LoginAnimation from "../../helpers/LoginAnimation";
-import aapmortext from "../../assets/aapmortext.svg";
 import aapmorlighttext from "../../assets/aapmorwhitetext.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { loginValidation, sendOtpApi } from "../../providers/userProvider";
@@ -146,280 +143,252 @@ const Login = () => {
 
   return (
     <Box
-      className="login-container"
       sx={{
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
-        width: "100",
-        boxSizing: "border-box",
-        background: " rgba(43, 43, 43, 1)",
-        overflow: "hidden",
-        position: "relative",
+        justifyContent: "center",
+        height: "100vh",
+        width: "100vw",
       }}
     >
       <Box
+        className="login-container"
         sx={{
-          position: "absolute",
-          top: "0px",
-          right: "0px",
-          width: "400px",
-          height: "400px",
-          background:
-            "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
-          filter: "blur(10px)",
-          zIndex: 0,
-        }}
-      />
-
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "0px",
-          left: "0px",
-          width: "400px",
-          height: "400px",
-          background:
-            "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
-          filter: "blur(10px)",
-          zIndex: 0,
-        }}
-      />
-
-      {/* <Box>{<LoginAnimation />}</Box> */}
-      <Box
-        sx={(theme) => ({
-          position: "relative",
-          borderRadius: "16px",
           display: "flex",
-          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "20px",
-          gap: 3,
-          // width: "fit-content",
-          width: { xs: "80%", md: "50%" },
-          // borderTop: `6px double ${theme.palette.accent.main}`,
-          // borderLeft: `6px double ${theme.palette.accent.main}`,
-          // backdropFilter: "blur(10px)",
-          // boxShadow: "6px 6px 16px 0px #bfbfbf",
-        })}
+          minHeight: "90vh",
+          width: "95vw",
+          boxSizing: "border-box",
+          background: " rgba(43, 43, 43, 1)",
+          overflow: "hidden",
+          position: "relative",
+          borderRadius: 2,
+        }}
       >
-        {/* <img
-          src={loginVector}
-          alt={"login vector logo"}
-          style={{
-            display: { xs: "none", md: "block" },
-            height: "60%",
+        {/* Gradient Circles 1 */}
+        <Box
+          sx={{
             position: "absolute",
-            left: { md: "-150px", xs: "-40px" },
-            marginBottom: "-60px",
+            top: "0px",
+            right: "0px",
+            width: "400px",
+            height: "400px",
+            background:
+              "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
+            filter: "blur(10px)",
+            zIndex: 0,
           }}
-        /> */}
-        <Stack
-          direction={{ md: "row", xs: "column" }}
-          spacing={1}
-          alignItems="center"
-          justifyContent={"center"}
-        >
-          <Stack direction={"row"} alignItems={"center"}>
-            <img
-              src={aapmorlogo}
-              alt="logoAapmor"
-              style={{ width: "80px", height: "50px" }}
-            />
+        />
+        {/* Gradient Circles 2 */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: "0px",
+            left: "0px",
+            width: "400px",
+            height: "400px",
+            background:
+              "radial-gradient(38.58% 38.58% at 50% 50%, rgba(116, 116, 116, 0.82) 0%, rgba(43, 43, 43, 1) 100%)",
+            filter: "blur(10px)",
+            zIndex: 0,
+          }}
+        />
 
-            {/* {mode && (
+        <Box
+          sx={(theme) => ({
+            // position: "relative",
+            // borderRadius: "16px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            // padding: "20px",
+            gap: 2,
+            width: { xs: "80%", md: "50%" },
+          })}
+        >
+          <Stack
+            direction={{ md: "row", xs: "column" }}
+            spacing={1}
+            alignItems="center"
+            justifyContent={"center"}
+          >
+            <Stack direction={"row"} alignItems={"center"}>
               <img
-                src={aapmorlighttext}
-                alt="aapmortext"
-                style={{
-                  height: { xs: "20px", md: "60px" },
-                  width: { xs: "40%", md: "60%" },
-                }}
+                src={aapmorlogo}
+                alt="logoAapmor"
+                style={{ width: "80px", height: "50px" }}
               />
-            )} */}
-            {!mode && (
-              <img
-                src={aapmorlighttext}
-                alt="aapmortext"
-                style={{
-                  // height: { xs: "20px", md: "80px" },
-                  // width: { xs: "50px", md: "100px" },
-                  width: "150px",
-                }}
-              />
-            )}
+
+              {!mode && (
+                <img
+                  src={aapmorlighttext}
+                  alt="aapmortext"
+                  style={{
+                    width: "150px",
+                  }}
+                />
+              )}
+            </Stack>
+            <Divider
+              orientation={"vertical"}
+              flexItem
+              sx={{
+                borderRightWidth: 2,
+                display: { xs: "none", md: "block" },
+                borderColor: "1px solid #767676",
+                height: "60px",
+                alignSelf: "center",
+                // borderRadius: "50%",
+                width: "10px",
+              }}
+            />
+            <Typography
+              color="#E8E8E8"
+              fontWeight={250}
+              fontSize={{ xs: "25px", md: "40px" }}
+              // variant={{ xs: "h3", md: "h4" }}
+              fontFamily={"san-serif"}
+            >
+              Blogs
+            </Typography>
           </Stack>
-          <Divider
-            orientation={"vertical"}
-            flexItem
-            sx={{
-              borderRightWidth: 4,
-              display: { xs: "none", md: "block" },
-              borderColor: "1px solid #767676",
-              height: "60px",
-              alignSelf: "center",
-              // borderRadius: "50%",
-              width: "10px",
-            }}
-          />
           <Typography
             color="#E8E8E8"
-            fontWeight={250}
-            fontSize={{ xs: "25px", md: "40px" }}
-            // variant={{ xs: "h3", md: "h4" }}
-            fontFamily={"san-serif"}
+            variant="h5"
+            gutterBottom
+            fontFamily={"Source sans pro"}
           >
-            Blogs
+            Login to Continue
           </Typography>
-        </Stack>
-        {/* <Typography
-          // mt={-3}
-          variant="p"
-          textAlign={"center"}
-          maxWidth={"500px"}
-          sx={{ whiteSpace: "break-spaces" }}
-          color={"grey"}
-          gutterBottom
-          fontSize={"24px"}
-          fontFamily={"Source sans pro"}
-        >
-          Explore, engage, and be inspired. Dive into a world of captivating
-          content. Let's get started!
-        </Typography> */}
-        <Typography
-          color="#E8E8E8"
-          variant="h5"
-          gutterBottom
-          fontFamily={"Source sans pro"}
-        >
-          Login to Continue
-        </Typography>
-        {/* email Input */}
-        <Typography
-          color="#E8E8E8"
-          sx={{ mt: 0, display: "flex", justifyContent: "center" }}
-        >
-          Email*
-        </Typography>
-        {showEmailView && (
-          <TextField
-            variant="outlined"
-            required
-            label=""
-            id="email"
-            error={emailError}
-            helperText={emailError === true && "Invalid email id"}
-            placeholder="Enter your email"
-            onChange={handleEmailChange}
-            value={email}
-            sx={{
-              color: "#E8E8E8",
-              height: "52px",
-              width: { xs: "90%", lg: "60%" },
-              marginBottom: { xs: "30px", lg: "8px" },
-              animation: emailError ? "shake 0.3s" : "",
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "12px",
-              },
-              "@keyframes shake": {
-                "0%": { marginLeft: "0rem" },
-                "25%": { marginLeft: "0.5rem" },
-                "75%": {
-                  marginLeft: "-0.5rem",
+          {/* email Input */}
+          {/* <Typography
+            color="#E8E8E8"
+            sx={{ mt: 0, display: "flex", justifyContent: "center" }}
+          >
+            Email*
+          </Typography> */}
+          {showEmailView && (
+            <TextField
+              variant="outlined"
+              required
+              label="Email"
+              id="email"
+              error={emailError}
+              helperText={emailError === true && "Invalid email id"}
+              placeholder="Enter your email"
+              onChange={handleEmailChange}
+              value={email}
+              sx={{
+                color: "#E8E8E8",
+                height: "52px",
+                width: { xs: "90%", lg: "60%" },
+                marginBottom: { xs: "30px", lg: "8px" },
+                animation: emailError ? "shake 0.3s" : "",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "12px",
                 },
-                "100%": { marginLeft: "0rem" },
-              },
-            }}
-          />
-        )}
-        {showOtpView && (
-          <TextField
-            variant="outlined"
-            required
-            label="OTP"
-            placeholder="Enter OTP"
-            value={otp}
-            onChange={handleOtpChange}
-            sx={{
-              width: { xs: "80%", lg: "60%" },
-              marginBottom: { xs: "30px", lg: "24px" },
-            }}
-          />
-        )}
-        {/* EMAIL SEND BUTTON */}
-        {showEmailView && (
-          <Button
-            onClick={onSubmitEmail}
-            data-testid="email input"
-            variant="contained"
-            // disabled={isButtonDisable}
-            sx={(theme) => ({
-              width: { xs: "60%", sm: "40%" },
-              height: "44px",
-              fontWeight: 500,
-              backgroundColor: "#ffffff",
-              color: "#000000",
-              borderRadius: "20px",
-              "&:hover": {
-                backgroundColor: `${theme.palette.accent.main}`,
-              },
-              mb: 2,
-            })}
-          >
-            {buttonText}
-          </Button>
-        )}
-        {/*  OTP BUTTON */}
-        {showOtpView && (
-          <Button
-            variant="contained"
-            sx={(theme) => ({
-              width: { xs: "50%", lg: "10%" },
-              height: "48px",
-              marginBottom: { xs: "30px", lg: "0px" },
-              backgroundColor: `${theme.palette.accent.main}`,
-              "&:hover": {
-                backgroundColor: "#016A70",
-              },
-            })}
-            onClick={handleOtpEntered}
-            disabled={isOtpButtonDisable}
-          >
-            {buttonText}
-          </Button>
-        )}
-        {showErrMsg && (
-          <Typography variant="p" sx={{ color: "red", marginTop: 2 }}>
-            *{errorMsg}
-          </Typography>
-        )}
-        {successMsg !== "" && (
-          <Box sx={{ textAlign: "center", maxWidth: 400 }}>
-            <Typography
-              variant="subtitle2"
-              sx={{ color: "green", marginTop: 2 }}
+                "@keyframes shake": {
+                  "0%": { marginLeft: "0rem" },
+                  "25%": { marginLeft: "0.5rem" },
+                  "75%": {
+                    marginLeft: "-0.5rem",
+                  },
+                  "100%": { marginLeft: "0rem" },
+                },
+              }}
+            />
+          )}
+          {showOtpView && (
+            <TextField
+              variant="outlined"
+              required
+              label="OTP"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              sx={{
+                width: { xs: "80%", lg: "60%" },
+                marginBottom: { xs: "30px", lg: "24px" },
+              }}
+            />
+          )}
+          {/* EMAIL SEND BUTTON */}
+          {showEmailView && (
+            <Button
+              onClick={onSubmitEmail}
+              data-testid="email input"
+              variant="contained"
+              // disabled={isButtonDisable}
+              sx={(theme) => ({
+                width: { xs: "60%", sm: "60%" },
+                height: "44px",
+                fontWeight: 500,
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                borderRadius: "12px",
+                // "&:hover": {
+                //   backgroundColor: `${theme.palette.accent.main}`,
+                // },
+                mb: 2,
+              })}
             >
-              {successMsg}
+              {buttonText}
+            </Button>
+          )}
+          {/*  OTP BUTTON */}
+          {showOtpView && (
+            <Button
+              variant="contained"
+              sx={(theme) => ({
+                width: { xs: "60%", sm: "60%" },
+                height: "44px",
+                marginBottom: { xs: "30px", lg: "0px" },
+                // backgroundColor: `${theme.palette.accent.main}`,
+                // "&:hover": {
+                //   backgroundColor: "#016A70",
+                // },
+                textTransform:"none",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+              })}
+              onClick={handleOtpEntered}
+              disabled={isOtpButtonDisable}
+            >
+              {buttonText}
+            </Button>
+          )}
+          {showErrMsg && (
+            <Typography variant="p" sx={{ color: "red", marginTop: 2 }}>
+              *{errorMsg}
             </Typography>
-            <Typography variant="caption" fontSize={12}>
-              incorrect email ?{" "}
-              <span
-                style={{
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-                onClick={handleIncorrectEmail}
+          )}
+          {successMsg !== "" && (
+            <Box sx={{ textAlign: "center", maxWidth: 400 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ color: "green", marginTop: 2 }}
               >
-                click here
-              </span>{" "}
-              to update your Email{" "}
-            </Typography>
-          </Box>
-        )}
+                {successMsg}
+              </Typography>
+              <Typography variant="caption" fontSize={12}>
+                incorrect email ?{" "}
+                <span
+                  style={{
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                    color: "blue",
+                  }}
+                  onClick={handleIncorrectEmail}
+                >
+                  click here
+                </span>{" "}
+                to update your Email{" "}
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );
