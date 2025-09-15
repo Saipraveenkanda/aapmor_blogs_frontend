@@ -426,9 +426,6 @@ const CreateBlog = () => {
                   size="small"
                   displayEmpty
                 >
-                  <MenuItem value="" disabled sx={{ color: "grey" }}>
-                    Select Category
-                  </MenuItem>
                   {catoreries.map((option) => (
                     <MenuItem key={option} value={option}>
                       {option}
