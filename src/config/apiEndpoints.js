@@ -28,5 +28,5 @@ export const apiEndpoints = {
   getNotificationsUrl: "/notifications",
   refreshToken: "/auth/refresh-token",
   filterBlogsApiUrl: "/blogs/filter",
-
+  getActivityUrl: "/api/activity",
 };

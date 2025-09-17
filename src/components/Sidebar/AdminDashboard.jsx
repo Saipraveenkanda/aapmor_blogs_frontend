@@ -30,6 +30,7 @@ import activityimage from "../../assets/noactivity.png";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import { getActivityService } from "../../providers/adminProvider";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
@@ -168,11 +169,28 @@ const Dashboard = () => {
       setActivity((prev) => [data, ...prev]);
     });
   }, []);
+  const getActivity = async () => {
+    const resp = await getActivityService();
+    console.log(resp, "RESPONSE ACTIVITY");
+
+    if (resp) {
+      setActivity(resp.data.data);
+    }
+  };
+  useEffect(() => {
+    getActivity();
+  }, []);
 
   const getIcon = (type) => {
     switch (type) {
       case "like":
-        return <FavoriteBorderIcon color="error" fontSize="small" sx={{fontSize:"16px"}} />;
+        return (
+          <FavoriteBorderIcon
+            color="error"
+            fontSize="small"
+            sx={{ fontSize: "16px" }}
+          />
+        );
       case "comment":
         return <ChatBubbleOutlineIcon color="primary" fontSize="small" />;
       case "post":
@@ -221,7 +239,7 @@ const Dashboard = () => {
                             borderRadius: "50%",
                             bgcolor: "grey.100",
                             display: "flex",
-                            flexDirection:"row",
+                            flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "center",
                             boxSizing: "border-box",

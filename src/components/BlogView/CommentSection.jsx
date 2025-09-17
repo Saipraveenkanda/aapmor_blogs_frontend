@@ -22,7 +22,6 @@ const CommentSection = ({
   user,
   getTimeAgo,
 }) => {
-  comments.reverse();
   const token = Cookies.get("jwtToken");
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
