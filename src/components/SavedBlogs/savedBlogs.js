@@ -178,8 +178,16 @@ const SavedBlogs = () => {
           display: "flex",
           flexWrap: "wrap",
           mt: 1,
+          flexDirection: "column",
         }}
       >
+        <Typography
+          variant="h6"
+          // gutterBottom
+          sx={{ fontWeight: "bold", color: "text.primary" }}
+        >
+          Your Saved Blogs :
+        </Typography>
         {savedBlogs?.map(
           (
             {
@@ -284,7 +292,12 @@ const SavedBlogs = () => {
           height: "100%",
         }}
       >
-        <Typography variant="p" fontWeight={600} fontSize={20} sx={{marginLeft:1}}>
+        <Typography
+          variant="p"
+          fontWeight={600}
+          fontSize={20}
+          sx={{ marginLeft: 1 }}
+        >
           Sorry, you haven't saved any blogs, try saving some blogs and refresh
           the page
         </Typography>
@@ -293,11 +306,7 @@ const SavedBlogs = () => {
   };
 
   const renderSavedBlogs = () => {
-    return (
-      <Box>
-        {savedBlogs.length > 0 ? renderBlogsView() : renderEmptyBlogsView()}
-      </Box>
-    );
+    return <Box>{savedBlogs.length > 0 && renderBlogsView()}</Box>;
   };
 
   const renderApiStatus = () => {
@@ -313,20 +322,7 @@ const SavedBlogs = () => {
     }
   };
 
-  return (
-    <>
-      {/* <Header /> */}
-      <Typography
-        variant="h6"
-        // gutterBottom
-        sx={{ fontWeight: "bold", color: "text.primary" }}
-      >
-        Your Saved Blogs :
-      </Typography>
-      <Box>{renderApiStatus()}</Box>
-      {/* <BottomNavbar /> */}
-    </>
-  );
+  return renderApiStatus();
 };
 
 export default SavedBlogs;

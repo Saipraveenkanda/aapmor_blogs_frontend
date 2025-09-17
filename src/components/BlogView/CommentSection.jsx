@@ -13,6 +13,7 @@ import SendIcon from "@mui/icons-material/Send";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import Cookies from "js-cookie";
+import { FaStar } from "react-icons/fa";
 
 const CommentSection = ({
   comments,
@@ -21,6 +22,7 @@ const CommentSection = ({
   user,
   getTimeAgo,
 }) => {
+  comments.reverse();
   const token = Cookies.get("jwtToken");
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
@@ -43,6 +45,14 @@ const CommentSection = ({
             spacing={1}
             sx={{ padding: 1 }}
           >
+            <svg width="0" height="0">
+              <defs>
+                <linearGradient id="starGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#FE8B76" />
+                  <stop offset="100%" stopColor="#6360BE" />
+                </linearGradient>
+              </defs>
+            </svg>
             {/* Main Comment */}
             <Stack direction={"row"} spacing={2}>
               <Avatar>{name?.[0]?.toUpperCase()}</Avatar>
@@ -126,7 +136,11 @@ const CommentSection = ({
                         setReplyText("");
                       }}
                     >
-                      <SendIcon sx={{ color: "accent.main" }} />
+                      <SendIcon
+                        fontSize="medium"
+                        className="winner-icon gradient-icon"
+                        style={{ fill: "url(#starGradient)" }}
+                      />
                     </IconButton>
                   </Stack>
                 )}

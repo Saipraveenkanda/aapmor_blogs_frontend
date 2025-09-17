@@ -43,6 +43,7 @@ import CommentSection from "./CommentSection";
 import BlogNotFound from "./NoBlogComponent";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import SendIcon from "@mui/icons-material/Send";
 import {
   commentLikeService,
   commentReplyService,
@@ -742,6 +743,20 @@ const BlogView = () => {
                   spacing={1}
                   sx={{}}
                 >
+                  <svg width="0" height="0">
+                    <defs>
+                      <linearGradient
+                        id="starGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop offset="0%" stopColor="#FE8B76" />
+                        <stop offset="100%" stopColor="#6360BE" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
                   {/* <Avatar>{name[0].toUpperCase()}</Avatar> */}
                   <Stack
                     direction={"row"}
@@ -767,22 +782,31 @@ const BlogView = () => {
                     <LoadingButton
                       variant="contained"
                       loading={loading}
-                      // size="small"
                       disabled={disableCommentButton}
                       onClick={handleCommentApi}
-                      // endIcon={}
+                      disableElevation
                       sx={{
+                        width: "30px",
+                        backgroundColor: "transparent",
                         height: "40px",
-                        // borderRadius: "50%",
-                        backgroundColor: "#016A70",
+                        "&.Mui-disabled": {
+                          backgroundColor: "transparent",
+                          color: "white",
+                        },
                         "&:hover": {
-                          backgroundColor: "#016A70",
+                          backgroundColor: "transparent",
                         },
                       }}
                     >
-                      {/* <SendOutlinedIcon /> */}
-                      <PaperPlaneTilt size={30} />
-                      {/* Send */}
+                      <SendIcon
+                        fontSize="large"
+                        className="winner-icon gradient-icon"
+                        style={{
+                          fill: disableCommentButton
+                            ? "grey"
+                            : "url(#starGradient)",
+                        }}
+                      />
                     </LoadingButton>
                   </Stack>
                 </Stack>

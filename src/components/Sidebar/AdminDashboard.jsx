@@ -7,6 +7,9 @@ import {
   Box,
   Skeleton,
   Stack,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
@@ -24,6 +27,9 @@ import aiImage from "../../assets/aiImage.jpg";
 import { Divider } from "@mui/material";
 import { getNotifications, getRecentActivity } from "../../socket";
 import activityimage from "../../assets/noactivity.png";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 
 const DashboardContainer = styled("div")({
   position: "fixed",
@@ -163,6 +169,19 @@ const Dashboard = () => {
     });
   }, []);
 
+  const getIcon = (type) => {
+    switch (type) {
+      case "like":
+        return <FavoriteBorderIcon color="error" fontSize="small" sx={{fontSize:"16px"}} />;
+      case "comment":
+        return <ChatBubbleOutlineIcon color="primary" fontSize="small" />;
+      case "post":
+        return <CreateOutlinedIcon color="success" fontSize="small" />;
+      default:
+        return <Avatar sx={{ width: 28, height: 28 }} />;
+    }
+  };
+
   return (
     <>
       <DashboardContainer>
@@ -184,6 +203,55 @@ const Dashboard = () => {
               }}
             >
               {activity.length > 0 ? (
+                activity.map((a, idx) => (
+                  <React.Fragment key={idx}>
+                    <ListItem
+                      alignItems="flex-start"
+                      sx={{ p: "0px 0px 12px 0px" }}
+                    >
+                      <ListItemAvatar
+                        sx={{
+                          minWidth: "38px",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 24,
+                            height: 24,
+                            borderRadius: "50%",
+                            bgcolor: "grey.100",
+                            display: "flex",
+                            flexDirection:"row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxSizing: "border-box",
+                          }}
+                        >
+                          {getIcon(a.type)}
+                        </Box>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Typography variant="body1">{a.message}</Typography>
+                        }
+                        secondary={
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ mt: 0.5, display: "block" }}
+                          >
+                            {timeAgo(a.timestamp)}
+                          </Typography>
+                        }
+                      />
+                    </ListItem>
+                    {/* {idx < activity.length - 1 && (
+                      <Divider variant="inset" component="li" />
+                    )} */}
+                  </React.Fragment>
+                ))
+              ) : (
+                /* (
                 activity?.map((a, index) => {
                   return (
                     <Stack key={index} direction={"column"} spacing={1}>
@@ -195,8 +263,7 @@ const Dashboard = () => {
                     </Stack>
                   );
                 })
-              ) : (
-                <Stack direction={"column"} alignItems={"center"}>
+              ) */ <Stack direction={"column"} alignItems={"center"}>
                   <img
                     src={activityimage}
                     alt="no-activity-image"

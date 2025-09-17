@@ -46,7 +46,8 @@ import {
 import { profileCheckingApi } from "../../providers/userProvider";
 import Admin from "../../assets/Admin.svg";
 import Icon from "../../assets/Icon.svg";
-
+import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
+import FaceOutlinedIcon from "@mui/icons-material/FaceOutlined";
 const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -290,6 +291,16 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
               onChange={(e) => setSearchInput(e.target.value)}
             />
           </Box>
+          {/* Profile Icon */}
+          {token !== undefined && (
+            <IconButton
+              size="small"
+              onClick={() => navigate("/user/profile")}
+              title={"Profile"}
+            >
+              <Face6OutlinedIcon />
+            </IconButton>
+          )}
           <IconButton
             size="small"
             // sx={(theme) => ({

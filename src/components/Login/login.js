@@ -149,6 +149,7 @@ const Login = () => {
         justifyContent: "center",
         height: "100vh",
         width: "100vw",
+        backgroundColor: "black",
       }}
     >
       <Box
@@ -281,13 +282,14 @@ const Login = () => {
               onChange={handleEmailChange}
               value={email}
               sx={{
-                color: "#E8E8E8",
+                color: "#E8E8E8 !important",
                 height: "52px",
                 width: { xs: "90%", lg: "60%" },
-                marginBottom: { xs: "30px", lg: "8px" },
+                marginBottom: { xs: "30px", md: "12px" },
                 animation: emailError ? "shake 0.3s" : "",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",
+                  color: "#ffffff !important",
                 },
                 "@keyframes shake": {
                   "0%": { marginLeft: "0rem" },
@@ -349,7 +351,7 @@ const Login = () => {
                 // "&:hover": {
                 //   backgroundColor: "#016A70",
                 // },
-                textTransform:"none",
+                textTransform: "none",
                 backgroundColor: "#ffffff",
                 color: "#000000",
               })}
