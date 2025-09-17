@@ -670,11 +670,7 @@ const BlogView = () => {
                     ) : (
                       <ThumbUpOffAltIcon />
                     )}
-                    {liked ? (
-                      <Typography>Liked</Typography>
-                    ) : (
-                      <Typography>Like</Typography>
-                    )}
+                    <Typography>{likes.length}</Typography>
                   </Button>
                 </div>
                 <Divider flexItem sx={{ border: "1px solid #ffffff" }} />

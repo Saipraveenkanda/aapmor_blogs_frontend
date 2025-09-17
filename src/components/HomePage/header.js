@@ -276,10 +276,10 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
               sx={{
                 p: 0.5,
                 pl: 1,
-                color: mode ? "#ffffff" : "#000000",
+                color: mode ? "#666666" : "#cccccc",
                 boxSizing: "border-box",
                 "& input::placeholder": {
-                  color: mode ? "#cccccc" : "#666666",
+                  color: mode ? "#666666" : "#cccccc",
                   opacity: 1,
                   transition: "color 0.3s ease-in-out",
                   animation: "slideUp 2s ease-in-out infinite",
