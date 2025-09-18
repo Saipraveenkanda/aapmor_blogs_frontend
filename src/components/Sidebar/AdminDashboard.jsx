@@ -190,9 +190,21 @@ const Dashboard = () => {
           />
         );
       case "comment":
-        return <ChatBubbleOutlineIcon color="primary" fontSize="small" sx={{ fontSize: "16px" }}/>;
+        return (
+          <ChatBubbleOutlineIcon
+            color="primary"
+            fontSize="small"
+            sx={{ fontSize: "16px" }}
+          />
+        );
       case "post":
-        return <CreateOutlinedIcon color="success" fontSize="small" sx={{ fontSize: "16px" }}/>;
+        return (
+          <CreateOutlinedIcon
+            color="success"
+            fontSize="small"
+            sx={{ fontSize: "16px" }}
+          />
+        );
       default:
         return <Avatar sx={{ width: 16, height: 16 }} />;
     }
@@ -207,7 +219,7 @@ const Dashboard = () => {
               variant="h6"
               fontWeight="bold"
               gutterBottom
-              sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
               Activities
             </Typography>
@@ -267,19 +279,7 @@ const Dashboard = () => {
                   </React.Fragment>
                 ))
               ) : (
-                /* (
-                activity?.map((a, index) => {
-                  return (
-                    <Stack key={index} direction={"column"} spacing={1}>
-                      <Typography key={index}>{a?.message}</Typography>
-
-                      <Typography variant="caption">
-                        {timeAgo(a.timestamp)}
-                      </Typography>
-                    </Stack>
-                  );
-                })
-              ) */ <Stack direction={"column"} alignItems={"center"}>
+                <Stack direction={"column"} alignItems={"center"}>
                   <img
                     src={activityimage}
                     alt="no-activity-image"
@@ -293,7 +293,6 @@ const Dashboard = () => {
               <>
                 <Divider
                   sx={{
-                    my: 4,
                     height: "1px",
                     backgroundImage:
                       "linear-gradient(90deg, rgba(0,0,0,0), #4E4E4E, rgba(0,0,0,0))",
@@ -305,7 +304,7 @@ const Dashboard = () => {
                   variant="h6"
                   fontWeight="bold"
                   gutterBottom
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}
                 >
                   Best blogs of the month
                 </Typography>
