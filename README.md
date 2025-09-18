@@ -11,6 +11,18 @@ AAPMOR Blogs is an internal blogging platform designed for employees to share in
 
 ## 📌 Features
 
+### 🆕 Version 3.0 Highlights
+
+- 🎨 **Updated/Enhanced UI:** Fresh look and improved user experience across the platform.
+- 🔔 **New Notifications:** Get notified instantly when someone comments on or likes your blog.
+- 🕒 **Activities Section:** See recent activity of all members, including their likes and comments on any blog.
+- 🏆 **Winners Section:** New scrolling section at the top showcasing recent blog winners.
+- ✍️ **Updated Writing Blog Page:** Enhanced thumbnail UI and the ability to preview your blog before publishing.
+- 🔑 **New Login Page:** Redesigned login experience.
+- 👤 **Profile Updates:** Now update your profile details directly from the profile section.
+
+---
+
 ### ✅ Previous Version Highlights
 
 - 🧾 Simple blog listing with thumbnails, title, and author info
@@ -22,14 +34,16 @@ AAPMOR Blogs is an internal blogging platform designed for employees to share in
 
 ---
 
-### 🌟 New Version Updates
+### 🌟 New Version Updates (v2.0)
 
 #### 🖌️ UI & UX
+
 - Revamped design with **Dark/Light themes**
 - Cleaned up top liked blogs section to ensure fair content visibility
 - Custom illustrations and accent colors for better engagement
 
 #### 📚 Blog Experience
+
 - **Author details section** with image, bio, contact link, and stats
 - Blog sharing to **WhatsApp**, **LinkedIn**, or via link
 - Updated comment system:
@@ -38,19 +52,23 @@ AAPMOR Blogs is an internal blogging platform designed for employees to share in
   - Reply to replies
 
 #### 🔮 AI Integration
+
 - ✨ **AI-powered summary generation** for blogs
 - 🤖 Auto-generate profile bios based on user data using **GroqCloud**
 
 #### 👥 Profile Enhancements
+
 - Upload profile image
 - Edit or auto-generate bio
 - View saved blogs
 
 #### 🛠 Admin Features
+
 - Admin badge in header (visible only to admins)
 - Admin-only view of blog like counts
 
 #### 🧠 Smart Suggestions (Beta)
+
 - Right-side dashboard showing:
   - Recommended blogs based on user interest
   - Trending blogs
@@ -60,8 +78,8 @@ AAPMOR Blogs is an internal blogging platform designed for employees to share in
 
 ## ⚙️ Tech Stack
 
-| Frontend | Backend | Database | Styling | AI | Deployment |
-|----------|---------|----------|---------|----|------------|
+| Frontend | Backend | Database | Styling     | AI        | Deployment                 |
+| -------- | ------- | -------- | ----------- | --------- | -------------------------- |
 | React    | Node.js | MongoDB  | Material UI | GroqCloud | Azure (Prod), Vercel (Dev) |
 
 - ✉️ **Nodemailer** for OTPs and blog publishing notifications
@@ -75,7 +93,7 @@ AAPMOR Blogs is an internal blogging platform designed for employees to share in
 
 ```bash
 # Clone repo
-git clone https://github.com/your-org/aapmor-blogs.git
+git clone https://github.com/Saipraveenkanda/aapmor_blogs_frontend.git
 
 # Install dependencies
 cd aapmor-blogs
@@ -101,4 +119,4 @@ Have suggestions or issues? Please open an issue or reach out to the internal De
 
 ## 📄 License
 
-MIT License. For internal use only at AAPMOR..
+MIT License. For internal use only at AAPMOR.

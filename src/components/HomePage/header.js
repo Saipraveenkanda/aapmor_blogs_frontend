@@ -47,7 +47,8 @@ import { profileCheckingApi } from "../../providers/userProvider";
 import Admin from "../../assets/Admin.svg";
 import Icon from "../../assets/Icon.svg";
 import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
-import FaceOutlinedIcon from "@mui/icons-material/FaceOutlined";
+import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
+
 const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -58,6 +59,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const handleToggle = (event) => {
     setNotificationAnchorEl(event.currentTarget);
   };
+  const [user, setUser] = useState({});
   const open = Boolean(anchorEl);
   const openNotifications = Boolean(notificationAnchorEl);
   const id = open ? "notifications-popper" : undefined;
@@ -101,6 +103,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
       setUserId(response?.data?.res?._id);
+      setUser(response?.data?.res);
     }
   };
 
@@ -296,9 +299,13 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
             <IconButton
               size="small"
               onClick={() => navigate("/user/profile")}
-              title={"Profile"}
+              title={user?.name || "Profile"}
             >
-              <Face6OutlinedIcon />
+              {user?.gender === "Male" ? (
+                <Face6OutlinedIcon />
+              ) : (
+                <Face3OutlinedIcon />
+              )}
             </IconButton>
           )}
           <IconButton

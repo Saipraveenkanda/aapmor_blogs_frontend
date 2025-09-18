@@ -55,12 +55,13 @@ const UserProfile = (props) => {
   const [editBio, setEditBio] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [editProfile, setEditProfile] = useState(false);
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
     setTempImage(base64);
     setImage(file);
+    handleImageUpload(file);
   };
 
   const handleGenerateBio = async () => {
@@ -78,7 +79,7 @@ const UserProfile = (props) => {
 
   /* UPLOAD IMAGE */
 
-  const handleImageUpload = async () => {
+  const handleImageUpload = async (image) => {
     setImageLoading(true);
     const file = image;
     const formData = new FormData();
@@ -115,6 +116,7 @@ const UserProfile = (props) => {
   };
 
   const updateProfile = async () => {
+    setLoading(true);
     const profileDetails = {
       gender,
       designation,
@@ -126,10 +128,14 @@ const UserProfile = (props) => {
     if (response?.status === 200) {
       const profile = response?.data?.profile;
       Cookies.set("userEmail", profile?.email);
-      Cookies.get("username", profile?.name);
-      Cookies.get("userrole", profile?.designation);
-      window.history.back();
+      Cookies.set("username", profile?.name);
+      Cookies.set("userrole", profile?.designation);
+      // window.history.back();
+      setLoading(false);
+      setEditProfile(false);
     }
+    setLoading(false);
+    setEditProfile(false);
   };
   const handleSaveBio = async () => {
     const response = await profileUpdateApi({ bio });
@@ -222,19 +228,35 @@ const UserProfile = (props) => {
               >
                 <div>
                   {/* Small Profile Image */}
-                  <Avatar
-                    variant="rounded"
-                    src={tempImage || profileImage}
-                    alt="Profile"
-                    sx={(theme) => ({
-                      width: 200,
-                      height: 200,
-                      cursor: "pointer",
-                      border: `2px solid ${theme.palette.accent.main}`, // Correct way
-                    })}
-                    onClick={handleHover}
-                    // onMouseLeave={handleClose}
-                  />
+                  {imageLoading ? (
+                    <Box
+                      sx={(theme) => ({
+                        width: 200,
+                        height: 200,
+                        cursor: "pointer",
+                        border: `2px solid ${theme.palette.accent.main}`, // Correct way
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      })}
+                    >
+                      Loading...
+                    </Box>
+                  ) : (
+                    <Avatar
+                      variant="rounded"
+                      src={tempImage || profileImage}
+                      alt="Profile"
+                      sx={(theme) => ({
+                        width: 200,
+                        height: 200,
+                        cursor: "pointer",
+                        border: `2px solid ${theme.palette.accent.main}`, // Correct way
+                      })}
+                      onClick={handleHover}
+                      // onMouseLeave={handleClose}
+                    />
+                  )}
 
                   {/* Expanded Image on Hover */}
                   <Popover
@@ -311,7 +333,7 @@ const UserProfile = (props) => {
                   >
                     Select Image
                   </Button>
-                  <Button
+                  {/* <Button
                     disabled={imageLoading || !tempImage}
                     onClick={handleImageUpload}
                     fullWidth
@@ -320,7 +342,7 @@ const UserProfile = (props) => {
                     startIcon={<UploadIcon />}
                   >
                     Upload
-                  </Button>
+                  </Button> */}
                   <Button
                     disabled
                     fullWidth
@@ -333,25 +355,36 @@ const UserProfile = (props) => {
                   </Button>
                 </Stack>
               </Box>
-
+              <Button
+                startIcon={<EditNoteOutlinedIcon />}
+                sx={{
+                  textTransform: "none",
+                  maxWidth: "fit-content",
+                }}
+                onClick={() => setEditProfile(!editProfile)}
+              >
+                Edit Profile
+              </Button>
               {/* Name */}
-              {profile?.name !== "" ? (
+              {profile?.name !== "" && !editProfile ? (
                 <Typography>
                   <b>Name:</b> {name}
                 </Typography>
               ) : (
                 <TextField
+                  label="Name"
                   fullWidth
                   required
                   size="small"
-                  helperText="Update your user name"
+                  placeholder="Update your user name"
+                  // helperText="Update your user name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               )}
 
               {/* Designation */}
-              {profile?.designation !== "" ? (
+              {profile?.designation !== "" && !editProfile ? (
                 <Typography>
                   <b>Designation:</b> {designation}
                 </Typography>
@@ -386,12 +419,12 @@ const UserProfile = (props) => {
                       SAP GRC Consultant
                     </MenuItem>
                   </Select>
-                  <FormHelperText>Update your designation</FormHelperText>
+                  {/* <FormHelperText>Update your designation</FormHelperText> */}
                 </FormControl>
               )}
 
               {/* Gender */}
-              {profile?.gender !== "" ? (
+              {profile?.gender !== "" && !editProfile ? (
                 <Typography>
                   <b>Gender:</b> {gender}
                 </Typography>
@@ -411,7 +444,7 @@ const UserProfile = (props) => {
                     <MenuItem value="Female">Female</MenuItem>
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
-                  <FormHelperText>Update your gender</FormHelperText>
+                  {/* <FormHelperText>Update your gender</FormHelperText> */}
                 </FormControl>
               )}
               {/* Email */}
@@ -434,7 +467,9 @@ const UserProfile = (props) => {
 
               <Button
                 onClick={updateProfile}
-                disabled={designation && gender && name && email}
+                disabled={
+                  !designation || !gender || !name || !email || !editProfile
+                }
                 sx={{
                   alignSelf: "flex-start",
                   width: "25%",

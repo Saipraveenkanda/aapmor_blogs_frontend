@@ -171,8 +171,6 @@ const Dashboard = () => {
   }, []);
   const getActivity = async () => {
     const resp = await getActivityService();
-    console.log(resp, "RESPONSE ACTIVITY");
-
     if (resp) {
       setActivity(resp.data.data);
     }
@@ -192,11 +190,11 @@ const Dashboard = () => {
           />
         );
       case "comment":
-        return <ChatBubbleOutlineIcon color="primary" fontSize="small" />;
+        return <ChatBubbleOutlineIcon color="primary" fontSize="small" sx={{ fontSize: "16px" }}/>;
       case "post":
-        return <CreateOutlinedIcon color="success" fontSize="small" />;
+        return <CreateOutlinedIcon color="success" fontSize="small" sx={{ fontSize: "16px" }}/>;
       default:
-        return <Avatar sx={{ width: 28, height: 28 }} />;
+        return <Avatar sx={{ width: 16, height: 16 }} />;
     }
   };
 

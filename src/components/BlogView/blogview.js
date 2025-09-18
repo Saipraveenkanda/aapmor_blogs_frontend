@@ -323,48 +323,6 @@ const BlogView = () => {
 
   const renderComments = () => {
     return (
-      // <Stack direction={"column"} spacing={0}>
-      //   {comments.map((eachComment) => {
-      //     const { comment, name, dateObject } = eachComment;
-      //     const time = getTimeAgo(dateObject);
-      //     return (
-      //       <>
-      //         <Stack
-      //           key={eachComment._id}
-      //           direction={"row"}
-      //           spacing={2}
-      //           sx={{
-      //             padding: 1,
-      //             boxSizing: "border-box",
-      //           }}
-      //         >
-      //           <Avatar>{name[0].toUpperCase()}</Avatar>
-      //           <Stack direction={"column"} spacing={1}>
-      //             <Typography variant="inherit" color={"#000"} fontWeight={600}>
-      //               {name}{" "}
-      //               <text style={{ color: "grey", fontSize: "10px" }}>
-      //                 {"\u25CF"}
-      //               </text>
-      //               <span
-      //                 style={{
-      //                   fontWeight: "lighter",
-      //                   color: "lightslategray",
-      //                   fontSize: "12px",
-      //                 }}
-      //               >
-      //                 {" "}
-      //                 {time}
-      //               </span>
-      //             </Typography>
-
-      //             <Typography variant="body2">{comment}</Typography>
-      //           </Stack>
-      //         </Stack>
-      //         <Divider orientation="horizontal" flexItem />
-      //       </>
-      //     );
-      //   })}
-      // </Stack>
       <CommentSection
         comments={comments}
         handleLike={handleLike}
@@ -383,41 +341,84 @@ const BlogView = () => {
     );
   };
 
+  // const handleSubmit = async () => {
+  //   const previousMonth = new Intl.DateTimeFormat("en-US", {
+  //     month: "long",
+  //   }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
+
+  //   const formData = {
+  //     winnerName: username,
+  //     blogTitle: title,
+  //     blogLink: window.location.href,
+  //     month: previousMonth,
+  //     blogId: _id,
+  //     blogImage,
+  //   };
+  //   try {
+  //     if (!isWinnerAnnounced) {
+  //       const response = await postWinnerDetails(formData);
+  //       if (response?.response?.data?.error) {
+  //         setSnackMessage(response?.response?.data?.error);
+  //         setOpenSnackBar(true);
+  //         return;
+  //       }
+  //       if (response.status === 201) {
+  //         setSnackMessage("Winner has been set successfully!");
+  //         setOpenSnackBar(true);
+  //         setIsWinnerAnnounced(true);
+  //         setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
+  //       }
+  //     } else {
+  //       setIsWinnerAnnounced(false);
+  //       setSnackMessage("Winner status reverted!");
+  //       setOpenSnackBar(true);
+  //       setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
+  //     }
+  //   } catch (error) {
+  //     alert("Error: " + error.message);
+  //     setSnackMessage(error.message);
+  //     setOpenSnackBar(true);
+  //   }
+  // };
+
   const handleSubmit = async () => {
-    const previousMonth = new Intl.DateTimeFormat("en-US", {
+    const publishedMonth = new Intl.DateTimeFormat("en-US", {
       month: "long",
-    }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
+    }).format(new Date(date));
 
     const formData = {
       winnerName: username,
       blogTitle: title,
       blogLink: window.location.href,
-      month: previousMonth,
+      month: publishedMonth,
       blogId: _id,
       blogImage,
     };
+
     try {
-      if (!isWinnerAnnounced) {
-        const response = await postWinnerDetails(formData);
-        if (response?.response?.data?.error) {
-          setSnackMessage(response?.response?.data?.error);
-          setOpenSnackBar(true);
-          return;
-        }
-        if (response.status === 201) {
-          setSnackMessage("Winner has been set successfully!");
-          setOpenSnackBar(true);
-          setIsWinnerAnnounced(true);
-          setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
-        }
-      } else {
-        setIsWinnerAnnounced(false);
+      const response = await postWinnerDetails(formData);
+
+      if (response?.response?.data?.error) {
+        setSnackMessage(response?.response?.data?.error);
+        setOpenSnackBar(true);
+        return;
+      }
+
+      if (response.status === 201) {
+        // Winner announced
+        setSnackMessage("Winner has been set successfully!");
+        setOpenSnackBar(true);
+        setIsWinnerAnnounced(true);
+        setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
+      } else if (response.status === 200) {
+        // Winner reverted
         setSnackMessage("Winner status reverted!");
         setOpenSnackBar(true);
+        setIsWinnerAnnounced(false);
         setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
       }
     } catch (error) {
-      alert("Error: " + error.message);
+      console.error("Error announcing/reverting winner:", error);
       setSnackMessage(error.message);
       setOpenSnackBar(true);
     }
