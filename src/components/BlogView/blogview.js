@@ -391,6 +391,8 @@ const BlogView = () => {
       month: publishedMonth,
       blogId: _id,
       blogImage,
+      email: blogDetails.email,
+      date,
     };
 
     try {

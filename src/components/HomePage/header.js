@@ -19,6 +19,7 @@ import {
   ListItem,
   ListItemText,
   Popover,
+  Skeleton,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -28,13 +29,11 @@ import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorLightText from "../../assets/aapmorwhitetext.svg";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../../store/slices/blogSlice";
 import { useDispatch } from "react-redux";
 import { listenToNotifications } from "../../socket";
-import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { timeAgo } from "../../utilities/timerFunction";
 // import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
 import { toast } from "react-toastify";
@@ -48,7 +47,6 @@ import Admin from "../../assets/Admin.svg";
 import Icon from "../../assets/Icon.svg";
 import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
 import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
-
 const Header = ({
   setSearchInput = () => {},
   setProfile,
@@ -309,10 +307,19 @@ const Header = ({
               onClick={() => navigate("/user/profile")}
               title={user?.name || "Profile"}
             >
-              {user?.gender === "Male" ? (
-                <Face6OutlinedIcon />
+              {user?.gender ? (
+                user?.gender === "Male" ? (
+                  <Face6OutlinedIcon />
+                ) : (
+                  <Face3OutlinedIcon />
+                )
               ) : (
-                <Face3OutlinedIcon />
+                <Skeleton
+                  variant="circular"
+                  animation={"wave"}
+                  width={24}
+                  height={24}
+                />
               )}
             </IconButton>
           )}
