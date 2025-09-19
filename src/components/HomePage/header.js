@@ -49,7 +49,11 @@ import Icon from "../../assets/Icon.svg";
 import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
 import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
 
-const Header = ({ setSearchInput = () => {}, setProfile }) => {
+const Header = ({
+  setSearchInput = () => {},
+  setProfile,
+  setProfileDetails,
+}) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
@@ -75,6 +79,10 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
     localStorage.setItem("theme", mode);
     dispatch(setAppTheme(mode));
   }, [mode]);
+
+  useEffect(() => {
+    setProfileDetails(user);
+  }, [user]);
 
   useEffect(() => {
     getUserDetail();

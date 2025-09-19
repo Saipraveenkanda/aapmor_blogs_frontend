@@ -86,7 +86,9 @@ const modules = {
 const CreateBlog = () => {
   const quillRef = useRef(null);
   const location = useLocation();
-  const { editBlog, isEdit } = location.state || {};
+  const { editBlog, isEdit, profileDetails } = location.state || {};
+  console.log(profileDetails, "STATE");
+
   const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
   const savedData =
     (savedBlogData !== null && savedBlogData) ||
@@ -198,13 +200,13 @@ const CreateBlog = () => {
   };
 
   const submitPost = async () => {
-    if (!name || !role) {
+    if (!profileDetails?.name) {
       setProfile(true);
     } else {
       setLoading(true);
       const blogDetails = {
-        username: name,
-        userrole: role,
+        username: profileDetails?.name,
+        userrole: profileDetails?.designation,
         title,
         description,
         blogImage,
@@ -237,8 +239,8 @@ const CreateBlog = () => {
           blogImage,
           dateObject,
           blogId,
-          name,
-          role,
+          name: profileDetails?.name,
+          role: profileDetails?.designation,
           editorHtml,
         };
         !isEdit && (await publishBlogApi(content));
@@ -369,7 +371,7 @@ const CreateBlog = () => {
 
   return (
     <>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       <Box
         sx={{
           display: "flex",

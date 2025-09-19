@@ -35,7 +35,6 @@ const Home = () => {
   const [category, setCategory] = useState("All");
   const [winnerDetails, setWinnerDetails] = useState([]);
   const [profileDetails, setProfileDetails] = useState({});
-  console.log(profile, "PROFILE");
   const theme = useTheme();
   const mode = theme.palette.mode;
 
@@ -44,11 +43,9 @@ const Home = () => {
     if (!token) {
       const checkProfileDetails = async () => {
         const response = await profileCheckingApi();
-        console.log(response, "RESP");
         if (response.status === 202) {
-          console.log("Profile not updated, opening profile");
           setProfile(true);
-        } else if (response.status === 200) {
+        } else {
           setProfile(false);
           setProfileDetails(response.data.res);
           if (response) {
@@ -123,8 +120,6 @@ const Home = () => {
 
   const getWinnerDetails = async () => {
     const response = await getWinnerOfTheMonth();
-    console.log(response, "RESP");
-
     if (response && !response?.data?.message) {
       setWinnerDetails(response?.data);
     } else {
@@ -334,10 +329,11 @@ const Home = () => {
           setSearchInput={setSearchInput}
           profile={profile}
           setProfile={setProfile}
+          setProfileDetails={setProfileDetails}
         />
-        {/* {winnerDetails?.length > 0 && ( */}
-        <WinnerTicker winnerDetails={winnerDetails} mode={mode} />
-        {/*  )} */}
+        {winnerDetails?.length > 0 && (
+          <WinnerTicker winnerDetails={winnerDetails} mode={mode} />
+        )}
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
             <CategoryTabs category={category} setCategory={setCategory} />
@@ -348,7 +344,7 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            <AdminDashboard />
+            <AdminDashboard profileDetails={profileDetails} />
           </Grid>
         </Grid>
       </Grid>

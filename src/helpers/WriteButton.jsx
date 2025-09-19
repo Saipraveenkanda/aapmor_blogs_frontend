@@ -9,12 +9,11 @@ import {
   getWritingUnlockTimeLeft,
 } from "../utilities/timerFunction";
 // import pencilSimpleLine from "../assets/pencilSimpleLine.svg";
-import { ReactComponent as PencilIcon } from '../assets/pencilSimpleLine.svg';
+import { ReactComponent as PencilIcon } from "../assets/pencilSimpleLine.svg";
 import { Padding } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 
-
-const WriteButton = (props) => {
+const WriteButton = ({ profileDetails }) => {
   const token = Cookies.get("jwtToken");
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(false);
@@ -34,44 +33,49 @@ const WriteButton = (props) => {
   return (
     <div>
       {token && (
-          <Box
-      sx={{
-        position: "fixed",
-        bottom: 50,
-        right: 24,
-        zIndex: 1200,
-      }}
-    >
-        <Fab
-          variant="extended"
-          // disabled={!isEnabled}
-          size="medium"
-          onClick={() => navigate("/createblog")}
+        <Box
           sx={{
-            backgroundColor: "#ffffff",
-            // boxShadow: "2px 2px 4px 0px grey ",
-            borderRadius: 13,
-            width: "180px",
-            height: "52px",
-            textTransform: "none",
-            fontSize: "20px",
-            fontWeight:"bold",
-             border: "4px solid #fff",
-            // "&:hover": {
-            //   border: "4px solid text.primary",
-            //   boxShadow: "1px 0px 4px 0px #ffffff inset",
-            //   backgroundColor: "accent.main",
-              
-            // },
-            color: "#000000",
-            marginRight: "60px",
-            marginTop: "20px",
+            position: "fixed",
+            bottom: 50,
+            right: 24,
+            zIndex: 1200,
           }}
         >
-         
-          Write
-           <PencilIcon style={{ height: "24px", width: "24px", fill: "currentColor" ,}} />
-        </Fab>
+          <Fab
+            variant="extended"
+            // disabled={!isEnabled}
+            size="medium"
+            onClick={() =>
+              navigate("/createblog", {
+                state: { profileDetails: profileDetails },
+              })
+            }
+            sx={{
+              backgroundColor: "#ffffff",
+              // boxShadow: "2px 2px 4px 0px grey ",
+              borderRadius: 13,
+              width: "180px",
+              height: "52px",
+              textTransform: "none",
+              fontSize: "20px",
+              fontWeight: "bold",
+              border: "4px solid #fff",
+              // "&:hover": {
+              //   border: "4px solid text.primary",
+              //   boxShadow: "1px 0px 4px 0px #ffffff inset",
+              //   backgroundColor: "accent.main",
+
+              // },
+              color: "#000000",
+              marginRight: "60px",
+              marginTop: "20px",
+            }}
+          >
+            Write
+            <PencilIcon
+              style={{ height: "24px", width: "24px", fill: "currentColor" }}
+            />
+          </Fab>
         </Box>
       )}
     </div>

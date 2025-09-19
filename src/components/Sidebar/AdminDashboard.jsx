@@ -63,7 +63,7 @@ const GlassCard = styled(Card)(({ theme }) => ({
   backgroundColor: "transparent",
 }));
 
-const Dashboard = () => {
+const Dashboard = ({ profileDetails }) => {
   const navigate = useNavigate();
   const blogObj = useSelector((state) => state.blogs);
   const recentBlogsList = blogObj.blogs;
@@ -77,7 +77,6 @@ const Dashboard = () => {
   const [winners, setWinners] = useState([]);
   const [showWinners, setShowWinners] = useState(false);
   const [activity, setActivity] = useState([]);
-  console.log(activity, "ACTIVITY");
 
   useEffect(() => {
     setLoading(true);
@@ -361,7 +360,7 @@ const Dashboard = () => {
         </GlassCard>
       </DashboardContainer>
 
-      <WriteButton />
+      <WriteButton profileDetails={profileDetails} />
     </>
   );
 };

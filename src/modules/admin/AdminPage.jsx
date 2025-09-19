@@ -13,8 +13,8 @@ import { profileCheckingApi } from "../../providers/userProvider";
 import Header from "../../components/HomePage/header";
 import { setTopBlogsData, setWinnerBlogs } from "../../store/slices/blogSlice";
 import RecentBlogs from "./components/recentBlogs";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import IconButton from '@mui/material/IconButton';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import IconButton from "@mui/material/IconButton";
 
 const AdminPage = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -24,7 +24,6 @@ const AdminPage = (props) => {
   const winnerBlogs = useSelector((state) => state.blogs.winnerBlogs);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(topBlogs, "TOP BLOGS");
   useEffect(() => {
     getUserDetail();
     getTopBlogsData();
@@ -75,12 +74,12 @@ const AdminPage = (props) => {
   }, [isAdmin]);
 
   //back navigation
-  const handleBack=()=>{
- navigate(-1)
-  }
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <Box>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       {loading ? (
         <Box
           sx={{
@@ -102,7 +101,7 @@ const AdminPage = (props) => {
             gutterBottom
           >
             <IconButton onClick={handleBack}>
-              <ArrowBackIosIcon/>
+              <ArrowBackIosIcon />
             </IconButton>
             Admin Dashboard
           </Typography>

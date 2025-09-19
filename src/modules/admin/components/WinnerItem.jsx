@@ -3,8 +3,6 @@ import { CardContent, Typography, Button, Box, Grid } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 const WinnerItem = ({ winners = [] }) => {
-  console.log(winners, "WINNERS");
-
   if (!winners || winners.length === 0 || winners.message) {
     return (
       <Grid item xs={12} md={6}>

@@ -89,7 +89,7 @@ const BlogView = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [copied, setCopied] = useState(false);
   const [isWinnerAnnounced, setIsWinnerAnnounced] = useState(false);
-
+  const [announceLoad, setAnnounceLoad] = useState(false);
   const shareText = encodeURIComponent(
     `${blogDetails?.title}\nRead more: "https://blogs.aapmor.com/blogs/${blogDetails?._id}`
   );
@@ -116,7 +116,6 @@ const BlogView = () => {
     }
   };
 
-  // console.log(getUserFromToken(), "USER FROM TOKEN");
   const { name, email } = getUserFromToken();
   // const name = Cookies.get("name");
   // const email = Cookies.get("email");
@@ -297,7 +296,6 @@ const BlogView = () => {
 
   const handleLike = async (index) => {
     const response = await commentLikeService(_id, index);
-    console.log(response, "LIKING COMMENT");
     if (response) {
       getBlogItem();
     }
@@ -310,7 +308,6 @@ const BlogView = () => {
       replyText,
       name
     );
-    console.log(response, "REPLYING COMMENT");
     if (response) {
       // setComments((prevComments) =>
       //   prevComments.map((c) =>
@@ -382,6 +379,7 @@ const BlogView = () => {
   // };
 
   const handleSubmit = async () => {
+    setAnnounceLoad(true);
     const publishedMonth = new Intl.DateTimeFormat("en-US", {
       month: "long",
     }).format(new Date(date));
@@ -401,6 +399,7 @@ const BlogView = () => {
       if (response?.response?.data?.error) {
         setSnackMessage(response?.response?.data?.error);
         setOpenSnackBar(true);
+        setAnnounceLoad(false);
         return;
       }
 
@@ -410,17 +409,20 @@ const BlogView = () => {
         setOpenSnackBar(true);
         setIsWinnerAnnounced(true);
         setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
+        setAnnounceLoad(false);
       } else if (response.status === 200) {
         // Winner reverted
         setSnackMessage("Winner status reverted!");
         setOpenSnackBar(true);
         setIsWinnerAnnounced(false);
         setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
+        setAnnounceLoad(false);
       }
     } catch (error) {
       console.error("Error announcing/reverting winner:", error);
       setSnackMessage(error.message);
       setOpenSnackBar(true);
+      setAnnounceLoad(false);
     }
   };
 
@@ -579,6 +581,7 @@ const BlogView = () => {
             {/* WINNER ANNOUNCEMENT BUTTON */}
             {token !== undefined && isAdmin && (
               <Button
+                disabled={announceLoad}
                 size="medium"
                 variant="outlined"
                 color="inherit"
@@ -837,7 +840,7 @@ const BlogView = () => {
   };
   return (
     <>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       <Grid container sx={{ flexDirection: "row", p: 3 }} xs={12}>
         <Grid item xs={0.4}>
           <IconButton

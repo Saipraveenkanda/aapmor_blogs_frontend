@@ -85,7 +85,6 @@ const UserProfile = (props) => {
     const formData = new FormData();
     formData.append("image", file);
     const response = await uploadProfileImage(formData);
-    console.log(response, "PROFILE UPLOAD RESPONSE");
     if (response) {
       setTempImage("");
       getProfile();
@@ -169,7 +168,7 @@ const UserProfile = (props) => {
 
   return (
     <>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       <Box sx={{ padding: "0px 60px", boxSizing: "border-box" }}>
         {/* USER DETAILS AND BIO */}
         {loading ? (
