@@ -13,7 +13,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector } from "react-redux";
 import AdminPage from "./modules/admin/AdminPage.jsx";
 import WriteBlog from "./components/CreateBlog/WriteBlog.jsx";
-
+import { Analytics } from "@vercel/analytics/react";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -77,6 +77,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={appTheme ? lightTheme : darkTheme}>
+      <Analytics />
       <CssBaseline />
       <Routes>
         <Route exact path="/" element={<Home />} />
