@@ -43,6 +43,7 @@ import CommentSection from "./CommentSection";
 import BlogNotFound from "./NoBlogComponent";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import SendIcon from "@mui/icons-material/Send";
 import {
   commentLikeService,
   commentReplyService,
@@ -87,6 +88,8 @@ const BlogView = () => {
   const [openSharePop, setOpenSharePop] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [copied, setCopied] = useState(false);
+  const [isWinnerAnnounced, setIsWinnerAnnounced] = useState(false);
+  const [announceLoad, setAnnounceLoad] = useState(false);
   const shareText = encodeURIComponent(
     `${blogDetails?.title}\nRead more: "https://blogs.aapmor.com/blogs/${blogDetails?._id}`
   );
@@ -113,7 +116,6 @@ const BlogView = () => {
     }
   };
 
-  // console.log(getUserFromToken(), "USER FROM TOKEN");
   const { name, email } = getUserFromToken();
   // const name = Cookies.get("name");
   // const email = Cookies.get("email");
@@ -224,6 +226,7 @@ const BlogView = () => {
     savedUsers,
     isBestBlog,
     publishedToWeb,
+    blogImage,
   } = blogDetails;
 
   const renderLoading = () => {
@@ -293,7 +296,6 @@ const BlogView = () => {
 
   const handleLike = async (index) => {
     const response = await commentLikeService(_id, index);
-    console.log(response, "LIKING COMMENT");
     if (response) {
       getBlogItem();
     }
@@ -306,7 +308,6 @@ const BlogView = () => {
       replyText,
       name
     );
-    console.log(response, "REPLYING COMMENT");
     if (response) {
       // setComments((prevComments) =>
       //   prevComments.map((c) =>
@@ -319,48 +320,6 @@ const BlogView = () => {
 
   const renderComments = () => {
     return (
-      // <Stack direction={"column"} spacing={0}>
-      //   {comments.map((eachComment) => {
-      //     const { comment, name, dateObject } = eachComment;
-      //     const time = getTimeAgo(dateObject);
-      //     return (
-      //       <>
-      //         <Stack
-      //           key={eachComment._id}
-      //           direction={"row"}
-      //           spacing={2}
-      //           sx={{
-      //             padding: 1,
-      //             boxSizing: "border-box",
-      //           }}
-      //         >
-      //           <Avatar>{name[0].toUpperCase()}</Avatar>
-      //           <Stack direction={"column"} spacing={1}>
-      //             <Typography variant="inherit" color={"#000"} fontWeight={600}>
-      //               {name}{" "}
-      //               <text style={{ color: "grey", fontSize: "10px" }}>
-      //                 {"\u25CF"}
-      //               </text>
-      //               <span
-      //                 style={{
-      //                   fontWeight: "lighter",
-      //                   color: "lightslategray",
-      //                   fontSize: "12px",
-      //                 }}
-      //               >
-      //                 {" "}
-      //                 {time}
-      //               </span>
-      //             </Typography>
-
-      //             <Typography variant="body2">{comment}</Typography>
-      //           </Stack>
-      //         </Stack>
-      //         <Divider orientation="horizontal" flexItem />
-      //       </>
-      //     );
-      //   })}
-      // </Stack>
       <CommentSection
         comments={comments}
         handleLike={handleLike}
@@ -379,37 +338,103 @@ const BlogView = () => {
     );
   };
 
+  // const handleSubmit = async () => {
+  //   const previousMonth = new Intl.DateTimeFormat("en-US", {
+  //     month: "long",
+  //   }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
+
+  //   const formData = {
+  //     winnerName: username,
+  //     blogTitle: title,
+  //     blogLink: window.location.href,
+  //     month: previousMonth,
+  //     blogId: _id,
+  //     blogImage,
+  //   };
+  //   try {
+  //     if (!isWinnerAnnounced) {
+  //       const response = await postWinnerDetails(formData);
+  //       if (response?.response?.data?.error) {
+  //         setSnackMessage(response?.response?.data?.error);
+  //         setOpenSnackBar(true);
+  //         return;
+  //       }
+  //       if (response.status === 201) {
+  //         setSnackMessage("Winner has been set successfully!");
+  //         setOpenSnackBar(true);
+  //         setIsWinnerAnnounced(true);
+  //         setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
+  //       }
+  //     } else {
+  //       setIsWinnerAnnounced(false);
+  //       setSnackMessage("Winner status reverted!");
+  //       setOpenSnackBar(true);
+  //       setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
+  //     }
+  //   } catch (error) {
+  //     alert("Error: " + error.message);
+  //     setSnackMessage(error.message);
+  //     setOpenSnackBar(true);
+  //   }
+  // };
+
   const handleSubmit = async () => {
-    const previousMonth = new Intl.DateTimeFormat("en-US", {
+    setAnnounceLoad(true);
+    const publishedMonth = new Intl.DateTimeFormat("en-US", {
       month: "long",
-    }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
+    }).format(new Date(date));
 
     const formData = {
       winnerName: username,
       blogTitle: title,
       blogLink: window.location.href,
-      month: previousMonth,
+      month: publishedMonth,
       blogId: _id,
+      blogImage,
+      email: blogDetails.email,
+      date,
     };
+
     try {
       const response = await postWinnerDetails(formData);
+
       if (response?.response?.data?.error) {
         setSnackMessage(response?.response?.data?.error);
         setOpenSnackBar(true);
+        setAnnounceLoad(false);
+        return;
       }
-      if (!response.status === 201) {
-        throw new Error("Failed to save winner");
-      } else if (response.status === 201) {
+
+      if (response.status === 201) {
+        // Winner announced
         setSnackMessage("Winner has been set successfully!");
         setOpenSnackBar(true);
-        getBlogItem();
+        setIsWinnerAnnounced(true);
+        setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
+        setAnnounceLoad(false);
+      } else if (response.status === 200) {
+        // Winner reverted
+        setSnackMessage("Winner status reverted!");
+        setOpenSnackBar(true);
+        setIsWinnerAnnounced(false);
+        setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
+        setAnnounceLoad(false);
       }
     } catch (error) {
-      alert("Error: " + error.message);
+      console.error("Error announcing/reverting winner:", error);
       setSnackMessage(error.message);
       setOpenSnackBar(true);
+      setAnnounceLoad(false);
     }
   };
+
+  useEffect(() => {
+    if (blogDetails && blogDetails.isBestBlog) {
+      setIsWinnerAnnounced(true);
+    } else {
+      setIsWinnerAnnounced(false);
+    }
+  }, [blogDetails]);
 
   const handlePublish = async () => {
     const payload = {
@@ -556,8 +581,9 @@ const BlogView = () => {
             {/* AWARD IMAGE */}
             {isBestBlog && <BestBlogRibbon />}
             {/* WINNER ANNOUNCEMENT BUTTON */}
-            {token !== undefined && isAdmin && !isBestBlog && (
+            {token !== undefined && isAdmin && (
               <Button
+                disabled={announceLoad}
                 size="medium"
                 variant="outlined"
                 color="inherit"
@@ -574,7 +600,7 @@ const BlogView = () => {
                   fontWeight: "bold",
                 })}
               >
-                Announce Winner
+                {isWinnerAnnounced ? "Revert Winner" : "Announce Winner"}
               </Button>
             )}
             {token !== undefined && isAdmin && (
@@ -650,11 +676,7 @@ const BlogView = () => {
                     ) : (
                       <ThumbUpOffAltIcon />
                     )}
-                    {liked ? (
-                      <Typography>Liked</Typography>
-                    ) : (
-                      <Typography>Like</Typography>
-                    )}
+                    <Typography>{likes.length}</Typography>
                   </Button>
                 </div>
                 <Divider flexItem sx={{ border: "1px solid #ffffff" }} />
@@ -723,6 +745,20 @@ const BlogView = () => {
                   spacing={1}
                   sx={{}}
                 >
+                  <svg width="0" height="0">
+                    <defs>
+                      <linearGradient
+                        id="starGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop offset="0%" stopColor="#FE8B76" />
+                        <stop offset="100%" stopColor="#6360BE" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
                   {/* <Avatar>{name[0].toUpperCase()}</Avatar> */}
                   <Stack
                     direction={"row"}
@@ -748,22 +784,31 @@ const BlogView = () => {
                     <LoadingButton
                       variant="contained"
                       loading={loading}
-                      // size="small"
                       disabled={disableCommentButton}
                       onClick={handleCommentApi}
-                      // endIcon={}
+                      disableElevation
                       sx={{
+                        width: "30px",
+                        backgroundColor: "transparent",
                         height: "40px",
-                        // borderRadius: "50%",
-                        backgroundColor: "#016A70",
+                        "&.Mui-disabled": {
+                          backgroundColor: "transparent",
+                          color: "white",
+                        },
                         "&:hover": {
-                          backgroundColor: "#016A70",
+                          backgroundColor: "transparent",
                         },
                       }}
                     >
-                      {/* <SendOutlinedIcon /> */}
-                      <PaperPlaneTilt size={30} />
-                      {/* Send */}
+                      <SendIcon
+                        fontSize="large"
+                        className="winner-icon gradient-icon"
+                        style={{
+                          fill: disableCommentButton
+                            ? "grey"
+                            : "url(#starGradient)",
+                        }}
+                      />
                     </LoadingButton>
                   </Stack>
                 </Stack>
@@ -797,7 +842,7 @@ const BlogView = () => {
   };
   return (
     <>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       <Grid container sx={{ flexDirection: "row", p: 3 }} xs={12}>
         <Grid item xs={0.4}>
           <IconButton

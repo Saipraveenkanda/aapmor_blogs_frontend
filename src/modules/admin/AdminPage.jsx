@@ -13,6 +13,8 @@ import { profileCheckingApi } from "../../providers/userProvider";
 import Header from "../../components/HomePage/header";
 import { setTopBlogsData, setWinnerBlogs } from "../../store/slices/blogSlice";
 import RecentBlogs from "./components/recentBlogs";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import IconButton from "@mui/material/IconButton";
 
 const AdminPage = (props) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -22,7 +24,6 @@ const AdminPage = (props) => {
   const winnerBlogs = useSelector((state) => state.blogs.winnerBlogs);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(topBlogs, "TOP BLOGS");
   useEffect(() => {
     getUserDetail();
     getTopBlogsData();
@@ -72,9 +73,13 @@ const AdminPage = (props) => {
       }, 2000);
   }, [isAdmin]);
 
+  //back navigation
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <Box>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       {loading ? (
         <Box
           sx={{
@@ -95,6 +100,9 @@ const AdminPage = (props) => {
             // textAlign={"center"}
             gutterBottom
           >
+            <IconButton onClick={handleBack}>
+              <ArrowBackIosIcon />
+            </IconButton>
             Admin Dashboard
           </Typography>
           <Grid container spacing={2} flexDirection={"column"}>
@@ -121,7 +129,7 @@ const AdminPage = (props) => {
             >
               Monthly Spotlight: Winning Blogs
             </Typography>
-            <Grid xs={12} container item spacing={2} /* sx={{ mt: 1 }} */>
+            <Grid xs={12} container item spacing={2}>
               <WinnerItem winners={winnerBlogs} />
             </Grid>
           </Grid>

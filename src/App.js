@@ -13,7 +13,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector } from "react-redux";
 import AdminPage from "./modules/admin/AdminPage.jsx";
 import WriteBlog from "./components/CreateBlog/WriteBlog.jsx";
-
+import { Analytics } from "@vercel/analytics/react";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -24,6 +24,7 @@ const darkTheme = createTheme({
       primary: "#f4f6f8", // Primary Text Color
       secondary: "#bfbfbf", // Secondary Text Color
       body: "#ff5252",
+      watermark: "#ffffff14",
     },
     background: {
       default: "#121212", // Default Background Color
@@ -51,6 +52,7 @@ const lightTheme = createTheme({
       primary: "#121212",
       secondary: "#4f4f4f",
       body: "#ff5252",
+      watermark: "#00000014",
     },
     background: {
       default: "#f4f6f8",
@@ -75,6 +77,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={appTheme ? lightTheme : darkTheme}>
+      <Analytics />
       <CssBaseline />
       <Routes>
         <Route exact path="/" element={<Home />} />

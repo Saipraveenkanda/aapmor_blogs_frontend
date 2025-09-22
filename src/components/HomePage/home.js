@@ -11,10 +11,16 @@ import noBlogsImage from "../../assets/noblogs.png";
 import WinnerAnnouncement from "../BlogWinner";
 import AdminDashboard from "../Sidebar/AdminDashboard";
 import { registerUser } from "../../socket";
-import { getBlogsApi } from "../../providers/blogProvider";
+import {
+  getBlogsApi,
+  getBlogsByCategoryApi,
+} from "../../providers/blogProvider";
 import { getWinnerOfTheMonth } from "../../providers/adminProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
 import { token } from "../../utilities/authUtils";
+import WinnerTicker from "../WinnerTicker";
+import CategoryTabs from "../Sidebar/CategoryTabs";
+import useTheme from "@mui/material/styles/useTheme";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -26,20 +32,20 @@ const Home = () => {
   const [updatedBlogs, setUpdatedBlogs] = useState(blogs);
   const [showAlert, setShowAlert] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [category, setCategory] = useState("All");
   const [winnerDetails, setWinnerDetails] = useState([]);
   const [profileDetails, setProfileDetails] = useState({});
-  console.log(profile, "PROFILE");
+  const theme = useTheme();
+  const mode = theme.palette.mode;
 
   useEffect(() => {
     document.title = "AAPMOR | Blogs";
     if (!token) {
       const checkProfileDetails = async () => {
         const response = await profileCheckingApi();
-        console.log(response, "RESP");
         if (response.status === 202) {
-          console.log("Profile not updated, opening profile");
           setProfile(true);
-        } else if (response.status === 200) {
+        } else {
           setProfile(false);
           setProfileDetails(response.data.res);
           if (response) {
@@ -79,27 +85,52 @@ const Home = () => {
   }, [blogs]);
 
   //GET BLOGS API CALL
-  const getBlogsData = async () => {
-    const response = await getBlogsApi();
-    if (response.status === 200) {
-      setApiStatus("SUCCESS");
-      dispatch(setBlogsData(response.data));
-    } else {
-      setApiStatus("FAILURE");
+  // const getBlogsData = async () => {
+  //   const response = await getBlogsByCategoryApi(category);
+  //   if (response.status === 200) {
+  //     setApiStatus("SUCCESS");
+  //     dispatch(setBlogsData(response.data));
+  //   } else {
+  //     setApiStatus("FAILURE");
+  //   }
+  // };
+
+  useEffect(() => {
+    const fetchBlogsByCategory = async () => {
+      setApiStatus("INITIAL");
+      const response = await getBlogsByCategoryApi(category);
+      if (response.status === 200) {
+        setApiStatus("SUCCESS");
+        dispatch(setBlogsData(response.data));
+      } else {
+        setApiStatus("FAILURE");
+      }
+    };
+
+    // Only fetch if category is defined
+    if (category) {
+      fetchBlogsByCategory();
     }
-  };
+  }, [category]);
+
+  //   useEffect(() => {
+  //   setApiStatus("INITIAL");
+  //   getBlogsData();
+  // }, [category]);
 
   const getWinnerDetails = async () => {
     const response = await getWinnerOfTheMonth();
-    if (response) {
+    if (response && !response?.data?.message) {
       setWinnerDetails(response?.data);
+    } else {
+      setWinnerDetails([]);
     }
   };
 
   useEffect(() => {
     setApiStatus("INITIAL");
     getWinnerDetails();
-    getBlogsData();
+    // getBlogsData();
   }, []);
 
   const renderLoadingView = () => {
@@ -109,7 +140,7 @@ const Home = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "90vh",
+          height: "calc(100vh - 156px)",
           width: "100%",
         }}
       >
@@ -170,7 +201,7 @@ const Home = () => {
     return (
       <Box
         sx={{
-          height: "calc(100vh - 65px)",
+          height: "calc(100vh - 156px)",
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -201,8 +232,10 @@ const Home = () => {
             width: "100%",
             minHeight: "91vh",
             padding: "24px",
+            paddingTop: 0,
             boxSizing: "border-box",
             backdropFilter: "blur(10px)",
+            // marginTop: "65px",
           }}
           gap={{ xs: 2, md: 4 }}
         >
@@ -296,9 +329,14 @@ const Home = () => {
           setSearchInput={setSearchInput}
           profile={profile}
           setProfile={setProfile}
+          setProfileDetails={setProfileDetails}
         />
+        {winnerDetails?.length > 0 && (
+          <WinnerTicker winnerDetails={winnerDetails} mode={mode} />
+        )}
         <Grid item sx={{ flexBasis: { xs: "100%", sm: "100%" } }} container>
           <Grid item xs={12} lg={8.5} sx={{ mr: 1, boxSizing: "border-box" }}>
+            <CategoryTabs category={category} setCategory={setCategory} />
             {renderBlogsApi()}
           </Grid>
           <Grid
@@ -306,7 +344,7 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            <AdminDashboard />
+            <AdminDashboard profileDetails={profileDetails} />
           </Grid>
         </Grid>
       </Grid>

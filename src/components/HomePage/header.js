@@ -19,6 +19,7 @@ import {
   ListItem,
   ListItemText,
   Popover,
+  Skeleton,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -28,13 +29,11 @@ import BookIcon from "@mui/icons-material/Book";
 import aapmorlogo from "../../assets/AAPMOR LOGO.svg";
 import aapmortext from "../../assets/aapmortext.svg";
 import aapmorLightText from "../../assets/aapmorwhitetext.svg";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../../store/slices/blogSlice";
 import { useDispatch } from "react-redux";
 import { listenToNotifications } from "../../socket";
-import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { timeAgo } from "../../utilities/timerFunction";
 // import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
 import { toast } from "react-toastify";
@@ -44,8 +43,15 @@ import {
   getNotifications,
 } from "../../providers/dashboardProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
-
-const Header = ({ setSearchInput = () => {}, setProfile }) => {
+import Admin from "../../assets/Admin.svg";
+import Icon from "../../assets/Icon.svg";
+import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
+import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
+const Header = ({
+  setSearchInput = () => {},
+  setProfile,
+  setProfileDetails,
+}) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
@@ -55,6 +61,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const handleToggle = (event) => {
     setNotificationAnchorEl(event.currentTarget);
   };
+  const [user, setUser] = useState({});
   const open = Boolean(anchorEl);
   const openNotifications = Boolean(notificationAnchorEl);
   const id = open ? "notifications-popper" : undefined;
@@ -70,6 +77,10 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
     localStorage.setItem("theme", mode);
     dispatch(setAppTheme(mode));
   }, [mode]);
+
+  useEffect(() => {
+    setProfileDetails(user);
+  }, [user]);
 
   useEffect(() => {
     getUserDetail();
@@ -98,6 +109,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
       setUserId(response?.data?.res?._id);
+      setUser(response?.data?.res);
     }
   };
 
@@ -125,10 +137,10 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
     navigate("/login");
   };
   const placeholderMessages = [
-    "Search by User Name...",
-    "Search by Blog Title...",
-    "Search by Month...",
-    "Search by Category...",
+    "Search Author",
+    "Search Blog Title",
+    "Search Month",
+    "Search Category",
     // "Search by Keywords...",
   ];
 
@@ -149,9 +161,9 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
       sx={{
         background: "transparent",
         backdropFilter: "blur(24px)",
-        borderBottom: "0.5px solid lightgrey",
+        // borderBottom: "0.5px solid lightgrey",
         color: "#000",
-        zIndex: 10,
+        // zIndex: 10,
       }}
       elevation={0}
     >
@@ -200,14 +212,19 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
           />
           <Typography
             variant="h6"
-            color={"accent.main"}
-            fontFamily={"Playwrite CO Guides, serif"}
+            color={"white"}
+            fontFamily={"san-serif"}
             fontWeight={500}
+            fontSize={30}
+            sx={{
+              color: mode ? "#767676" : "#ffffff",
+              transition: "color 0.3s ease-in-out",
+            }}
           >
             Blogs
           </Typography>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             display: { xs: "none", sm: "flex" },
             alignItems: "center",
@@ -240,15 +257,77 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
             color="action"
             sx={{ cursor: "pointer", color: "accent.main" }}
           />
-        </Box>
+        </Box> */}
 
         {/* WEB NAVIGATION AFTER LOGIN */}
         <Stack spacing={1} alignItems={"center"} direction={"row"}>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+              width: "50%",
+              backgroundColor: "#transparent",
+              border: "1px solid #767676",
+              borderRadius: 8,
+              pr: 2,
+            }}
+          >
+            {" "}
+            <SearchOutlined
+              color="action"
+              sx={{
+                cursor: "pointer",
+                color: mode ? "#666666" : "#ddcdcdff",
+                ml: 2,
+              }}
+            />
+            <InputBase
+              sx={{
+                p: 0.5,
+                pl: 1,
+                color: mode ? "#666666" : "#cccccc",
+                boxSizing: "border-box",
+                "& input::placeholder": {
+                  color: mode ? "#666666" : "#cccccc",
+                  opacity: 1,
+                  transition: "color 0.3s ease-in-out",
+                  animation: "slideUp 2s ease-in-out infinite",
+                },
+              }}
+              type="search"
+              placeholder={placeholder}
+              fullWidth
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+          </Box>
+          {/* Profile Icon */}
+          {token !== undefined && (
+            <IconButton
+              size="small"
+              onClick={() => navigate("/user/profile")}
+              title={user?.name || "Profile"}
+            >
+              {user?.gender ? (
+                user?.gender === "Male" ? (
+                  <Face6OutlinedIcon />
+                ) : (
+                  <Face3OutlinedIcon />
+                )
+              ) : (
+                <Skeleton
+                  variant="circular"
+                  animation={"wave"}
+                  width={24}
+                  height={24}
+                />
+              )}
+            </IconButton>
+          )}
           <IconButton
             size="small"
-            sx={(theme) => ({
-              border: `1px solid ${theme.palette.accent.main}`,
-            })}
+            // sx={(theme) => ({
+            //   border: `1px solid ${theme.palette.accent.main}`,
+            // })}
             onClick={() => setMode(!mode)}
             title={mode ? "Light Mode" : "Dark Mode"}
           >
@@ -257,14 +336,24 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
           {token !== undefined && (
             <IconButton
               size="small"
-              sx={(theme) => ({
-                border: `1px solid ${theme.palette.accent.main}`,
-              })}
+              // sx={(theme) => ({
+              //   border: `1px solid ${theme.palette.accent.main}`,
+              // })}
               onClick={handleToggle}
               title={"Notifications"}
             >
               <Badge badgeContent={notifications?.length} color="primary">
-                <CircleNotificationsIcon />
+                <img
+                  src={Icon}
+                  alt="Notifications"
+                  style={{
+                    width: 24,
+                    height: 24,
+                    filter: mode
+                      ? "invert(70%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(90%) contrast(85%)" // Light gray for dark mode
+                      : "invert(30%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(95%) contrast(90%)",
+                  }}
+                />
               </Badge>
             </IconButton>
           )}
@@ -284,13 +373,20 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
                   title="Admin"
                   onClick={() => navigate("/admin")}
                   size="small"
-                  sx={(theme) => ({
-                    border: `1px solid ${theme.palette.accent.main}`,
-                  })}
+                  // sx={(theme) => ({
+                  //   border: `1px solid ${theme.palette.accent.main}`,
+                  // })}
                 >
-                  <AdminPanelSettingsOutlinedIcon
-                  // sx={{ color: "accent.main" }}
-                  // fontSize="medium"
+                  <img
+                    src={Admin}
+                    alt="Admin"
+                    style={{
+                      width: 24,
+                      height: 24,
+                      filter: mode
+                        ? "invert(70%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(90%) contrast(85%)" // Light gray for dark mode
+                        : "invert(30%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(95%) contrast(90%)",
+                    }}
                   />
                 </IconButton>
               )}
@@ -301,7 +397,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
                 disableElevation
                 sx={(theme) => ({
                   borderRadius: 4,
-                  border: `0.5px solid ${theme.palette.accent.main}`,
+                  border: " 1px solid #767676",
                   textTransform: "none",
                   color: "text.secondary",
                 })}

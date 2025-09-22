@@ -62,7 +62,7 @@ const RecentBlogs = ({ blogs = [], publishedBlogs = [] }) => {
                     overflowY: "auto",
                     maxHeight: "70vh",
                     scrollbarWidth: "thin",
-                    scrollbarWidth: "none",
+                    // scrollbarWidth: "none",
                     p: 1,
                     borderRadius: 2,
                   }}

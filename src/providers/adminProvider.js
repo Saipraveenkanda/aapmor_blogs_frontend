@@ -65,3 +65,13 @@ export const getTrendingBlogs = async () => {
     return error;
   }
 };
+
+export const getActivityService = async () => {
+  try {
+    return await axios.get(apiEndpoints.getActivityUrl);
+  } catch (error) {
+    console.log(error, "ERROR");
+    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //PUBLISH TO WEB ERROR
+    return error;
+  }
+};

@@ -13,6 +13,12 @@ import {
   Fab,
   CircularProgress,
   Skeleton,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  Popover,
+  Avatar,
+  Modal,
 } from "@mui/material";
 import { useState, React, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -32,6 +38,8 @@ import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import SmartButtonOutlinedIcon from "@mui/icons-material/SmartButtonOutlined";
 import { useRef } from "react";
 import ImageResize from "quill-image-resize-module-react";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import {
   uploadThumbnail,
   createBlogApi,
@@ -40,6 +48,11 @@ import {
   updateBlogApi,
 } from "../../providers/blogProvider";
 import BlogPreview from "../BlogView/PreviewBlog";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 const Size = ReactQuill.Quill.import("attributors/style/size");
@@ -73,7 +86,9 @@ const modules = {
 const CreateBlog = () => {
   const quillRef = useRef(null);
   const location = useLocation();
-  const { editBlog, isEdit } = location.state || {};
+  const { editBlog, isEdit, profileDetails } = location.state || {};
+  console.log(profileDetails, "STATE");
+
   const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
   const savedData =
     (savedBlogData !== null && savedBlogData) ||
@@ -103,7 +118,16 @@ const CreateBlog = () => {
   const role = Cookies.get("userrole");
   const [plainText, setPlainText] = useState("");
   const navigate = useNavigate();
-
+  const [showPreview, setShowPreview] = useState(false);
+  // const [tempImage, setTempImage] = useState("");
+  const handleImageClose = () => {
+    setAnchorEl(null);
+  };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openImage = Boolean(anchorEl);
+  const handleHover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
   useEffect(() => {
     document.querySelectorAll(".ql-toolbar button").forEach((button) => {
       const format = button.classList[0]?.replace("ql-", "");
@@ -176,13 +200,13 @@ const CreateBlog = () => {
   };
 
   const submitPost = async () => {
-    if (!name || !role) {
+    if (!profileDetails?.name) {
       setProfile(true);
     } else {
       setLoading(true);
       const blogDetails = {
-        username: name,
-        userrole: role,
+        username: profileDetails?.name,
+        userrole: profileDetails?.designation,
         title,
         description,
         blogImage,
@@ -215,8 +239,8 @@ const CreateBlog = () => {
           blogImage,
           dateObject,
           blogId,
-          name,
-          role,
+          name: profileDetails?.name,
+          role: profileDetails?.designation,
           editorHtml,
         };
         !isEdit && (await publishBlogApi(content));
@@ -256,15 +280,111 @@ const CreateBlog = () => {
     setSummaryLoading(false);
   };
 
+  const UploadContainer = () => {
+    return (
+      <Box
+        sx={{
+          // width: 240,
+          height: 100,
+          border: "2px dashed #ccc",
+          borderRadius: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          position: "relative",
+          overflow: "hidden",
+          "&:hover": { borderColor: "#1976d2" }, // highlight on hover
+        }}
+      >
+        {!blogImage ? (
+          <label
+            htmlFor="file-upload"
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              color: "#888",
+              cursor: "pointer",
+            }}
+          >
+            <Typography variant="body2" textAlign={"center"}>
+              Click to Upload Thumbnail <span style={{ color: "red" }}>*</span>{" "}
+            </Typography>
+            <InsertPhotoOutlinedIcon />
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleFileUpload}
+            />
+          </label>
+        ) : (
+          <>
+            <Box
+              component="img"
+              src={blogImage}
+              alt="Uploaded"
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+              onClick={handleHover}
+            />
+            <IconButton
+              size="small"
+              onClick={() => setBlogImage("")}
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                backgroundColor: "rgba(0,0,0,0.6)",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "rgba(0,0,0,0.8)",
+                },
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+            <Typography
+              sx={{
+                position: "absolute",
+                textAlign: "center",
+                color: "#ffffff",
+                fontWeight: "bold",
+              }}
+              variant="caption"
+            >
+              Click to view full size
+            </Typography>
+          </>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <>
-      <Header />
+      <Header setProfileDetails={() => {}} />
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
+          alignItems: "flex-start",
         }}
       >
+        <IconButton
+          sx={{ position: "fixed", top: "80px", left: "5%" }}
+          onClick={() => navigate("/")}
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
         <Box
           sx={{
             display: "flex",
@@ -283,18 +403,13 @@ const CreateBlog = () => {
             container
             spacing={1}
           >
-            <Grid item xs={12} md={6}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", color: "grey" }}
-              >
-                TITLE<span style={{ color: "red" }}>*</span>
-              </Typography>
+            <Grid item xs={12} md={8}>
               <TextField
+                size="small"
+                label={"Title"}
                 placeholder="Enter your blog title"
                 onChange={(e) => setTitle(e.target.value)}
-                // sx={{ minWidth: { xs: "350px", sm: "500px", md: "600px" } }}
-                variant="standard"
+                variant="outlined"
                 required
                 fullWidth
                 value={title}
@@ -302,76 +417,29 @@ const CreateBlog = () => {
             </Grid>
             {/* category */}
             <Grid item xs={9} md={4} sx={{ paddingRight: "4px" }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: "bold", color: "grey" }}
-              >
-                Category<span style={{ color: "red" }}>*</span>
-              </Typography>
-              <Select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                fullWidth
-                size="small"
-                displayEmpty
-              >
-                <MenuItem value="" disabled sx={{ color: "grey" }}>
-                  Select Category
-                </MenuItem>
-                {catoreries.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            {/* thumbnail  */}
-            <Grid item xs={2} md={2}>
-              <Tooltip title="Insert thumbnail image for your blog">
-                <Button
-                  component="label"
-                  role={undefined}
-                  variant="outlined"
-                  tabIndex={-1}
-                  startIcon={<AddPhotoAlternateIcon />}
-                  sx={{
-                    textTransform: "none",
-                    marginTop: "24px",
-                    border: "1px solid #016A70",
-                    color: "#016A70",
-                    "&:hover": {
-                      color: "#ffffff",
-                      backgroundColor: "#016A7080",
-                      border: "1px solid #016A70",
-                    },
-                  }}
+              <FormControl size="small" fullWidth>
+                <InputLabel>Category *</InputLabel>
+                <Select
                   required
-                  size="large"
+                  label="Category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  fullWidth
+                  size="small"
+                  displayEmpty
                 >
-                  Thumbnail <span style={{ color: "red" }}> *</span>
-                  <Input
-                    accept="image/*"
-                    multiple
-                    type="file"
-                    onChange={handleFileUpload}
-                    id="imageFile"
-                    sx={{ display: "none" }}
-                  />
-                  <label htmlFor="imageFile"></label>
-                </Button>
-              </Tooltip>
+                  {catoreries.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
-          </Grid>
-          {/* blog description */}
-          <Grid>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", color: "grey" }}
-            >
-              Blog Description<span style={{ color: "red" }}>*</span>
-            </Typography>
-            <Stack direction={"row"} spacing={2} alignItems={"flex-end"}>
+            {/* blog description */}
+            <Grid item xs={12} md={10} mt={1}>
               <TextField
+                label="Blog Description"
                 disabled={summaryLoading}
                 variant="outlined"
                 placeholder="Enter few lines about your blog"
@@ -382,21 +450,21 @@ const CreateBlog = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
+            </Grid>
+            {/* thumbnail  */}
+            <Grid item xs={12} md={2} mt={1}>
+              <UploadContainer />
+            </Grid>
+            {/* Summarize button */}
+            <Grid item xs={12} md={2}>
               <Button
+                size="small"
                 onClick={handleSummarize}
                 title="Summarize your blog"
                 variant="outlined"
                 disabled={summaryLoading}
                 sx={{
                   textTransform: "none",
-                  border: "1px solid #016A70",
-                  borderLeft: summaryLoading && "none",
-                  color: "#016A70",
-                  "&:hover": {
-                    color: "#ffffff",
-                    backgroundColor: "#016A7080",
-                    border: "1px solid #016A70",
-                  },
                 }}
                 endIcon={
                   <SmartButtonOutlinedIcon
@@ -406,18 +474,38 @@ const CreateBlog = () => {
                 }
               >
                 {summaryLoading ? (
-                  <Box sx={{ width: "100px" }}>
-                    <div class="dots"></div>
-                  </Box>
+                  <Typography sx={{ display: "flex", alignItems: "center" }}>
+                    Please Wait
+                  </Typography>
                 ) : (
                   <Typography sx={{ display: "flex", alignItems: "center" }}>
-                    {/* <SmartButtonOutlinedIcon fontSize="large" /> */}
                     Summarize
                   </Typography>
                 )}
               </Button>
-            </Stack>
+            </Grid>
+            {/* Preview Button */}
+            <Grid sx={{ position: "sticky", top: "70px" }}>
+              <Button
+                title="Preview your blog before posting"
+                onClick={() => setShowPreview(!showPreview)}
+                sx={{
+                  textTransform: "none",
+                }}
+                variant="outlined"
+                endIcon={
+                  showPreview ? (
+                    <EditOutlinedIcon />
+                  ) : (
+                    <VisibilityIcon fontSize="small" color="warning" />
+                  )
+                }
+              >
+                {showPreview ? "Edit" : "Preview"}
+              </Button>
+            </Grid>
           </Grid>
+
           {/* floating buttons  */}
           <Grid
             sx={{
@@ -474,57 +562,9 @@ const CreateBlog = () => {
                 />
               )}
             </Fab>
-            <BlogPreview htmlContent={editorHtml} />
           </Grid>
 
-          {/* EDITOR BOX*/}
-          {(blogImage !== "" || imageLoading) && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                boxSizing: "border-box",
-                backgroundColor: "#bfbfbf50",
-                width: "300px",
-                height: "200px",
-                mt: 1,
-                borderRadius: 2,
-                // boxShadow: "0px 0px 10px 0px #00000050",
-              }}
-            >
-              <Stack
-                direction={"row"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-                spacing={12}
-              >
-                <Typography variant="p" fontWeight={500}>
-                  Your blog thumbnail
-                </Typography>
-                <Tooltip title="click to remove thumbnail" placement="right">
-                  <IconButton onClick={() => setBlogImage("")}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
-              {imageLoading ? (
-                <Skeleton
-                  variant="rectangular"
-                  sx={{ position: "relative", width: "100%", height: "100%" }}
-                />
-              ) : (
-                <img
-                  src={blogImage}
-                  alt="thumbnail"
-                  style={{
-                    width: "100%",
-                    height: "80%",
-                  }}
-                />
-              )}
-            </Box>
-          )}
+          {/* Preview or Edit Blog */}
           <Box
             sx={{
               width: "100%",
@@ -532,13 +572,21 @@ const CreateBlog = () => {
               alignSelf: "center",
             }}
           >
-            <ReactQuill
-              ref={quillRef}
-              theme="snow"
-              value={editorHtml}
-              onChange={handleChange}
-              modules={modules}
-            />
+            {showPreview ? (
+              <BlogPreview
+                htmlContent={editorHtml}
+                showPreview={showPreview}
+                setShowPreview={setShowPreview}
+              />
+            ) : (
+              <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                value={editorHtml}
+                onChange={handleChange}
+                modules={modules}
+              />
+            )}
           </Box>
         </Box>
       </Box>
@@ -589,6 +637,65 @@ const CreateBlog = () => {
         }
       `}
       </style>
+
+      {/* Preview Image */}
+      <Modal
+        open={openImage}
+        // anchorEl={anchorEl}
+        onClose={handleImageClose}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+        disableRestoreFocus
+        PaperProps={{
+          style: {
+            padding: "10px",
+            borderRadius: "10px",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            outline: "none",
+          }}
+        >
+          <IconButton
+            onClick={() => setAnchorEl(null)}
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              color: "#ffffff",
+              zIndex: 1,
+            }}
+          >
+            <ClearIcon sx={{ color: "#ffffff" }} />
+          </IconButton>
+          <Avatar
+            src={blogImage}
+            variant="square"
+            alt="Expanded Profile"
+            sx={{
+              width: "100%",
+              height: "90vh",
+              // border: "3px solid white",
+            }}
+          />
+        </Box>
+      </Modal>
       <ProfilePopup
         profile={profile}
         setProfile={setProfile}
@@ -599,7 +706,3 @@ const CreateBlog = () => {
   );
 };
 export default CreateBlog;
-
-const loader = () => {
-  return <></>;
-};

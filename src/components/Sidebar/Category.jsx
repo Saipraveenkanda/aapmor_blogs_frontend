@@ -14,8 +14,13 @@ import BiotechOutlinedIcon from "@mui/icons-material/BiotechOutlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import InsightsIcon from "@mui/icons-material/Insights";
+import { useTheme } from "@mui/material/styles";
 
 const Category = ({ category, setCategory, label }) => {
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
+  const isSelected = category === label;
+
   const renderIcon = () => {
     switch (label) {
       case "All":
@@ -123,7 +128,7 @@ const Category = ({ category, setCategory, label }) => {
 
   return (
     <Stack direction={"row"} alignItems={"center"}>
-      <Box
+      {/* <Box
         sx={{
           borderRadius: "50%",
           height: "30px",
@@ -142,29 +147,54 @@ const Category = ({ category, setCategory, label }) => {
         }}
       >
         {renderIcon()}
-      </Box>
+      </Box> */}
       <Button
         size="small"
         // startIcon={renderIcon()}
         value={label}
         variant={category === label ? "contained" : "outlined"}
-        onClick={(e) => setCategory(e.target.value)}
+        onClick={(e) => setCategory(label)}
         sx={{
-          border: `1px solid ${category === label ? "#016A70" : "lightgrey"}`,
-          height: "40px",
+          border: `1px solid ${
+            isSelected ? "#F1F1F1" : isDarkMode ? "#444" : "#ccc"
+          }`,
+          height: "30px",
           width: "100%",
           borderRadius: 2,
           textTransform: "none",
-          backgroundColor: "#fff",
-          color: category === label ? "#016A70" : "#000",
-          fontWeight: category === label ? "bold" : "",
-          p: "6px 6px 6px 24px",
+          // backgroundColor: isSelected
+          //   ? "#F1F1F1"
+          //   : isDarkMode
+          //   ? "#F1F1F1"
+          //   : "#f5f5f5",
+          color: isSelected ? "#222121" : isDarkMode ? "#e0e0e0" : "#333333",
+          fontWeight: isSelected ? "bold" : "",
+          p: "6px",
+          // background: isSelected
+          //   ? "#F1F1F1"
+          //   : isDarkMode
+          //   ? "linear-gradient(343.58deg, rgba(30, 30, 30, 0.2) -21.05%, rgba(60, 60, 60, 0.5) 24.15%, #292929 77.91%)"
+          //   : "linear-gradient(343.58deg, rgba(240, 240, 240, 0.5) -21.05%, rgba(230, 230, 230, 0.5) 24.15%, #f2f2f2 77.91%)",
           mr: 0.5,
+          background: isSelected
+            ? isDarkMode
+              ? "#F1F1F1"
+              : ""
+            : isDarkMode
+            ? "linear-gradient(322.49deg, #121212 -10.4%, #1e1e1e80 32.3%, #292929 83.09%)"
+            : "linear-gradient(343.58deg, #f0f0f080 -21.05%, #e6e6e680 24.15%, #f2f2f2 77.91%)",
+          // borderImage: isDarkMode
+          //   ? "linear-gradient(180deg, #363636 0%, rgba(50, 50, 50, 0.5) 100%)"
+          //   : "linear-gradient(180deg, #ccc 0%, rgba(200, 200, 200, 0.5) 100%)",
           "&:hover": {
-            backgroundColor: "unset",
-            borderColor: "#016A70",
+            borderColor: "#F1F1F1",
+            backgroundColor: isSelected
+              ? "#363636"
+              : isDarkMode
+              ? "#3a3a3a"
+              : "#eaeaea",
+            color: isSelected ? "#222121" : isDarkMode ? "#e0e0e0" : "#333333",
           },
-          // boxShadow: "2px 0px 4px 0px #bfbfbf",
         }}
       >
         {label}
