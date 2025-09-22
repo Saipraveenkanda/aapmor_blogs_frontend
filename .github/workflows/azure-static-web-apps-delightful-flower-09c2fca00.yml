@@ -25,7 +25,7 @@ jobs:
           npm run build
 
       - name: Copy routes.json to build
-        run: cp routes.json dist/
+        run: cp routes.json build/
 
       # - name: Build And Deploy
       #   id: builddeploy
