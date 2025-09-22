@@ -14,37 +14,30 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    env: # 👈 Global envs available for all steps in this job
+      REACT_APP_API_URL: "https://aapmorblogsapi-amb7gsgqc2h5ggfq.southindia-01.azurewebsites.net"
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
+
       - name: Install dependencies and build
         run: |
-          npm install
-          npm run build
+          npm ci
+          CI=false npm run build
 
       - name: Copy routes.json to build
-        run: cp routes.json build/
+        run: cp routes.json build/ || true
 
-      # - name: Build And Deploy
-      #   id: builddeploy
-      #   uses: Azure/static-web-apps-deploy@v1
-      #   with:
-      #     azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHFUL_FLOWER_09C2FCA00 }}
-      #     repo_token: ${{ secrets.GITHUB_TOKEN }} # For PR comments
-      #     action: "upload"
-      #     app_location: "/"            # App source code path
-      #     api_location: ""             # Optional: API source code path
-      #     output_location: "dist"      # Built app output folder
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHFUL_FLOWER_09C2FCA00 }}
           action: "upload"
-          app_location: "build" # This now points to your final built folder
-          output_location: "" # Do not set this; it's not used in upload mode
-          api_location: "" # If no APIs, keep it blank
+          app_location: "build"
+          output_location: ""
+          api_location: "" # leave blank if no Azure Functions API
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -52,7 +45,6 @@ jobs:
     name: Close Pull Request Job
     steps:
       - name: Close Pull Request
-        id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHFUL_FLOWER_09C2FCA00 }}
