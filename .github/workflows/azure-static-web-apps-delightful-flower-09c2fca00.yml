@@ -24,7 +24,7 @@ jobs:
           npm install
           npm run build
 
-      - name: Copy routes.json to dist
+      - name: Copy routes.json to build
         run: cp routes.json dist/
 
       # - name: Build And Deploy
