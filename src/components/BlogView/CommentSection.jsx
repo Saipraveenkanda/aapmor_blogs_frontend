@@ -74,7 +74,7 @@ const CommentSection = ({
                 </Typography>
 
                 <Typography variant="body2">
-                  {comment.trim() || "(Empty Comment)"}
+                  {comment?.trim() || "(Empty Comment)"}
                 </Typography>
 
                 {/* Like & Reply Buttons */}
@@ -127,6 +127,10 @@ const CommentSection = ({
                       }}
                     />
                     <IconButton
+                      title="Reply"
+                      disabled={replyText?.trim() === ""}
+                      disableFocusRipple
+                      disableRipple
                       variant="outlined"
                       size="small"
                       onClick={() => {
@@ -134,11 +138,20 @@ const CommentSection = ({
                         setReplyingTo(null);
                         setReplyText("");
                       }}
+                      sx={{
+                        backgroundColor: "transparent",
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      }}
                     >
                       <SendIcon
                         fontSize="medium"
                         className="winner-icon gradient-icon"
-                        style={{ fill: "url(#starGradient)" }}
+                        style={{
+                          fill:
+                            replyText?.trim() !== "" && "url(#starGradient)",
+                        }}
                       />
                     </IconButton>
                   </Stack>

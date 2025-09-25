@@ -6,7 +6,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  List,
   ListItem,
   ListItemAvatar,
   Skeleton,
@@ -171,7 +170,6 @@ const SavedBlogs = () => {
         container
         spacing={0}
         sx={{
-          // bgcolor: "background.paper",
           maxWidth: "100%",
           overflowY: "auto",
           scrollbarWidth: "thin",
@@ -183,7 +181,6 @@ const SavedBlogs = () => {
       >
         <Typography
           variant="h6"
-          // gutterBottom
           sx={{ fontWeight: "bold", color: "text.primary" }}
         >
           Your Saved Blogs :
@@ -279,29 +276,6 @@ const SavedBlogs = () => {
           }
         )}
       </Grid>
-    );
-  };
-
-  const renderEmptyBlogsView = () => {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100%",
-        }}
-      >
-        <Typography
-          variant="p"
-          fontWeight={600}
-          fontSize={20}
-          sx={{ marginLeft: 1 }}
-        >
-          Sorry, you haven't saved any blogs, try saving some blogs and refresh
-          the page
-        </Typography>
-      </Box>
     );
   };
 

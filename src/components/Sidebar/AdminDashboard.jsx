@@ -5,27 +5,16 @@ import {
   Typography,
   Avatar,
   Box,
-  Skeleton,
   Stack,
   ListItem,
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useSelector } from "react-redux";
-// import BlogCardSlider from "./BlogCardSlider";
-// import WhatshotOutlinedIcon from "@mui/icons-material/WhatshotOutlined";
-// import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-// import InterestsIcon from "@mui/icons-material/Interests";
-import { useNavigate } from "react-router-dom";
-// import AnalyzeAnimation from "../../helpers/AnalyzeBlogsAnimation";
-// import trophyanimation from "../../helpers/trophyanimation.json";
 import WriteButton from "../../helpers/WriteButton";
-// import Lottie from "lottie-react";
-import { getUserFromToken } from "../../utilities/authUtils";
 import aiImage from "../../assets/aiImage.jpg";
 import { Divider } from "@mui/material";
-import { getNotifications, getRecentActivity } from "../../socket";
+import { getRecentActivity } from "../../socket";
 import activityimage from "../../assets/noactivity.png";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -44,8 +33,6 @@ const DashboardContainer = styled("div")({
   borderRadius: "12px",
   borderTopRightRadius: "0",
   borderBottomRightRadius: "0",
-  maxHeight: "calc(100vh - 64px)",
-  // height: "calc(100vh - 64px)",
   width: "370px",
   height: "auto",
   maxHeight: "80%",
@@ -64,43 +51,8 @@ const GlassCard = styled(Card)(({ theme }) => ({
 }));
 
 const Dashboard = ({ profileDetails }) => {
-  const navigate = useNavigate();
-  const blogObj = useSelector((state) => state.blogs);
-  const recentBlogsList = blogObj.blogs;
-  const currentDate = new Date();
-  const [loading, setLoading] = useState(true);
-  const currentMonth = currentDate.getMonth() - 1; // 0-based index (0 = January, 11 = December)
-  const currentYear = currentDate.getFullYear();
-  const [topBlogs, setTopBlogs] = useState([]);
-  const [lastReadBlog, setLastReadBlog] = useState({});
-  const user = getUserFromToken();
   const [winners, setWinners] = useState([]);
-  const [showWinners, setShowWinners] = useState(false);
   const [activity, setActivity] = useState([]);
-
-  useEffect(() => {
-    setLoading(true);
-    const lastReadBlogId = localStorage.getItem("lastReadBlog") || "";
-    const blogs = blogObj.blogs;
-    if (blogs.length > 0) {
-      setTopBlogs(
-        [...recentBlogsList]
-          .filter((blog) => {
-            const blogDate = new Date(blog.date);
-            return (
-              blogDate.getMonth() === currentMonth &&
-              blogDate.getFullYear() === currentYear &&
-              blog.likes.length > 0
-            );
-          })
-          .sort((a, b) => b.likes.length - a.likes.length)
-          .slice(0, 5)
-      );
-      setLoading(false);
-    }
-    const lastReadBlog = recentBlogsList.find((b) => b._id === lastReadBlogId);
-    setLastReadBlog(lastReadBlog);
-  }, [blogObj]);
 
   function timeAgo(dateInput) {
     const now = new Date();
@@ -122,10 +74,6 @@ const Dashboard = ({ profileDetails }) => {
     return `${years} year${years > 1 ? "s" : ""} ago`;
   }
 
-  const monthName = new Date().toLocaleString("default", {
-    month: "long",
-  });
-
   useEffect(() => {
     const fetchWinners = async () => {
       try {
@@ -137,17 +85,7 @@ const Dashboard = ({ profileDetails }) => {
       }
     };
     fetchWinners();
-    const showFlag = localStorage.getItem("showAnnouncement");
-    if (showFlag === "true") {
-      setShowWinners(true);
-      localStorage.removeItem("showAnnouncement");
-    }
   }, []);
-
-  const handleCheckWinners = () => {
-    localStorage.setItem("showAnnouncement", true);
-    window.location.reload();
-  };
 
   const [currentWinnerIndex, setCurrentWinnerIndex] = useState(0);
 
@@ -288,7 +226,7 @@ const Dashboard = ({ profileDetails }) => {
                 </Stack>
               )}
             </Box>
-            {!loading && winners.length > 0 && (
+            {winners.length > 0 && (
               <>
                 <Divider
                   sx={{
@@ -297,6 +235,7 @@ const Dashboard = ({ profileDetails }) => {
                       "linear-gradient(90deg, rgba(0,0,0,0), #4E4E4E, rgba(0,0,0,0))",
                     backgroundColor: "transparent",
                     border: "none",
+                    mt: 2,
                   }}
                 />
                 <Typography

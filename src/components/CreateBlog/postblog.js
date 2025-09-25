@@ -2,23 +2,18 @@ import {
   Box,
   Button,
   TextField,
-  Stack,
-  Input,
   Select,
   MenuItem,
-  Tooltip,
   IconButton,
   Typography,
   Grid,
   Fab,
   CircularProgress,
-  Skeleton,
   FormControl,
-  FormControlLabel,
   InputLabel,
-  Popover,
   Avatar,
   Modal,
+  InputAdornment,
 } from "@mui/material";
 import { useState, React, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,12 +21,10 @@ import Header from "../HomePage/header";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./loader.css";
-import Cookies from "js-cookie";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import ProfilePopup from "../HomePage/ProfilePopup";
 import BottomNavbar from "../BottomNavigation/bottomNavigation";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
@@ -39,7 +32,7 @@ import SmartButtonOutlinedIcon from "@mui/icons-material/SmartButtonOutlined";
 import { useRef } from "react";
 import ImageResize from "quill-image-resize-module-react";
 import ClearIcon from "@mui/icons-material/Clear";
-
+import SaveAltOutlinedIcon from "@mui/icons-material/SaveAltOutlined";
 import {
   uploadThumbnail,
   createBlogApi,
@@ -52,6 +45,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
@@ -73,6 +68,7 @@ const modules = {
     [{ align: [] }], // Text alignment
     [{ color: [] }, { background: [] }], // Text & background color
     ["image", "video"], // Media support
+    ["code-block"],
   ],
   clipboard: {
     matchVisual: true,
@@ -86,9 +82,7 @@ const modules = {
 const CreateBlog = () => {
   const quillRef = useRef(null);
   const location = useLocation();
-  const { editBlog, isEdit, profileDetails } = location.state || {};
-  console.log(profileDetails, "STATE");
-
+  const { editBlog, isEdit } = location.state || {};
   const savedBlogData = JSON.parse(localStorage.getItem("blogData"));
   const savedData =
     (savedBlogData !== null && savedBlogData) ||
@@ -111,11 +105,7 @@ const CreateBlog = () => {
   );
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [scrollPos, setScrollPos] = useState(0);
-  const [imageLoading, setImageLoading] = useState(false);
   const [summaryLoading, setSummaryLoading] = useState(false);
-  const name = Cookies.get("username");
-  const role = Cookies.get("userrole");
   const [plainText, setPlainText] = useState("");
   const navigate = useNavigate();
   const [showPreview, setShowPreview] = useState(false);
@@ -125,6 +115,8 @@ const CreateBlog = () => {
   };
   const [anchorEl, setAnchorEl] = useState(null);
   const openImage = Boolean(anchorEl);
+  const userObj = useSelector((state) => state.user);
+  const profileDetails = userObj?.userDetails;
   const handleHover = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -148,16 +140,15 @@ const CreateBlog = () => {
       blogImage: blogImage,
       html: editorHtml,
     };
-    setLoading(true);
     localStorage.setItem("blogData", JSON.stringify(saveBlogData));
-    setLoading(false);
+    toast.info("Your draft is saved. Come back anytime to continue writing ✍️");
   };
   const disablePublishButton =
     !!category &&
-    !!title &&
-    !!description &&
+    !!title.trim() &&
+    !!description.trim() &&
     !!blogImage &&
-    !!editorHtml &&
+    !!editorHtml.trim() &&
     editorHtml !== "<p><br></p>";
 
   const handleClose = () => {
@@ -188,17 +179,14 @@ const CreateBlog = () => {
   })}, ${newDate.getFullYear()}`;
 
   const handleFileUpload = async (e) => {
-    setImageLoading(true);
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("image", file);
     const response = await uploadThumbnail(formData);
     if (response) {
       setBlogImage(response.data.url);
-      setImageLoading(false);
     }
   };
-
   const submitPost = async () => {
     if (!profileDetails?.name) {
       setProfile(true);
@@ -224,13 +212,10 @@ const CreateBlog = () => {
         category,
         html: editorHtml,
       };
-      console.log(blogDetails);
       const response = await (isEdit
         ? updateBlogApi(editBlog?._id, updatedData)
         : createBlogApi(blogDetails));
-      console.log(response);
       if (response.status === 200) {
-        setLoading(false);
         const data = !isEdit && response?.data?.message;
         var blogId = data;
         const content = {
@@ -358,8 +343,10 @@ const CreateBlog = () => {
                 textAlign: "center",
                 color: "#ffffff",
                 fontWeight: "bold",
+                mixBlendMode: "difference",
               }}
               variant="caption"
+              onClick={handleHover}
             >
               Click to view full size
             </Typography>
@@ -413,6 +400,16 @@ const CreateBlog = () => {
                 required
                 fullWidth
                 value={title}
+                inputProps={{ maxLength: 100 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <span style={{ fontSize: "12px", color: "#888" }}>
+                        {title.length}/100
+                      </span>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             {/* category */}
@@ -427,6 +424,23 @@ const CreateBlog = () => {
                   fullWidth
                   size="small"
                   displayEmpty
+                  sx={{ minWidth: 200 }}
+                  MenuProps={{
+                    anchorOrigin: {
+                      vertical: "bottom",
+                      horizontal: "left",
+                    },
+                    transformOrigin: {
+                      vertical: "top",
+                      horizontal: "left",
+                    },
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200, // fixed dropdown height
+                        overflowY: "auto",
+                      },
+                    },
+                  }}
                 >
                   {catoreries.map((option) => (
                     <MenuItem key={option} value={option}>
@@ -513,55 +527,59 @@ const CreateBlog = () => {
               bottom: "12%",
               right: "3%",
               zIndex: 101,
+              display: "flex",
+              gap: 2,
             }}
           >
-            <Fab
+            <Button
+              variant="outlined"
               aria-label="add"
               onClick={handleSave}
               disabled={loading}
-              size="small"
-              sx={{ marginRight: "4px", background: "#5CB338" }}
+              size="medium"
+              sx={{
+                textTransform: "none",
+                width: "80px",
+                border: "1px solid #aaa",
+                color: "unset",
+              }}
+              endIcon={<SaveAltOutlinedIcon fontSize="small" />}
             >
-              <SaveIcon
-                titleAccess="Save"
-                sx={{ color: "white", "&:hover": { color: "#000" } }}
-              />
-            </Fab>
-            <Fab
+              Save
+            </Button>
+            <Button
+              variant="outlined"
               aria-label="add"
               onClick={() => {
                 localStorage.removeItem("blogData");
                 navigate("/");
               }}
-              size="small"
-              sx={{ marginRight: "4px", background: "#F93827" }}
+              size="medium"
+              sx={{
+                textTransform: "none",
+                width: "80px",
+                color: "unset",
+                border: "1px solid #aaa",
+              }}
+              endIcon={<CloseIcon fontSize="small" />}
             >
-              <CloseIcon
-                titleAccess="Close"
-                sx={{ color: "white", "&:hover": { color: "#000" } }}
-              />
-            </Fab>
-            <Fab
+              Close
+            </Button>
+            <Button
+              variant="outlined"
               aria-label="publish"
               onClick={submitPost}
               disabled={!disablePublishButton}
-              size="small"
-              sx={{ marginRight: "4px", background: "#024CAA" }}
+              size="medium"
+              sx={{
+                width: "80px",
+                textTransform: "none",
+                border: "1px solid #aaa",
+                color: "unset",
+              }}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : isEdit ? (
-                <UpdateOutlinedIcon
-                  titleAccess="Update"
-                  sx={{ color: "white", "&:hover": { color: "#000" } }}
-                />
-              ) : (
-                <SendIcon
-                  titleAccess="Publish"
-                  sx={{ color: "white", "&:hover": { color: "#000" } }}
-                />
-              )}
-            </Fab>
+              {loading ? "Loading..." : isEdit ? "Update" : "Submit"}
+            </Button>
           </Grid>
 
           {/* Preview or Edit Blog */}

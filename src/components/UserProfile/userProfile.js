@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   TextField,
   FormControl,
   InputLabel,
@@ -8,7 +7,6 @@ import {
   Select,
   Typography,
   MenuItem,
-  FormHelperText,
   Grid,
   Stack,
   Avatar,
@@ -27,7 +25,6 @@ import BottomNavbar from "../BottomNavigation/bottomNavigation";
 import { useNavigate } from "react-router-dom";
 import SavedBlogs from "../SavedBlogs/savedBlogs";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import UploadIcon from "@mui/icons-material/Upload";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import ClearIcon from "@mui/icons-material/Clear";
 import AssistantOutlinedIcon from "@mui/icons-material/AssistantOutlined";
@@ -45,7 +42,6 @@ const UserProfile = (props) => {
   const [designation, setDesignation] = useState(profile?.designation || "");
   const [gender, setGender] = useState(profile?.gender || "");
   const [name, setName] = useState(profile?.name || "");
-  const [image, setImage] = useState("");
   const [email, setEmail] = useState(profile?.email || "");
   const [bio, setBio] = useState(profile?.bio || "");
   const [profileImage, setProfileImage] = useState(profile?.profileImage || "");
@@ -60,7 +56,6 @@ const UserProfile = (props) => {
     const file = e.target.files[0];
     const base64 = await convertToBase64(file);
     setTempImage(base64);
-    setImage(file);
     handleImageUpload(file);
   };
 

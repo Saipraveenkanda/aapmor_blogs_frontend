@@ -113,7 +113,7 @@ export const likesApi = async (id, name) => {
     return await axios.put(apiEndpoints.likesApiUrl, payload);
   } catch (error) {
     console.log(error, "ERROR");
-    toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //LIKES ERROR
+    // toast.error(TOAST_MESSAGES.DEFAULT_ERROR); //LIKES ERROR
     return error;
   }
 };

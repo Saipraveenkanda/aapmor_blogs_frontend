@@ -25,7 +25,7 @@ export default function WinnerTicker({ winnerDetails = [], mode }) {
               style={{ fill: "url(#starGradient)" }}
             />
             <span className="winner-text">
-              <span>{winner.month} Top BLogs : </span>
+              <span>{winner.month} Top Blogs : </span>
               {winner.winnerName} - "
               <a
                 href={winner.blogLink}

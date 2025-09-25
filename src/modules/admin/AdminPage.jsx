@@ -29,6 +29,7 @@ const AdminPage = (props) => {
     getTopBlogsData();
     getPublishedBlogs();
     getWinnerBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getUserDetail = async () => {

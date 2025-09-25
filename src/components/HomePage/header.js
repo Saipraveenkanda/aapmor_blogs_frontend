@@ -33,7 +33,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../../store/slices/blogSlice";
 import { useDispatch } from "react-redux";
-import { listenToNotifications } from "../../socket";
+import { listenToNotifications, registerUser } from "../../socket";
 import { timeAgo } from "../../utilities/timerFunction";
 // import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
 import { toast } from "react-toastify";
@@ -47,11 +47,9 @@ import Admin from "../../assets/Admin.svg";
 import Icon from "../../assets/Icon.svg";
 import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
 import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
-const Header = ({
-  setSearchInput = () => {},
-  setProfile,
-  setProfileDetails,
-}) => {
+import { setUserDetails } from "../../store/slices/userSlice";
+
+const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
@@ -76,14 +74,12 @@ const Header = ({
   useEffect(() => {
     localStorage.setItem("theme", mode);
     dispatch(setAppTheme(mode));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   useEffect(() => {
-    setProfileDetails(user);
-  }, [user]);
-
-  useEffect(() => {
     getUserDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -105,11 +101,13 @@ const Header = ({
       if (response.status === 202) {
         setProfile(true);
       }
+      registerUser(response?.data?.res?._id);
       setIsAdmin(
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
       setUserId(response?.data?.res?._id);
       setUser(response?.data?.res);
+      dispatch(setUserDetails(response?.data?.res));
     }
   };
 
@@ -119,7 +117,6 @@ const Header = ({
       if (response) {
         setNotifications([]);
       }
-      // toast.success("All notifications cleared!");
     } catch (err) {
       console.error("Clear notifications error:", err);
       toast.error("Failed to clear notifications");
@@ -307,12 +304,11 @@ const Header = ({
               onClick={() => navigate("/user/profile")}
               title={user?.name || "Profile"}
             >
-              {user?.gender ? (
-                user?.gender === "Male" ? (
-                  <Face6OutlinedIcon />
-                ) : (
-                  <Face3OutlinedIcon />
-                )
+              {user?.profileImage ? (
+                <Avatar
+                  src={user?.profileImage}
+                  sx={{ height: 24, width: 24 }}
+                />
               ) : (
                 <Skeleton
                   variant="circular"
