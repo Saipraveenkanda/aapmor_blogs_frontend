@@ -188,6 +188,7 @@ const CreateBlog = () => {
     }
   };
   const submitPost = async () => {
+    setLoading(true);
     if (!profileDetails?.name) {
       setProfile(true);
     } else {
@@ -535,7 +536,6 @@ const CreateBlog = () => {
               variant="outlined"
               aria-label="add"
               onClick={handleSave}
-              disabled={loading}
               size="medium"
               sx={{
                 textTransform: "none",
@@ -569,7 +569,7 @@ const CreateBlog = () => {
               variant="outlined"
               aria-label="publish"
               onClick={submitPost}
-              disabled={!disablePublishButton}
+              disabled={!disablePublishButton || loading}
               size="medium"
               sx={{
                 width: "80px",
