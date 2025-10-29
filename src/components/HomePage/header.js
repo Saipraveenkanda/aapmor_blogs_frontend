@@ -33,7 +33,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import { setAppTheme } from "../../store/slices/blogSlice";
 import { useDispatch } from "react-redux";
-import { listenToNotifications } from "../../socket";
+import { listenToNotifications, registerUser } from "../../socket";
 import { timeAgo } from "../../utilities/timerFunction";
 // import notificationAudio from "../../assets/sounds/notification-pluck-off.mp3";
 import { toast } from "react-toastify";
@@ -45,13 +45,9 @@ import {
 import { profileCheckingApi } from "../../providers/userProvider";
 import Admin from "../../assets/Admin.svg";
 import Icon from "../../assets/Icon.svg";
-import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
-import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
-const Header = ({
-  setSearchInput = () => {},
-  setProfile,
-  setProfileDetails,
-}) => {
+import { setUserDetails } from "../../store/slices/userSlice";
+
+const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [placeholder, setPlaceholder] = useState("Search by User...");
@@ -67,6 +63,7 @@ const Header = ({
   const id = open ? "notifications-popper" : undefined;
   const [notifications, setNotifications] = useState([]);
   const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,14 +73,12 @@ const Header = ({
   useEffect(() => {
     localStorage.setItem("theme", mode);
     dispatch(setAppTheme(mode));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   useEffect(() => {
-    setProfileDetails(user);
-  }, [user]);
-
-  useEffect(() => {
     getUserDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -100,17 +95,22 @@ const Header = ({
     }
   };
   const getUserDetail = async () => {
+    setLoading(true);
     const response = await profileCheckingApi();
     if (response) {
       if (response.status === 202) {
         setProfile(true);
       }
+      setUser(response?.data?.res);
+      registerUser(response?.data?.res?._id);
       setIsAdmin(
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
       setUserId(response?.data?.res?._id);
-      setUser(response?.data?.res);
+      dispatch(setUserDetails(response?.data?.res));
+      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleClearNotifications = async () => {
@@ -119,7 +119,6 @@ const Header = ({
       if (response) {
         setNotifications([]);
       }
-      // toast.success("All notifications cleared!");
     } catch (err) {
       console.error("Clear notifications error:", err);
       toast.error("Failed to clear notifications");
@@ -265,7 +264,7 @@ const Header = ({
             sx={{
               display: { xs: "none", sm: "flex" },
               alignItems: "center",
-              width: "50%",
+              width: "auto",
               backgroundColor: "#transparent",
               border: "1px solid #767676",
               borderRadius: 8,
@@ -307,12 +306,11 @@ const Header = ({
               onClick={() => navigate("/user/profile")}
               title={user?.name || "Profile"}
             >
-              {user?.gender ? (
-                user?.gender === "Male" ? (
-                  <Face6OutlinedIcon />
-                ) : (
-                  <Face3OutlinedIcon />
-                )
+              {user?.profileImage || !loading ? (
+                <Avatar
+                  src={user?.profileImage}
+                  sx={{ height: 24, width: 24 }}
+                />
               ) : (
                 <Skeleton
                   variant="circular"
@@ -515,8 +513,9 @@ const Header = ({
           elevation: 0,
           sx: {
             width: 360,
-            // maxHeight: 400,
-            // overflowY: "auto",
+            height: "auto",
+            maxHeight: 400,
+            overflowY: "auto",
             p: 2,
             borderRadius: 4,
             background:
@@ -526,6 +525,7 @@ const Header = ({
             WebkitBackdropFilter: "blur(12px)",
             border: "1px solid rgba(255, 255, 255, 0.2)",
             color: "text.primary",
+            scrollbarWidth: "none",
           },
         }}
       >

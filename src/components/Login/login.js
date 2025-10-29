@@ -41,6 +41,7 @@ const Login = () => {
     if (token !== undefined) {
       navigate("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnSubmitError = (message) => {
@@ -118,7 +119,7 @@ const Login = () => {
     }
 
     if (validEmail) {
-      setButtonText("sending...");
+      setButtonText("Sending...");
       const response = await sendOtpApi(email);
       const data = response.data;
       setSuccessMsg(data.message);
@@ -149,7 +150,7 @@ const Login = () => {
         justifyContent: "center",
         height: "100vh",
         width: "100vw",
-        backgroundColor: "black",
+        backgroundColor: "#1c1c1cff",
       }}
     >
       <Box
@@ -211,7 +212,7 @@ const Login = () => {
         >
           <Stack
             direction={{ md: "row", xs: "column" }}
-            spacing={1}
+            spacing={2}
             alignItems="center"
             justifyContent={"center"}
           >
@@ -236,10 +237,9 @@ const Login = () => {
               orientation={"vertical"}
               flexItem
               sx={{
-                borderRightWidth: 2,
                 display: { xs: "none", md: "block" },
-                borderColor: "1px solid #767676",
-                height: "60px",
+                borderColor: "#E8E8E8",
+                height: "50px",
                 alignSelf: "center",
                 // borderRadius: "50%",
                 width: "10px",
@@ -289,7 +289,28 @@ const Login = () => {
                 animation: emailError ? "shake 0.3s" : "",
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",
-                  color: "#ffffff !important",
+                  color: "#fff",
+                  "& fieldset": {
+                    borderColor: "#fff", // default outline
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#fff", // hover outline
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#fff", // focus outline
+                  },
+                  "& input": {
+                    color: "#fff", // typing text
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#fff", // label color
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#fff", // label on focus
+                },
+                "& .MuiFormHelperText-root": {
+                  color: emailError ? "#ff5252" : "#aaa", // error helper vs normal
                 },
                 "@keyframes shake": {
                   "0%": { marginLeft: "0rem" },
@@ -313,6 +334,31 @@ const Login = () => {
               sx={{
                 width: { xs: "80%", lg: "60%" },
                 marginBottom: { xs: "30px", lg: "24px" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "12px",
+                  color: "#fff",
+                  "& fieldset": {
+                    borderColor: "#fff", // default outline
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#fff", // hover outline
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#fff", // focus outline
+                  },
+                  "& input": {
+                    color: "#fff", // typing text
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#fff", // label color
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#fff", // label on focus
+                },
+                "& .MuiFormHelperText-root": {
+                  color: emailError ? "#ff5252" : "#aaa", // error helper vs normal
+                },
               }}
             />
           )}
@@ -322,17 +368,23 @@ const Login = () => {
               onClick={onSubmitEmail}
               data-testid="email input"
               variant="contained"
-              // disabled={isButtonDisable}
+              disabled={isButtonDisable}
               sx={(theme) => ({
                 width: { xs: "60%", sm: "60%" },
-                height: "44px",
+                height: "52px",
                 fontWeight: 500,
-                backgroundColor: "#ffffff",
-                color: "#000000",
+                textTransform: "none",
+                backgroundImage:
+                  "linear-gradient(45deg, #fe8b76 0%, #6360be 100%);",
+                color: "#fff",
                 borderRadius: "12px",
-                // "&:hover": {
-                //   backgroundColor: `${theme.palette.accent.main}`,
-                // },
+                backgroundSize: "200% 200%", // make gradient bigger to allow movement
+                transition: "background-position 0.8s ease-in-out", // smooth movement
+                "&:hover": {
+                  color: "#fff",
+                  // boxShadow: "1px 1px 4px 0px #000 inset",
+                  backgroundPosition: "100% 0%", // shift gradient left → right
+                },
                 mb: 2,
               })}
             >
@@ -345,12 +397,18 @@ const Login = () => {
               variant="contained"
               sx={(theme) => ({
                 width: { xs: "60%", sm: "60%" },
-                height: "44px",
+                height: "52px",
                 marginBottom: { xs: "30px", lg: "0px" },
-                // backgroundColor: `${theme.palette.accent.main}`,
-                // "&:hover": {
-                //   backgroundColor: "#016A70",
-                // },
+                backgroundImage:
+                  "linear-gradient(45deg, #fe8b76 0%, #6360be 100%);",
+                borderRadius: "12px",
+                backgroundSize: "200% 200%", // make gradient bigger to allow movement
+                transition: "background-position 0.8s ease-in-out", // smooth movement
+                "&:hover": {
+                  color: "#fff",
+                  // boxShadow: "1px 1px 4px 0px #000 inset",
+                  backgroundPosition: "100% 0%", // shift gradient left → right
+                },
                 textTransform: "none",
                 backgroundColor: "#ffffff",
                 color: "#000000",
@@ -374,7 +432,11 @@ const Login = () => {
               >
                 {successMsg}
               </Typography>
-              <Typography variant="caption" fontSize={12}>
+              <Typography
+                variant="caption"
+                fontSize={12}
+                sx={{ color: "#E8E8E8" }}
+              >
                 incorrect email ?{" "}
                 <span
                   style={{

@@ -62,6 +62,7 @@ import {
 } from "../../providers/adminProvider";
 import { profileCheckingApi } from "../../providers/userProvider";
 import { getUserFromToken, token } from "../../utilities/authUtils";
+import CloseIcon from "@mui/icons-material/Close";
 
 const BlogView = () => {
   const navigate = useNavigate();
@@ -94,7 +95,11 @@ const BlogView = () => {
     `${blogDetails?.title}\nRead more: "https://blogs.aapmor.com/blogs/${blogDetails?._id}`
   );
   const whatsappUrl = `https://wa.me/?text=${shareText}`;
-  const linkedInUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${shareText}`;
+  // const linkedInUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${shareText}`; // OLD SHARE METHOD
+  const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+    shareText
+  )}`;
+
   useEffect(() => {
     getUserDetail();
     getBlogItem();
@@ -129,7 +134,7 @@ const BlogView = () => {
   }, [blogDetails]);
 
   useEffect(() => {
-    if (comment.length >= 1) {
+    if (comment.trim().length >= 1) {
       setDisableCommentButton(false);
     } else {
       setDisableCommentButton(true);
@@ -165,7 +170,12 @@ const BlogView = () => {
 
   const handleEdit = () => {
     localStorage.removeItem("blogData");
-    navigate("/createblog", { state: { editBlog: blogDetails, isEdit: true } });
+    navigate("/createblog", {
+      state: {
+        editBlog: blogDetails,
+        isEdit: true,
+      },
+    });
   };
 
   const handleDelete = async () => {
@@ -338,46 +348,6 @@ const BlogView = () => {
     );
   };
 
-  // const handleSubmit = async () => {
-  //   const previousMonth = new Intl.DateTimeFormat("en-US", {
-  //     month: "long",
-  //   }).format(new Date(new Date().setMonth(new Date().getMonth() - 1)));
-
-  //   const formData = {
-  //     winnerName: username,
-  //     blogTitle: title,
-  //     blogLink: window.location.href,
-  //     month: previousMonth,
-  //     blogId: _id,
-  //     blogImage,
-  //   };
-  //   try {
-  //     if (!isWinnerAnnounced) {
-  //       const response = await postWinnerDetails(formData);
-  //       if (response?.response?.data?.error) {
-  //         setSnackMessage(response?.response?.data?.error);
-  //         setOpenSnackBar(true);
-  //         return;
-  //       }
-  //       if (response.status === 201) {
-  //         setSnackMessage("Winner has been set successfully!");
-  //         setOpenSnackBar(true);
-  //         setIsWinnerAnnounced(true);
-  //         setBlogDetails((prev) => ({ ...prev, isBestBlog: true }));
-  //       }
-  //     } else {
-  //       setIsWinnerAnnounced(false);
-  //       setSnackMessage("Winner status reverted!");
-  //       setOpenSnackBar(true);
-  //       setBlogDetails((prev) => ({ ...prev, isBestBlog: false }));
-  //     }
-  //   } catch (error) {
-  //     alert("Error: " + error.message);
-  //     setSnackMessage(error.message);
-  //     setOpenSnackBar(true);
-  //   }
-  // };
-
   const handleSubmit = async () => {
     setAnnounceLoad(true);
     const publishedMonth = new Intl.DateTimeFormat("en-US", {
@@ -455,7 +425,9 @@ const BlogView = () => {
       : await publishBlogToWeb(payload);
     console.log(payload, response, "PUBLISHING BLOG");
     if (response.status === 200) {
-      setSnackMessage("Blog published to website");
+      publishedToWeb
+        ? setSnackMessage("Blog un published to website")
+        : setSnackMessage("Blog published to website");
       setOpenSnackBar(true);
       getBlogItem();
     }
@@ -782,6 +754,7 @@ const BlogView = () => {
                       fullWidth
                     />
                     <LoadingButton
+                      title="Send"
                       variant="contained"
                       loading={loading}
                       disabled={disableCommentButton}
@@ -916,20 +889,32 @@ const BlogView = () => {
             // border: `0.5px solid ${theme.palette.accent.main}`,
           })}
         >
-          <Typography
-            sx={{
-              fontSize: "24px",
-              fontWeight: "bold",
-              // textAlign: "center",
-              marginBottom: "40px",
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-            }}
+          <Stack
+            direction={"row"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
           >
-            <ShareOutlinedIcon fontSize="large" sx={{ color: "accent.main" }} />
-            Share this blog!
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: "22px",
+                fontWeight: "bold",
+                // textAlign: "center",
+                // marginBottom: "40px",
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <ShareOutlinedIcon
+                fontSize="medium"
+                sx={{ color: "accent.main" }}
+              />
+              Share this blog!
+            </Typography>
+            <IconButton onClick={() => setOpenSharePop(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Stack>
           <Typography /* textAlign={"center"} */>
             Good reads spark better convos.
             {/* <br /> */} Share it with your squad!
@@ -1007,7 +992,9 @@ const BlogView = () => {
                       bgcolor: "#0077B5",
                     },
                   }}
-                  onClick={() => window.open(linkedInUrl, "_blank")}
+                  onClick={() =>
+                    window.open(linkedInUrl, "_blank", "noopener,noreferrer")
+                  }
                 >
                   <LinkedinLogo size={24} color="#ffffff" />
                 </IconButton>

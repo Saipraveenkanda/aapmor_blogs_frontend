@@ -9,12 +9,11 @@ import {
   MenuItem,
   Select,
   Skeleton,
-  Stack,
   TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, {  useState } from "react";
 import Header from "../HomePage/header";
 import SmartButtonOutlinedIcon from "@mui/icons-material/SmartButtonOutlined";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
@@ -191,7 +190,7 @@ const WriteBlog = () => {
         alignItems: "center",
       }}
     >
-      <Header />
+      <Header setProfileDetails={() => {}} />
       <Grid sx={{ width: "80%", marginTop: "20px" }}>
         <Grid
           xs={12}

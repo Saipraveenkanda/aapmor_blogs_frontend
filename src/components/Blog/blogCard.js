@@ -18,7 +18,7 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { useNavigate } from "react-router-dom";
 import { DotOutline } from "@phosphor-icons/react";
 
-const Blog = (blogDetails) => {
+const Blog = (blogDetails, profileDetails) => {
   const navigate = useNavigate();
   const [isBookmarked, setBookmark] = useState(false);
   const {
@@ -36,10 +36,11 @@ const Blog = (blogDetails) => {
   const monthName = new Date(date).toLocaleString("default", {
     month: "short",
   });
-
   const handleReadMore = () => {
     localStorage.setItem("lastReadBlog", _id);
-    navigate(`/blogs/${_id}`);
+    navigate(`/blogs/${_id}`, {
+      state: { profileDetails: profileDetails },
+    });
   };
   return (
     <>
@@ -147,6 +148,7 @@ const Blog = (blogDetails) => {
                   variant="h6"
                   fontWeight={700}
                   sx={{ lineHeight: 1.1 }}
+                  noWrap
                 >
                   {title}
                 </Typography>
@@ -221,18 +223,6 @@ const Blog = (blogDetails) => {
             >
               Posted: {formattedDate}
             </Typography>
-            {/* <Chip
-              label={category}
-              size="small"
-              sx={{
-                justifySelf: "flex-end",
-                alignSelf: "flex-end",
-                m: "4px 4px 0px 0px",
-                backgroundColor: "#00000090",
-                fontSize: "10px",
-                color: "#ffffff",
-              }}
-            /> */}
           </Stack>
 
           <Typography variant="body2" fontWeight={700}>
@@ -279,11 +269,12 @@ const Blog = (blogDetails) => {
         variant="middle"
         flexItem
         // sx={{ borderColor: "accent.light" }}
-       sx={{ border:"1px solid ",
-        borderImage:"linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #4E4E4E 48.08%, rgba(0, 0, 0, 0) 100%)",
-        borderImageSlice:1
-       }}
-
+        sx={{
+          border: "1px solid ",
+          borderImage:
+            "linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #4E4E4E 48.08%, rgba(0, 0, 0, 0) 100%)",
+          borderImageSlice: 1,
+        }}
       />
     </>
   );

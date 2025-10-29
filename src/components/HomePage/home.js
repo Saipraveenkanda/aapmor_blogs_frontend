@@ -8,16 +8,9 @@ import { setBlogsData } from "../../store/slices/blogSlice";
 import HomeLoading from "../../helpers/homeLoading";
 import ProfilePopup from "./ProfilePopup";
 import noBlogsImage from "../../assets/noblogs.png";
-import WinnerAnnouncement from "../BlogWinner";
 import AdminDashboard from "../Sidebar/AdminDashboard";
-import { registerUser } from "../../socket";
-import {
-  getBlogsApi,
-  getBlogsByCategoryApi,
-} from "../../providers/blogProvider";
+import { getBlogsByCategoryApi } from "../../providers/blogProvider";
 import { getWinnerOfTheMonth } from "../../providers/adminProvider";
-import { profileCheckingApi } from "../../providers/userProvider";
-import { token } from "../../utilities/authUtils";
 import WinnerTicker from "../WinnerTicker";
 import CategoryTabs from "../Sidebar/CategoryTabs";
 import useTheme from "@mui/material/styles/useTheme";
@@ -25,7 +18,6 @@ import useTheme from "@mui/material/styles/useTheme";
 const Home = () => {
   const dispatch = useDispatch();
   const [profile, setProfile] = useState(false);
-  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [apiStatus, setApiStatus] = useState("INITIAL");
   const blogObj = useSelector((state) => state.blogs);
   const blogs = blogObj.blogs;
@@ -34,45 +26,9 @@ const Home = () => {
   const [searchInput, setSearchInput] = useState("");
   const [category, setCategory] = useState("All");
   const [winnerDetails, setWinnerDetails] = useState([]);
-  const [profileDetails, setProfileDetails] = useState({});
   const theme = useTheme();
   const mode = theme.palette.mode;
-
-  useEffect(() => {
-    document.title = "AAPMOR | Blogs";
-    if (!token) {
-      const checkProfileDetails = async () => {
-        const response = await profileCheckingApi();
-        if (response.status === 202) {
-          setProfile(true);
-        } else {
-          setProfile(false);
-          setProfileDetails(response.data.res);
-          if (response) {
-            registerUser(response.data.res._id);
-          }
-        }
-      };
-      checkProfileDetails();
-    } else {
-      setProfile(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const showFirstTime = localStorage.getItem("showAnnouncement");
-    if (
-      (showFirstTime === null || showFirstTime === "true") &&
-      apiStatus === "SUCCESS"
-    ) {
-      setShowAnnouncement(true);
-    }
-  }, [apiStatus]);
-
-  const handleAnnouncementClose = () => {
-    setShowAnnouncement(false);
-    localStorage.setItem("showAnnouncement", "false");
-  };
+  const userObj = useSelector((state) => state.user);
 
   useEffect(() => {
     setTimeout(() => {
@@ -83,17 +39,6 @@ const Home = () => {
   useEffect(() => {
     setUpdatedBlogs(blogs);
   }, [blogs]);
-
-  //GET BLOGS API CALL
-  // const getBlogsData = async () => {
-  //   const response = await getBlogsByCategoryApi(category);
-  //   if (response.status === 200) {
-  //     setApiStatus("SUCCESS");
-  //     dispatch(setBlogsData(response.data));
-  //   } else {
-  //     setApiStatus("FAILURE");
-  //   }
-  // };
 
   useEffect(() => {
     const fetchBlogsByCategory = async () => {
@@ -111,12 +56,8 @@ const Home = () => {
     if (category) {
       fetchBlogsByCategory();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
-
-  //   useEffect(() => {
-  //   setApiStatus("INITIAL");
-  //   getBlogsData();
-  // }, [category]);
 
   const getWinnerDetails = async () => {
     const response = await getWinnerOfTheMonth();
@@ -130,7 +71,6 @@ const Home = () => {
   useEffect(() => {
     setApiStatus("INITIAL");
     getWinnerDetails();
-    // getBlogsData();
   }, []);
 
   const renderLoadingView = () => {
@@ -168,7 +108,7 @@ const Home = () => {
       >
         <img
           src={noBlogsImage}
-          alt="no-blog-image"
+          alt="no-blog"
           style={{
             width: "40%",
           }}
@@ -314,6 +254,7 @@ const Home = () => {
       );
     });
     setUpdatedBlogs(filteredBlogs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput]);
 
   return (
@@ -329,7 +270,6 @@ const Home = () => {
           setSearchInput={setSearchInput}
           profile={profile}
           setProfile={setProfile}
-          setProfileDetails={setProfileDetails}
         />
         {winnerDetails?.length > 0 && (
           <WinnerTicker winnerDetails={winnerDetails} mode={mode} />
@@ -344,7 +284,7 @@ const Home = () => {
             xs={3}
             sx={{ "@media(max-width:480px)": { display: "none" } }}
           >
-            <AdminDashboard profileDetails={profileDetails} />
+            <AdminDashboard />
           </Grid>
         </Grid>
       </Grid>
@@ -356,13 +296,6 @@ const Home = () => {
         />
       )}
       <BottomNavbar />
-      {showAnnouncement && !winnerDetails?.message && (
-        <WinnerAnnouncement
-          isOpen={showAnnouncement}
-          onClose={handleAnnouncementClose}
-          winnerDetails={winnerDetails}
-        />
-      )}
     </>
   );
 };
