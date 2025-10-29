@@ -178,10 +178,9 @@ const CreateBlog = () => {
     month: "short",
   })}, ${newDate.getFullYear()}`;
 
-  const MAX_FILE_SIZE_MB = 3;
-  const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png"];
-
   const handleFileUpload = async (e) => {
+    const MAX_FILE_SIZE_MB = 3;
+    const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png"];
     const file = e.target.files[0];
     if (!file) return;
 
