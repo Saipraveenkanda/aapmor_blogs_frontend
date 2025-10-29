@@ -45,8 +45,6 @@ import {
 import { profileCheckingApi } from "../../providers/userProvider";
 import Admin from "../../assets/Admin.svg";
 import Icon from "../../assets/Icon.svg";
-import Face6OutlinedIcon from "@mui/icons-material/Face6Outlined";
-import Face3OutlinedIcon from "@mui/icons-material/Face3Outlined";
 import { setUserDetails } from "../../store/slices/userSlice";
 
 const Header = ({ setSearchInput = () => {}, setProfile }) => {
@@ -65,6 +63,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
   const id = open ? "notifications-popper" : undefined;
   const [notifications, setNotifications] = useState([]);
   const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -96,19 +95,22 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
     }
   };
   const getUserDetail = async () => {
+    setLoading(true);
     const response = await profileCheckingApi();
     if (response) {
       if (response.status === 202) {
         setProfile(true);
       }
+      setUser(response?.data?.res);
       registerUser(response?.data?.res?._id);
       setIsAdmin(
         response?.data?.res?.admin ? response?.data?.res?.admin : false
       );
       setUserId(response?.data?.res?._id);
-      setUser(response?.data?.res);
       dispatch(setUserDetails(response?.data?.res));
+      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleClearNotifications = async () => {
@@ -262,7 +264,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
             sx={{
               display: { xs: "none", sm: "flex" },
               alignItems: "center",
-              width: "50%",
+              width: "auto",
               backgroundColor: "#transparent",
               border: "1px solid #767676",
               borderRadius: 8,
@@ -304,7 +306,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
               onClick={() => navigate("/user/profile")}
               title={user?.name || "Profile"}
             >
-              {user?.profileImage ? (
+              {user?.profileImage || !loading ? (
                 <Avatar
                   src={user?.profileImage}
                   sx={{ height: 24, width: 24 }}
@@ -511,8 +513,9 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
           elevation: 0,
           sx: {
             width: 360,
-            // maxHeight: 400,
-            // overflowY: "auto",
+            height: "auto",
+            maxHeight: 400,
+            overflowY: "auto",
             p: 2,
             borderRadius: 4,
             background:
@@ -522,6 +525,7 @@ const Header = ({ setSearchInput = () => {}, setProfile }) => {
             WebkitBackdropFilter: "blur(12px)",
             border: "1px solid rgba(255, 255, 255, 0.2)",
             color: "text.primary",
+            scrollbarWidth: "none",
           },
         }}
       >

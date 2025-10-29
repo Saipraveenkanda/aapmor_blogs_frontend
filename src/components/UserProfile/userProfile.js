@@ -17,6 +17,7 @@ import {
   Popover,
   Divider,
   CircularProgress,
+  InputAdornment,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../HomePage/header";
@@ -545,11 +546,22 @@ const UserProfile = (props) => {
                     variant="outlined"
                     multiline
                     value={bio}
-                    rows={6}
+                    rows={4}
                     placeholder="Enter here..."
                     defaultValue={profile?.bio}
                     fullWidth
                     onChange={(e) => setBio(e.target.value)}
+                    helperText={`${300 - bio.length} chars left`}
+                    inputProps={{ maxLength: 300 }}
+                    // InputProps={{
+                    //   endAdornment: (
+                    //     <InputAdornment position="start">
+                    //       <span style={{ fontSize: "12px", color: "#888" }}>
+                    //         {300 - bio.length} chars left
+                    //       </span>
+                    //     </InputAdornment>
+                    //   ),
+                    // }}
                   />
                   <Stack
                     direction={"row"}
